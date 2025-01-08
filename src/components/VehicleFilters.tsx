@@ -1,29 +1,11 @@
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
-import { RotateCcw, ChevronRight } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { SelectFilter } from "./filters/SelectFilter";
 import { RangeFilter } from "./filters/RangeFilter";
-import { useState } from "react";
-
-const carBrands = [
-  { name: "Chevrolet", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Fiat", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Ford", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Honda", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Hyundai", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Mitsubishi", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Renault", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Toyota", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "Volkswagen", logo: "/lovable-uploads/9d856f69-daac-47be-aee9-b31137f3ac46.png" },
-  { name: "BMW", logo: "/placeholder.svg" },
-  { name: "Mercedes-Benz", logo: "/placeholder.svg" },
-  { name: "Audi", logo: "/placeholder.svg" },
-  { name: "Jeep", logo: "/placeholder.svg" },
-  { name: "Land Rover", logo: "/placeholder.svg" },
-  { name: "Volvo", logo: "/placeholder.svg" },
-];
+import { BrandFilter } from "./filters/BrandFilter";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 interface FiltersState {
   make: string;
@@ -86,18 +68,11 @@ const bodyTypes = [
 ];
 
 export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps) => {
-  const [showAllBrands, setShowAllBrands] = useState(false);
-  const visibleBrands = showAllBrands ? carBrands : carBrands.slice(0, 9);
-
   const handleChange = (key: keyof FiltersState, value: string) => {
     onFilterChange({
       ...filters,
       [key]: value === "all" ? "" : value,
     });
-  };
-
-  const handleBrandClick = (brandName: string) => {
-    handleChange("make", brandName);
   };
 
   const resetFilters = () => {
@@ -134,39 +109,10 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
       <Separator />
 
       <div className="space-y-4">
-        <Label>Marca do carro</Label>
-        <div className="grid grid-cols-3 gap-2">
-          {visibleBrands.map((brand) => (
-            <button
-              key={brand.name}
-              onClick={() => handleBrandClick(brand.name)}
-              className={`p-2 rounded-lg border transition-colors hover:border-primary ${
-                filters.make === brand.name ? "border-primary bg-primary/5" : "border-gray-200"
-              }`}
-            >
-              <div className="flex flex-col items-center gap-2">
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="w-12 h-12 object-contain"
-                />
-                <span className="text-xs font-medium">{brand.name}</span>
-              </div>
-            </button>
-          ))}
-        </div>
-        {carBrands.length > 9 && (
-          <Button
-            variant="ghost"
-            className="w-full text-muted-foreground hover:text-primary"
-            onClick={() => setShowAllBrands(!showAllBrands)}
-          >
-            {showAllBrands ? "Ver menos marcas" : "Ver mais marcas"}
-            <ChevronRight className={`ml-2 h-4 w-4 transition-transform ${
-              showAllBrands ? "rotate-90" : ""
-            }`} />
-          </Button>
-        )}
+        <BrandFilter
+          selectedBrand={filters.make}
+          onBrandSelect={(brand) => handleChange("make", brand)}
+        />
 
         <div className="space-y-2">
           <Label>Ano mínimo</Label>
