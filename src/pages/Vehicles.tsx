@@ -53,9 +53,9 @@ export default function Vehicles() {
       <Navbar />
       <SearchBar onSearch={setSearchTerm} />
       
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={false}>
         <div className="container mx-auto flex min-h-screen w-full gap-8 py-8">
-          <Sidebar defaultCollapsed={false} className="min-w-[240px]">
+          <Sidebar className="min-w-[240px]">
             <SidebarContent>
               <VehicleFilters filters={filters} onFilterChange={setFilters} />
             </SidebarContent>
