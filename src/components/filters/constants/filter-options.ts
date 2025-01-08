@@ -23,12 +23,12 @@ export const transmissions = [
 ];
 
 export const fuelTypes = [
-  { value: "Flex", label: "Flex" },
-  { value: "Gasolina", label: "Gasolina" },
-  { value: "Etanol", label: "Etanol" },
-  { value: "Diesel", label: "Diesel" },
-  { value: "Elétrico", label: "Elétrico" },
-  { value: "Híbrido", label: "Híbrido" },
+  { value: "FLEX", label: "Flex" },
+  { value: "GASOLINA", label: "Gasolina" },
+  { value: "ETANOL", label: "Etanol" },
+  { value: "DIESEL", label: "Diesel" },
+  { value: "ELETRICO", label: "Elétrico" },
+  { value: "HIBRIDO", label: "Híbrido" },
 ];
 
 export const bodyTypes = [
