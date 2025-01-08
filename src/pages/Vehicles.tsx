@@ -34,7 +34,7 @@ export default function Vehicles() {
     color: "",
   });
 
-  const { data: vehicles = [], isLoading } = useQuery({
+  const { data: vehicles = [], isLoading } = useQuery<FilteredVehicle[]>({
     queryKey: ["vehicles", filters],
     queryFn: async () => {
       try {
@@ -52,14 +52,15 @@ export default function Vehicles() {
           p_color: filters.color || null,
         };
 
-        const { data, error } = await supabase.rpc<FilteredVehicle[], FilterProductsParams>("filter_products", params);
+        const { data, error } = await supabase
+          .rpc('filter_products', params);
 
         if (error) {
           toast.error("Erro ao carregar veículos");
           throw error;
         }
 
-        let filteredData = data || [];
+        let filteredData = data as FilteredVehicle[] || [];
         if (filters.condition) {
           filteredData = filteredData.filter(
             (vehicle) => vehicle.condition === filters.condition
