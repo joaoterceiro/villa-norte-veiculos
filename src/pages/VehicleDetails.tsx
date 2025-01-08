@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -5,6 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { VehicleCard } from "@/components/VehicleCard";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
 import {
   ChevronLeft,
   ChevronRight,
@@ -16,6 +21,8 @@ import {
 
 const VehicleDetails = () => {
   const { id } = useParams();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const { data: vehicle, isLoading } = useQuery({
     queryKey: ["vehicle", id],
@@ -48,7 +55,6 @@ const VehicleDetails = () => {
 
       if (error) throw error;
       
-      // Transform the data to match the VehicleCard expected format
       return data.map(v => ({
         ...v,
         accessories: v.product_accessories?.map(a => a.accessory) || []
@@ -71,25 +77,51 @@ const VehicleDetails = () => {
     }).format(price);
   };
 
+  const images = vehicle.product_images || [];
+  const hasImages = images.length > 0;
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? images.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === images.length - 1 ? 0 : prev + 1
+    );
+  };
+
   return (
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Carrossel de Imagens */}
         <div className="relative rounded-lg overflow-hidden bg-gray-100">
           <img
-            src={vehicle.image_feature}
+            src={hasImages ? images[currentImageIndex].image_url : vehicle.image_feature}
             alt={vehicle.title}
-            className="w-full aspect-[4/3] object-cover"
+            className="w-full aspect-[4/3] object-cover cursor-pointer"
+            onClick={() => setLightboxOpen(true)}
           />
-          <button className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full">
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full">
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {hasImages && (
+            <>
+              <button 
+                onClick={handlePrevImage}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button 
+                onClick={handleNextImage}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </>
+          )}
         </div>
 
-        {/* Informações do Veículo */}
+        {/* Rest of the vehicle details */}
         <div className="space-y-6">
           <div>
             <div className="flex items-center gap-2 text-sm text-muted mb-2">
@@ -149,6 +181,7 @@ const VehicleDetails = () => {
         </div>
       </div>
 
+      {/* Rest of the component */}
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Sobre o veículo</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -239,6 +272,35 @@ const VehicleDetails = () => {
           </div>
         </>
       )}
+
+      {/* Lightbox Dialog */}
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="max-w-screen-lg w-full p-0 bg-black">
+          <div className="relative">
+            <img
+              src={hasImages ? images[currentImageIndex].image_url_large || images[currentImageIndex].image_url : vehicle.image_feature}
+              alt={vehicle.title}
+              className="w-full h-auto"
+            />
+            {hasImages && (
+              <>
+                <button 
+                  onClick={handlePrevImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button 
+                  onClick={handleNextImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
