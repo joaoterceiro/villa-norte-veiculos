@@ -60,14 +60,12 @@ export default function Vehicles() {
           throw error;
         }
 
-        let filteredData = data as FilteredVehicle[] || [];
-        if (filters.condition) {
-          filteredData = filteredData.filter(
-            (vehicle) => vehicle.condition === filters.condition
-          );
-        }
-
-        return filteredData;
+        const filteredData = (data as FilteredVehicle[]) || [];
+        
+        // Apply condition filter after getting data since it's not in the RPC
+        return filters.condition
+          ? filteredData.filter((vehicle) => vehicle.condition === filters.condition)
+          : filteredData;
       } catch (error) {
         console.error("Error fetching vehicles:", error);
         throw error;
@@ -89,11 +87,9 @@ export default function Vehicles() {
             <h1 className="text-2xl font-bold text-gray-900">
               Veículos disponíveis
             </h1>
-            {vehicles && (
-              <p className="text-sm text-gray-500 mt-1">
-                {vehicles.length} veículos encontrados
-              </p>
-            )}
+            <p className="text-sm text-gray-500 mt-1">
+              {vehicles.length} veículos encontrados
+            </p>
           </div>
 
           {isLoading ? (
