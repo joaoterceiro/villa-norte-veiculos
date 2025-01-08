@@ -23,7 +23,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
   const handleChange = (key: keyof FiltersState, value: string) => {
     onFilterChange({
       ...filters,
-      [key]: value,
+      [key]: value === "all" ? "" : value,
     });
   };
 
@@ -87,14 +87,14 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
       <div className="space-y-2">
         <Label>Câmbio</Label>
         <Select
-          value={filters.transmission}
+          value={filters.transmission || "all"}
           onValueChange={(value) => handleChange("transmission", value)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecione" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="MANUAL">Manual</SelectItem>
             <SelectItem value="AUTOMATIC">Automático</SelectItem>
           </SelectContent>
@@ -104,14 +104,14 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
       <div className="space-y-2">
         <Label>Combustível</Label>
         <Select
-          value={filters.fuelType}
+          value={filters.fuelType || "all"}
           onValueChange={(value) => handleChange("fuelType", value)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecione" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="FLEX">Flex</SelectItem>
             <SelectItem value="GASOLINE">Gasolina</SelectItem>
             <SelectItem value="ETHANOL">Etanol</SelectItem>
@@ -125,14 +125,14 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
       <div className="space-y-2">
         <Label>Tipo de carroceria</Label>
         <Select
-          value={filters.bodyType}
+          value={filters.bodyType || "all"}
           onValueChange={(value) => handleChange("bodyType", value)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecione" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="SUV">SUV</SelectItem>
             <SelectItem value="HATCH">Hatch</SelectItem>
             <SelectItem value="SEDAN">Sedã</SelectItem>
