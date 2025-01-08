@@ -1,4 +1,5 @@
 import { Calendar, Fuel, Car } from "lucide-react";
+import { Card } from "./ui/card";
 
 const vehicles = [
   {
@@ -35,50 +36,50 @@ export const FeaturedVehicles = () => {
     <div className="container mx-auto py-12">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {vehicles.map((vehicle) => (
-          <div
+          <Card
             key={vehicle.id}
-            className="bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow border border-gray-200"
+            className="group overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100"
           >
-            <div className="relative">
+            <div className="aspect-[4/3] relative overflow-hidden">
               <img
                 src={vehicle.image}
                 alt={vehicle.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute top-4 left-4">
-                <span className="bg-primary text-white px-3 py-1 rounded-full text-sm">
+                <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium">
                   Destaque
                 </span>
               </div>
             </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2 text-secondary">
+            <div className="p-4">
+              <h3 className="text-base font-semibold text-secondary line-clamp-2 mb-3 min-h-[2.5rem]">
                 {vehicle.name}
               </h3>
-              <div className="flex items-center gap-6 text-muted mb-4 text-sm">
-                <span className="flex items-center gap-1">
-                  <Calendar size={16} />
+              <div className="flex flex-wrap gap-4 text-muted text-xs mb-4">
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4" />
                   {vehicle.year}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Car size={16} />
+                <span className="flex items-center gap-1.5">
+                  <Car className="w-4 h-4" />
                   {vehicle.mileage}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Fuel size={16} />
+                <span className="flex items-center gap-1.5">
+                  <Fuel className="w-4 h-4" />
                   {vehicle.fuel}
                 </span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-primary">
+              <div className="flex flex-col gap-3">
+                <span className="text-xl font-bold text-primary">
                   {vehicle.price}
                 </span>
-                <button className="text-primary hover:text-accent transition-colors font-semibold">
-                  Ver detalhes →
+                <button className="w-full bg-primary/10 hover:bg-primary/20 text-primary py-2 px-4 rounded-md transition-colors text-sm font-medium">
+                  Ver detalhes
                 </button>
               </div>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </div>
