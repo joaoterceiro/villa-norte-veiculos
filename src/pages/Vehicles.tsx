@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
-import { SearchBar } from "@/components/SearchBar";
 import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleFilters } from "@/components/VehicleFilters";
 import {
@@ -51,7 +50,6 @@ export default function Vehicles() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <SearchBar onSearch={setSearchTerm} className="" />
       
       <SidebarProvider defaultOpen={false}>
         <div className="container mx-auto flex min-h-screen w-full gap-8 py-8">
