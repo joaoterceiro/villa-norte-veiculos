@@ -180,6 +180,13 @@ export type Database = {
             referencedRelation: "product"
             referencedColumns: ["vehicle_id"]
           },
+          {
+            foreignKeyName: "product_accessories_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_details"
+            referencedColumns: ["vehicle_id"]
+          },
         ]
       }
       product_images: {
@@ -207,6 +214,13 @@ export type Database = {
             columns: ["vehicle_id"]
             isOneToOne: false
             referencedRelation: "product"
+            referencedColumns: ["vehicle_id"]
+          },
+          {
+            foreignKeyName: "product_images_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_details"
             referencedColumns: ["vehicle_id"]
           },
         ]
@@ -324,6 +338,28 @@ export type Database = {
         }
         Relationships: []
       }
+      vehicle_details: {
+        Row: {
+          accessories: string[] | null
+          body_type: string | null
+          color: string | null
+          condition: string | null
+          external_id: number | null
+          fuel_type: string | null
+          image_feature: string | null
+          is_featured: boolean | null
+          make: string | null
+          mileage: number | null
+          model: string | null
+          price: number | null
+          status: string | null
+          title: string | null
+          transmission: string | null
+          vehicle_id: string | null
+          year: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       filter_products: {
@@ -340,39 +376,23 @@ export type Database = {
           p_body_type?: string
         }
         Returns: {
-          base_model: string | null
-          body_type: string | null
-          category: string | null
-          chassis: string | null
-          color: string | null
-          condition: string | null
-          date_added: string
-          deleted_at: string | null
-          description: string | null
-          doors: number | null
-          download: string | null
-          engine: string | null
-          external_id: number
-          fipe_code: string | null
-          fipe_value: number | null
-          fuel_type: string | null
-          horsepower: number | null
-          image_feature: string | null
-          inspection_report: string | null
-          is_featured: boolean | null
-          last_update: string | null
-          make: string | null
-          manufacture_year: number | null
-          mileage: number | null
-          model: string | null
-          plate: string | null
-          price: number | null
-          promotion_price: number | null
-          status: string | null
-          title: string
-          transmission: string | null
           vehicle_id: string
-          year: number | null
+          external_id: number
+          title: string
+          make: string
+          model: string
+          year: number
+          price: number
+          mileage: number
+          fuel_type: string
+          transmission: string
+          body_type: string
+          color: string
+          condition: string
+          is_featured: boolean
+          status: string
+          image_feature: string
+          accessories: string[]
         }[]
       }
       filtered_products: {

@@ -55,6 +55,11 @@ export default function Vehicles() {
             <h1 className="text-2xl font-bold text-gray-900">
               Veículos disponíveis
             </h1>
+            {vehicles && (
+              <p className="text-sm text-gray-500 mt-1">
+                {vehicles.length} veículos encontrados
+              </p>
+            )}
           </div>
 
           {isLoading ? (
