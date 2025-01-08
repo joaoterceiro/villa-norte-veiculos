@@ -4,13 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleInfoPanel } from "@/components/VehicleInfoPanel";
 import { VehicleSpecifications } from "@/components/VehicleSpecifications";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { VehicleImageGallery } from "@/components/VehicleImageGallery";
+import { VehicleSimilar } from "@/components/VehicleSimilar";
 
 const VehicleDetails = () => {
   const { id } = useParams();
@@ -44,7 +44,7 @@ const VehicleDetails = () => {
         .select("*, product_accessories(accessory)")
         .eq("make", vehicle?.make)
         .neq("vehicle_id", id)
-        .limit(4);
+        .limit(5);
 
       if (error) throw error;
       
@@ -54,6 +54,18 @@ const VehicleDetails = () => {
       }));
     },
   });
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? (vehicle?.product_images?.length || 1) - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === (vehicle?.product_images?.length || 1) - 1 ? 0 : prev + 1
+    );
+  };
 
   if (isLoading) {
     return (
@@ -75,21 +87,6 @@ const VehicleDetails = () => {
     );
   }
 
-  const images = vehicle.product_images || [];
-  const hasImages = images.length > 0;
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? images.length - 1 : prev - 1
-    );
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === images.length - 1 ? 0 : prev + 1
-    );
-  };
-
   const specifications = [
     { label: "Marca", value: vehicle.make },
     { label: "Modelo", value: vehicle.model },
@@ -109,30 +106,15 @@ const VehicleDetails = () => {
       <main className="min-h-screen bg-background">
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-12 lg:col-span-8 relative rounded-lg overflow-hidden bg-gray-100">
-              <img
-                src={hasImages ? images[currentImageIndex].image_url : vehicle.image_feature}
-                alt={vehicle.title}
-                className="w-full aspect-[4/3] object-cover cursor-pointer"
-                onClick={() => setLightboxOpen(true)}
-              />
-              {hasImages && (
-                <>
-                  <button 
-                    onClick={handlePrevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
-                  >
-                    <ChevronLeft className="w-6 h-6" />
-                  </button>
-                  <button 
-                    onClick={handleNextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
-                  >
-                    <ChevronRight className="w-6 h-6" />
-                  </button>
-                </>
-              )}
-            </div>
+            <VehicleImageGallery
+              images={vehicle.product_images || []}
+              title={vehicle.title}
+              imageFeature={vehicle.image_feature}
+              currentImageIndex={currentImageIndex}
+              onPrevImage={handlePrevImage}
+              onNextImage={handleNextImage}
+              onImageClick={() => setLightboxOpen(true)}
+            />
 
             <div className="col-span-12 lg:col-span-4">
               <VehicleInfoPanel
@@ -178,42 +160,21 @@ const VehicleDetails = () => {
           {similarVehicles && similarVehicles.length > 0 && (
             <>
               <Separator className="my-8" />
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Veículos Similares</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {similarVehicles.map((vehicle) => (
-                    <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
-                  ))}
-                </div>
-              </div>
+              <VehicleSimilar vehicles={similarVehicles} />
             </>
           )}
 
           <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
             <DialogContent className="max-w-screen-lg w-full p-0 bg-black">
-              <div className="relative">
-                <img
-                  src={hasImages ? images[currentImageIndex].image_url_large || images[currentImageIndex].image_url : vehicle.image_feature}
-                  alt={vehicle.title}
-                  className="w-full h-auto"
-                />
-                {hasImages && (
-                  <>
-                    <button 
-                      onClick={handlePrevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
-                    >
-                      <ChevronLeft className="w-6 h-6" />
-                    </button>
-                    <button 
-                      onClick={handleNextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
-                    >
-                      <ChevronRight className="w-6 h-6" />
-                    </button>
-                  </>
-                )}
-              </div>
+              <VehicleImageGallery
+                images={vehicle.product_images || []}
+                title={vehicle.title}
+                imageFeature={vehicle.image_feature}
+                currentImageIndex={currentImageIndex}
+                onPrevImage={handlePrevImage}
+                onNextImage={handleNextImage}
+                onImageClick={() => setLightboxOpen(false)}
+              />
             </DialogContent>
           </Dialog>
         </div>
