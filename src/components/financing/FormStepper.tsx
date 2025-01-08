@@ -34,11 +34,6 @@ export const FormStepper = ({ currentStep, totalSteps }: FormStepperProps) => {
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-2">
-        <span className="text-sm text-gray-500">Dados Pessoais</span>
-        <span className="text-sm text-gray-500">Dados Financeiros</span>
-        <span className="text-sm text-gray-500">Documentação</span>
-      </div>
     </div>
   );
 };
