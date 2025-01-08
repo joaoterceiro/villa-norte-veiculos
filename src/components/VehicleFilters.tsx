@@ -1,9 +1,10 @@
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { RotateCcw } from "lucide-react";
+import { SelectFilter } from "./filters/SelectFilter";
+import { RangeFilter } from "./filters/RangeFilter";
 
 interface FiltersState {
   make: string;
@@ -25,8 +26,44 @@ interface VehicleFiltersProps {
 }
 
 const carColors = [
-  "PRETO", "BRANCO", "PRATA", "CINZA", "VERMELHO", 
-  "AZUL", "VERDE", "AMARELO", "MARROM", "BEGE"
+  { value: "PRETO", label: "Preto" },
+  { value: "BRANCO", label: "Branco" },
+  { value: "PRATA", label: "Prata" },
+  { value: "CINZA", label: "Cinza" },
+  { value: "VERMELHO", label: "Vermelho" },
+  { value: "AZUL", label: "Azul" },
+  { value: "VERDE", label: "Verde" },
+  { value: "AMARELO", label: "Amarelo" },
+  { value: "MARROM", label: "Marrom" },
+  { value: "BEGE", label: "Bege" },
+];
+
+const conditions = [
+  { value: "NOVO", label: "Novo" },
+  { value: "SEMINOVO", label: "Seminovo" },
+  { value: "USADO", label: "Usado" },
+];
+
+const transmissions = [
+  { value: "MANUAL", label: "Manual" },
+  { value: "AUTOMATIC", label: "Automático" },
+];
+
+const fuelTypes = [
+  { value: "FLEX", label: "Flex" },
+  { value: "GASOLINE", label: "Gasolina" },
+  { value: "ETHANOL", label: "Etanol" },
+  { value: "DIESEL", label: "Diesel" },
+  { value: "ELECTRIC", label: "Elétrico" },
+  { value: "HYBRID", label: "Híbrido" },
+];
+
+const bodyTypes = [
+  { value: "SUV", label: "SUV" },
+  { value: "HATCH", label: "Hatch" },
+  { value: "SEDAN", label: "Sedã" },
+  { value: "PICKUP", label: "Picape" },
+  { value: "COUPE", label: "Coupé" },
 ];
 
 export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps) => {
@@ -77,26 +114,16 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
             placeholder="Ex: Toyota"
             value={filters.make}
             onChange={(e) => handleChange("make", e.target.value)}
+            className="bg-white"
           />
         </div>
 
-        <div className="space-y-2">
-          <Label>Estado</Label>
-          <Select
-            value={filters.condition || "all"}
-            onValueChange={(value) => handleChange("condition", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="NOVO">Novo</SelectItem>
-              <SelectItem value="SEMINOVO">Seminovo</SelectItem>
-              <SelectItem value="USADO">Usado</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <SelectFilter
+          label="Estado"
+          value={filters.condition}
+          onValueChange={(value) => handleChange("condition", value)}
+          options={conditions}
+        />
 
         <div className="space-y-2">
           <Label>Ano mínimo</Label>
@@ -105,122 +132,53 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
             placeholder="Ex: 2020"
             value={filters.yearMin}
             onChange={(e) => handleChange("yearMin", e.target.value)}
+            className="bg-white"
           />
         </div>
 
-        <div className="space-y-2">
-          <Label>Preço</Label>
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              placeholder="Mín"
-              value={filters.priceMin}
-              onChange={(e) => handleChange("priceMin", e.target.value)}
-            />
-            <Input
-              type="number"
-              placeholder="Máx"
-              value={filters.priceMax}
-              onChange={(e) => handleChange("priceMax", e.target.value)}
-            />
-          </div>
-        </div>
+        <RangeFilter
+          label="Preço"
+          minValue={filters.priceMin}
+          maxValue={filters.priceMax}
+          onMinChange={(value) => handleChange("priceMin", value)}
+          onMaxChange={(value) => handleChange("priceMax", value)}
+        />
 
-        <div className="space-y-2">
-          <Label>Quilometragem</Label>
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              placeholder="Mín"
-              value={filters.mileageMin}
-              onChange={(e) => handleChange("mileageMin", e.target.value)}
-            />
-            <Input
-              type="number"
-              placeholder="Máx"
-              value={filters.mileageMax}
-              onChange={(e) => handleChange("mileageMax", e.target.value)}
-            />
-          </div>
-        </div>
+        <RangeFilter
+          label="Quilometragem"
+          minValue={filters.mileageMin}
+          maxValue={filters.mileageMax}
+          onMinChange={(value) => handleChange("mileageMin", value)}
+          onMaxChange={(value) => handleChange("mileageMax", value)}
+        />
 
-        <div className="space-y-2">
-          <Label>Câmbio</Label>
-          <Select
-            value={filters.transmission || "all"}
-            onValueChange={(value) => handleChange("transmission", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="MANUAL">Manual</SelectItem>
-              <SelectItem value="AUTOMATIC">Automático</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <SelectFilter
+          label="Câmbio"
+          value={filters.transmission}
+          onValueChange={(value) => handleChange("transmission", value)}
+          options={transmissions}
+        />
 
-        <div className="space-y-2">
-          <Label>Combustível</Label>
-          <Select
-            value={filters.fuelType || "all"}
-            onValueChange={(value) => handleChange("fuelType", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="FLEX">Flex</SelectItem>
-              <SelectItem value="GASOLINE">Gasolina</SelectItem>
-              <SelectItem value="ETHANOL">Etanol</SelectItem>
-              <SelectItem value="DIESEL">Diesel</SelectItem>
-              <SelectItem value="ELECTRIC">Elétrico</SelectItem>
-              <SelectItem value="HYBRID">Híbrido</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <SelectFilter
+          label="Combustível"
+          value={filters.fuelType}
+          onValueChange={(value) => handleChange("fuelType", value)}
+          options={fuelTypes}
+        />
 
-        <div className="space-y-2">
-          <Label>Tipo de carroceria</Label>
-          <Select
-            value={filters.bodyType || "all"}
-            onValueChange={(value) => handleChange("bodyType", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="SUV">SUV</SelectItem>
-              <SelectItem value="HATCH">Hatch</SelectItem>
-              <SelectItem value="SEDAN">Sedã</SelectItem>
-              <SelectItem value="PICKUP">Picape</SelectItem>
-              <SelectItem value="COUPE">Coupé</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <SelectFilter
+          label="Tipo de carroceria"
+          value={filters.bodyType}
+          onValueChange={(value) => handleChange("bodyType", value)}
+          options={bodyTypes}
+        />
 
-        <div className="space-y-2">
-          <Label>Cor</Label>
-          <Select
-            value={filters.color || "all"}
-            onValueChange={(value) => handleChange("color", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas</SelectItem>
-              {carColors.map((color) => (
-                <SelectItem key={color} value={color}>
-                  {color}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <SelectFilter
+          label="Cor"
+          value={filters.color}
+          onValueChange={(value) => handleChange("color", value)}
+          options={carColors}
+        />
       </div>
     </div>
   );
