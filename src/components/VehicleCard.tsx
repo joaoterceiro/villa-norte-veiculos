@@ -1,4 +1,4 @@
-import { Calendar, Fuel, Car, Check } from "lucide-react";
+import { Calendar, Fuel, Car } from "lucide-react";
 import { Card } from "./ui/card";
 
 interface VehicleCardProps {
@@ -33,17 +33,20 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
         />
         {vehicle.is_featured && (
           <div className="absolute top-4 left-4">
-            <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium">
-              Destaque
+            <span className="bg-orange-500 text-white px-3 py-1 rounded-sm text-xs font-medium uppercase">
+              Oferta imperdível
             </span>
           </div>
         )}
       </div>
       <div className="p-4">
-        <h3 className="text-base font-semibold text-secondary line-clamp-2 mb-3 min-h-[2.5rem]">
+        <h3 className="text-base font-semibold text-secondary line-clamp-2 mb-3">
           {vehicle.title}
         </h3>
-        <div className="flex flex-wrap gap-4 text-muted text-xs mb-4">
+        <span className="text-xl font-bold text-primary block mb-3">
+          {formatPrice(vehicle.price || 0)}
+        </span>
+        <div className="flex flex-wrap gap-4 text-muted text-sm">
           <span className="flex items-center gap-1.5">
             <Calendar className="w-4 h-4" />
             {vehicle.year}
@@ -54,37 +57,8 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           </span>
           <span className="flex items-center gap-1.5">
             <Fuel className="w-4 h-4" />
-            {vehicle.fuel_type}
+            {vehicle.fuel_type?.toLowerCase()}
           </span>
-        </div>
-        {vehicle.accessories && vehicle.accessories.length > 0 && (
-          <div className="mb-4">
-            <h4 className="text-sm font-medium mb-2">Acessórios</h4>
-            <div className="flex flex-wrap gap-2">
-              {vehicle.accessories.slice(0, 3).map((accessory) => (
-                <span
-                  key={accessory}
-                  className="inline-flex items-center gap-1 text-xs bg-secondary/10 text-secondary px-2 py-1 rounded"
-                >
-                  <Check className="w-3 h-3" />
-                  {accessory}
-                </span>
-              ))}
-              {vehicle.accessories.length > 3 && (
-                <span className="text-xs text-muted">
-                  +{vehicle.accessories.length - 3} mais
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-        <div className="flex flex-col gap-3">
-          <span className="text-xl font-bold text-primary">
-            {formatPrice(vehicle.price || 0)}
-          </span>
-          <button className="w-full bg-primary/10 hover:bg-primary/20 text-primary py-2 px-4 rounded-md transition-colors text-sm font-medium">
-            Ver detalhes
-          </button>
         </div>
       </div>
     </Card>
