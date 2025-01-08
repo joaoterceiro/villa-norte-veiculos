@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { WhatsappLogo } from "@phosphor-icons/react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { VehicleCard } from "@/components/VehicleCard";
@@ -10,12 +9,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Car,
-  Calendar,
-  Fuel,
-  GaugeCircle,
-  Cog,
-  DoorOpen,
-  Palette,
+  MessageSquare,
+  Calculator,
+  CheckCircle,
 } from "lucide-react";
 
 const VehicleDetails = () => {
@@ -45,13 +41,18 @@ const VehicleDetails = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("product")
-        .select("*")
+        .select("*, product_accessories(accessory)")
         .eq("make", vehicle?.make)
         .neq("vehicle_id", id)
         .limit(4);
 
       if (error) throw error;
-      return data;
+      
+      // Transform the data to match the VehicleCard expected format
+      return data.map(v => ({
+        ...v,
+        accessories: v.product_accessories?.map(a => a.accessory) || []
+      }));
     },
   });
 
@@ -93,8 +94,6 @@ const VehicleDetails = () => {
           <div>
             <div className="flex items-center gap-2 text-sm text-muted mb-2">
               <span className="uppercase">{vehicle.condition}</span>
-              <span>|</span>
-              <span>{vehicle.city}</span>
             </div>
             <h1 className="text-2xl font-bold">{vehicle.title}</h1>
             <div className="mt-4">
@@ -106,10 +105,11 @@ const VehicleDetails = () => {
 
           <div className="space-y-4">
             <Button className="w-full" size="lg">
-              <WhatsappLogo weight="fill" className="w-5 h-5" />
+              <MessageSquare className="w-5 h-5" />
               Tenho interesse
             </Button>
             <Button variant="outline" className="w-full" size="lg">
+              <Calculator className="w-5 h-5" />
               Faça uma simulação
             </Button>
           </div>
@@ -117,31 +117,31 @@ const VehicleDetails = () => {
           <div className="space-y-2 text-sm">
             <div className="flex items-center gap-2">
               <Badge variant="secondary">
-                <Car className="w-4 h-4 mr-1" />
+                <CheckCircle className="w-4 h-4 mr-1" />
                 Veículos revisados e periciados
               </Badge>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="secondary">
-                <Car className="w-4 h-4 mr-1" />
+                <CheckCircle className="w-4 h-4 mr-1" />
                 Bônus na troca
               </Badge>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="secondary">
-                <Car className="w-4 h-4 mr-1" />
+                <CheckCircle className="w-4 h-4 mr-1" />
                 90 dias de garantia da loja
               </Badge>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="secondary">
-                <Car className="w-4 h-4 mr-1" />
+                <CheckCircle className="w-4 h-4 mr-1" />
                 Entrada Parcelada em até 21x
               </Badge>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="secondary">
-                <Car className="w-4 h-4 mr-1" />
+                <CheckCircle className="w-4 h-4 mr-1" />
                 Pague em até 60 Meses
               </Badge>
             </div>
