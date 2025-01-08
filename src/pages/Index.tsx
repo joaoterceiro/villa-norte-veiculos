@@ -6,6 +6,8 @@ import { BrandLogos } from "@/components/BrandLogos";
 import { VehicleTypes } from "@/components/VehicleTypes";
 import { FinancingSteps } from "@/components/FinancingSteps";
 import { Showrooms } from "@/components/Showrooms";
+import { LogIn } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -46,6 +48,16 @@ const Index = () => {
                 <li>/villanorteveiculo</li>
               </ul>
             </div>
+          </div>
+          <div className="mt-8 flex justify-end">
+            <Link 
+              to="/auth" 
+              className="text-muted hover:text-white transition-colors flex items-center gap-2"
+              aria-label="Login administrativo"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Área administrativa</span>
+            </Link>
           </div>
         </div>
       </footer>
