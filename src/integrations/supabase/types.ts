@@ -51,6 +51,27 @@ export type Database = {
         }
         Relationships: []
       }
+      portal_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          updated_at: string | null
+          whatsapp_number: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          whatsapp_number: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
       product: {
         Row: {
           base_model: string | null

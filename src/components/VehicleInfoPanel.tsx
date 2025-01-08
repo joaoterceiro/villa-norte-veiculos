@@ -1,12 +1,15 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Calculator, CheckCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VehicleInfoPanelProps {
   title: string;
   condition: string;
   location?: string;
   price: number;
+  category?: string;
 }
 
 export const VehicleInfoPanel = ({
@@ -14,12 +17,36 @@ export const VehicleInfoPanel = ({
   condition,
   location,
   price,
+  category = "carro",
 }: VehicleInfoPanelProps) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
     }).format(price);
+  };
+
+  const { data: settings } = useQuery({
+    queryKey: ["portal-settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("portal_settings")
+        .select("*")
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const handleWhatsAppClick = () => {
+    if (!settings?.whatsapp_number) return;
+
+    const message = encodeURIComponent(
+      `Oi, acabei de ver o ${category} ${title} e queria saber mais detalhes de como adquirir.`
+    );
+    const whatsappUrl = `https://wa.me/${settings.whatsapp_number}?text=${message}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   return (
@@ -36,14 +63,18 @@ export const VehicleInfoPanel = ({
         </div>
         <h1 className="text-3xl font-bold text-[#14181B]">{title}</h1>
         <div className="mt-4">
-          <span className="text-4xl font-bold text-primary">
+          <span className="text-4xl font-bold text-[#FF6500]">
             {formatPrice(price || 0)}
           </span>
         </div>
       </div>
 
       <div className="space-y-4">
-        <Button className="w-full text-lg" size="lg">
+        <Button 
+          className="w-full text-lg" 
+          size="lg"
+          onClick={handleWhatsAppClick}
+        >
           <MessageSquare className="w-6 h-6 mr-2" />
           Tenho interesse
         </Button>

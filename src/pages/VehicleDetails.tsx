@@ -122,6 +122,7 @@ const VehicleDetails = () => {
                 condition={vehicle.condition}
                 price={vehicle.price}
                 location="São José dos Campos"
+                category={vehicle.category}
               />
             </div>
           </div>
