@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export type Database = {
+export interface Database {
   public: {
     Tables: {
       leads: {
@@ -48,6 +48,27 @@ export type Database = {
           status?: string | null
           telefone?: string
           valor_entrada?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          id: string
+          role: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          role?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          role?: string
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -210,6 +231,27 @@ export type Database = {
             referencedColumns: ["vehicle_id"]
           },
         ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       slides: {
         Row: {
