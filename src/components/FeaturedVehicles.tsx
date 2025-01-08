@@ -5,16 +5,16 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const FeaturedVehicles = () => {
   const { data: vehicles, isLoading } = useQuery({
-    queryKey: ["featured-vehicles"],
+    queryKey: ["vehicles"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("product")
         .select("*")
-        .eq("is_featured", true)
         .eq("status", "active")
         .is("deleted_at", null)
+        .order("is_featured", { ascending: false })
         .order("date_added", { ascending: false })
-        .limit(5);
+        .limit(10);
 
       if (error) throw error;
       return data;
@@ -71,11 +71,13 @@ export const FeaturedVehicles = () => {
                 alt={vehicle.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              <div className="absolute top-4 left-4">
-                <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium">
-                  Destaque
-                </span>
-              </div>
+              {vehicle.is_featured && (
+                <div className="absolute top-4 left-4">
+                  <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium">
+                    Destaque
+                  </span>
+                </div>
+              )}
             </div>
             <div className="p-4">
               <h3 className="text-base font-semibold text-secondary line-clamp-2 mb-3 min-h-[2.5rem]">
