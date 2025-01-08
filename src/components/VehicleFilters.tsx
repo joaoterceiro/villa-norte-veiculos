@@ -121,7 +121,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
             placeholder="Digite o ano mínimo..."
             value={filters.yearMin}
             onChange={(e) => handleChange("yearMin", e.target.value)}
-            className="bg-white"
+            className="bg-white placeholder:text-gray-500"
           />
         </div>
 
@@ -131,8 +131,9 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           maxValue={filters.priceMax}
           onMinChange={(value) => handleChange("priceMin", value)}
           onMaxChange={(value) => handleChange("priceMax", value)}
-          minPlaceholder="R$ 0,00"
-          maxPlaceholder="R$ 999.999,99"
+          minPlaceholder="Valor mínimo"
+          maxPlaceholder="Valor máximo"
+          isCurrency={true}
         />
 
         <RangeFilter
