@@ -14,6 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { FilterProductsParams, FilteredVehicle } from "@/integrations/supabase/types/filter-products.types";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -37,7 +38,7 @@ export default function Vehicles() {
     queryKey: ["vehicles", filters],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.rpc("filter_products", {
+        const params: FilterProductsParams = {
           p_search_term: null,
           p_marca: filters.make || null,
           p_ano_min: filters.yearMin || null,
@@ -49,7 +50,9 @@ export default function Vehicles() {
           p_fuel_type: filters.fuelType || null,
           p_body_type: filters.bodyType || null,
           p_color: filters.color || null,
-        });
+        };
+
+        const { data, error } = await supabase.rpc<FilteredVehicle>("filter_products", params);
 
         if (error) {
           toast.error("Erro ao carregar veículos");
