@@ -144,6 +144,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           onMaxChange={(value) => handleChange("mileageMax", value)}
           minPlaceholder="0 KM"
           maxPlaceholder="500.000 KM"
+          isKilometer={true}
         />
 
         <SelectFilter

@@ -11,6 +11,7 @@ interface RangeFilterProps {
   minPlaceholder?: string;
   maxPlaceholder?: string;
   isCurrency?: boolean;
+  isKilometer?: boolean;
 }
 
 export const RangeFilter = ({
@@ -23,6 +24,7 @@ export const RangeFilter = ({
   minPlaceholder = "Mínimo",
   maxPlaceholder = "Máximo",
   isCurrency = false,
+  isKilometer = false,
 }: RangeFilterProps) => {
   const formatCurrency = (value: string) => {
     if (!value) return "";
@@ -34,9 +36,32 @@ export const RangeFilter = ({
     }).format(floatValue);
   };
 
+  const formatKilometer = (value: string) => {
+    if (!value) return "";
+    const numericValue = value.replace(/\D/g, "");
+    return new Intl.NumberFormat("pt-BR").format(Number(numericValue)) + " KM";
+  };
+
   const handleCurrencyChange = (value: string, onChange: (value: string) => void) => {
     const numericValue = value.replace(/\D/g, "");
     onChange(numericValue);
+  };
+
+  const handleKilometerChange = (value: string, onChange: (value: string) => void) => {
+    const numericValue = value.replace(/\D/g, "");
+    onChange(numericValue);
+  };
+
+  const getValue = (value: string) => {
+    if (isCurrency) return formatCurrency(value);
+    if (isKilometer) return formatKilometer(value);
+    return value;
+  };
+
+  const handleChange = (value: string, onChange: (value: string) => void) => {
+    if (isCurrency) return handleCurrencyChange(value, onChange);
+    if (isKilometer) return handleKilometerChange(value, onChange);
+    return onChange(value);
   };
 
   return (
@@ -44,25 +69,17 @@ export const RangeFilter = ({
       <Label>{label}</Label>
       <div className="flex gap-2">
         <Input
-          type={isCurrency ? "text" : type}
+          type={isCurrency || isKilometer ? "text" : type}
           placeholder={minPlaceholder}
-          value={isCurrency ? formatCurrency(minValue) : minValue}
-          onChange={(e) =>
-            isCurrency
-              ? handleCurrencyChange(e.target.value, onMinChange)
-              : onMinChange(e.target.value)
-          }
+          value={getValue(minValue)}
+          onChange={(e) => handleChange(e.target.value, onMinChange)}
           className="bg-white placeholder:text-gray-500"
         />
         <Input
-          type={isCurrency ? "text" : type}
+          type={isCurrency || isKilometer ? "text" : type}
           placeholder={maxPlaceholder}
-          value={isCurrency ? formatCurrency(maxValue) : maxValue}
-          onChange={(e) =>
-            isCurrency
-              ? handleCurrencyChange(e.target.value, onMaxChange)
-              : onMaxChange(e.target.value)
-          }
+          value={getValue(maxValue)}
+          onChange={(e) => handleChange(e.target.value, onMaxChange)}
           className="bg-white placeholder:text-gray-500"
         />
       </div>
