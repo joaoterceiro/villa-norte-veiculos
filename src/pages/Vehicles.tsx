@@ -4,12 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleFilters } from "@/components/VehicleFilters";
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarContent,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import { Loader2 } from "lucide-react";
 
 export default function Vehicles() {
@@ -51,42 +45,37 @@ export default function Vehicles() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      <SidebarProvider defaultOpen={false}>
-        <div className="container mx-auto flex min-h-screen w-full gap-8 py-8">
-          <Sidebar className="min-w-[240px]">
-            <SidebarContent>
-              <VehicleFilters filters={filters} onFilterChange={setFilters} />
-            </SidebarContent>
-          </Sidebar>
+      <div className="container mx-auto flex min-h-screen w-full gap-8 py-8">
+        <aside className="w-[280px] shrink-0 rounded-lg bg-white p-4 shadow-sm">
+          <VehicleFilters filters={filters} onFilterChange={setFilters} />
+        </aside>
 
-          <main className="flex-1">
-            <div className="mb-6 flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-gray-900">
-                Veículos disponíveis
-              </h1>
-              <SidebarTrigger />
+        <main className="flex-1">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">
+              Veículos disponíveis
+            </h1>
+          </div>
+
+          {isLoading ? (
+            <div className="flex h-[400px] items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
-
-            {isLoading ? (
-              <div className="flex h-[400px] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : !vehicles || vehicles.length === 0 ? (
-              <div className="flex h-[400px] items-center justify-center">
-                <p className="text-lg text-gray-500">
-                  Nenhum veículo encontrado com os filtros selecionados
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {vehicles.map((vehicle) => (
-                  <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
-                ))}
-              </div>
-            )}
-          </main>
-        </div>
-      </SidebarProvider>
+          ) : !vehicles || vehicles.length === 0 ? (
+            <div className="flex h-[400px] items-center justify-center">
+              <p className="text-lg text-gray-500">
+                Nenhum veículo encontrado com os filtros selecionados
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {vehicles.map((vehicle) => (
+                <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
