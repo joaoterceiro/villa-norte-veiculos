@@ -40,39 +40,46 @@ export default function Vehicles() {
       try {
         const params: FilterProductsParams = {
           p_search_term: null,
-          p_marca: filters.make || null,
+          p_marca: filters.make?.toLowerCase() || null,
           p_ano_min: filters.yearMin || null,
           p_price_min: filters.priceMin ? Number(filters.priceMin) : null,
           p_price_max: filters.priceMax ? Number(filters.priceMax) : null,
           p_mileage_min: filters.mileageMin ? Number(filters.mileageMin) : null,
           p_mileage_max: filters.mileageMax ? Number(filters.mileageMax) : null,
-          p_transmission_type: filters.transmission || null,
-          p_fuel_type: filters.fuelType || null,
-          p_body_type: filters.bodyType || null,
-          p_color: filters.color || null,
+          p_transmission_type: filters.transmission?.toLowerCase() || null,
+          p_fuel_type: filters.fuelType?.toLowerCase() || null,
+          p_body_type: filters.bodyType?.toLowerCase() || null,
+          p_color: filters.color?.toLowerCase() || null,
         };
 
-        console.log("Filter params:", params);
+        console.log("Filtros aplicados:", filters);
+        console.log("Parâmetros enviados para o RPC:", params);
 
         const { data, error } = await supabase
           .rpc('filter_products', params);
 
         if (error) {
-          console.error("Error fetching vehicles:", error);
+          console.error("Erro ao buscar veículos:", error);
           toast.error("Erro ao carregar veículos");
           throw error;
         }
 
-        console.log("Filtered data:", data);
+        console.log("Dados retornados do banco:", data);
 
         const filteredData = data || [];
         
-        // Apply condition filter after getting data since it's not in the RPC
-        return filters.condition
-          ? filteredData.filter((vehicle) => vehicle.condition === filters.condition)
+        // Aplicar filtro de condição após receber os dados
+        const finalData = filters.condition
+          ? filteredData.filter((vehicle) => 
+              vehicle.condition?.toLowerCase() === filters.condition.toLowerCase()
+            )
           : filteredData;
+
+        console.log("Dados após filtro de condição:", finalData);
+        
+        return finalData;
       } catch (error) {
-        console.error("Error fetching vehicles:", error);
+        console.error("Erro na função de busca:", error);
         throw error;
       }
     },
