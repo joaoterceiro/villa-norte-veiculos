@@ -2,8 +2,22 @@ import { Calendar, Fuel, Car } from "lucide-react";
 import { Card } from "./ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useState } from "react";
+
+const ITEMS_PER_PAGE = 12;
 
 export const FeaturedVehicles = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { data: vehicles, isLoading } = useQuery({
     queryKey: ["vehicles"],
     queryFn: async () => {
@@ -13,8 +27,7 @@ export const FeaturedVehicles = () => {
         .eq("status", "active")
         .is("deleted_at", null)
         .order("is_featured", { ascending: false })
-        .order("date_added", { ascending: false })
-        .limit(10);
+        .order("date_added", { ascending: false });
 
       if (error) throw error;
       return data;
@@ -24,8 +37,8 @@ export const FeaturedVehicles = () => {
   if (isLoading) {
     return (
       <div className="container mx-auto py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {[...Array(5)].map((_, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
             <Card
               key={i}
               className="group overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100 animate-pulse"
@@ -57,10 +70,21 @@ export const FeaturedVehicles = () => {
     }).format(price);
   };
 
+  // Pagination logic
+  const totalPages = Math.ceil(vehicles.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentVehicles = vehicles.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="container mx-auto py-12">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {vehicles.map((vehicle) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {currentVehicles.map((vehicle) => (
           <Card
             key={vehicle.vehicle_id}
             className="group overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100"
@@ -109,6 +133,62 @@ export const FeaturedVehicles = () => {
           </Card>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              
+              {[...Array(totalPages)].map((_, i) => {
+                const page = i + 1;
+                
+                // Show first page, current page, last page, and pages around current page
+                if (
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                ) {
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => handlePageChange(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                }
+
+                // Show ellipsis for gaps
+                if (page === 2 || page === totalPages - 1) {
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  );
+                }
+
+                return null;
+              })}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 };
