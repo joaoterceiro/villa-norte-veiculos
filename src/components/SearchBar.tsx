@@ -3,9 +3,6 @@ import { Search } from "lucide-react";
 export const SearchBar = () => {
   return (
     <div className="container mx-auto -mt-8 relative z-10 px-4">
-      <h2 className="text-2xl md:text-3xl font-semibold text-secondary mb-6 text-left">
-        Encontre o veículo perfeito entre mais de 100 disponíveis!
-      </h2>
       <div className="bg-white rounded-lg shadow-lg p-6">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
