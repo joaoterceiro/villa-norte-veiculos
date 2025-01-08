@@ -12,22 +12,29 @@ const Admin = () => {
   }, []);
 
   const checkUser = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate("/auth");
-      return;
-    }
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/auth");
+        return;
+      }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
+      const { data: userProfile, error } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", session.user.id)
+        .single();
 
-    if (profile?.role !== "admin") {
+      if (error || userProfile?.role !== "admin") {
+        navigate("/");
+        return;
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error checking user:", error);
       navigate("/");
     }
-    setLoading(false);
   };
 
   const handleSignOut = async () => {

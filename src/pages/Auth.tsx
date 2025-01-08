@@ -11,26 +11,35 @@ const Auth = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // Check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate("/admin");
-      }
-    });
+    checkSession();
+  }, []);
 
+  const checkSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      navigate("/admin");
+    }
+  };
+
+  useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_IN") {
-        // Check if user is admin before redirecting
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", session?.user.id)
-          .single();
+      if (event === "SIGNED_IN" && session) {
+        try {
+          const { data: userProfile, error } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", session.user.id)
+            .single();
 
-        if (profile?.role === "admin") {
-          navigate("/admin");
-        } else {
-          setErrorMessage("Acesso negado. Apenas administradores podem fazer login.");
+          if (error || userProfile?.role !== "admin") {
+            setErrorMessage("Acesso negado. Apenas administradores podem fazer login.");
+            await supabase.auth.signOut();
+          } else {
+            navigate("/admin");
+          }
+        } catch (error) {
+          console.error("Error checking user role:", error);
+          setErrorMessage("Erro ao verificar permissões do usuário.");
           await supabase.auth.signOut();
         }
       }
