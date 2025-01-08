@@ -362,39 +362,74 @@ export type Database = {
       }
     }
     Functions: {
-      filter_products: {
-        Args: {
-          p_search_term?: string
-          p_marca?: string
-          p_ano_min?: string
-          p_price_min?: number
-          p_price_max?: number
-          p_mileage_min?: number
-          p_mileage_max?: number
-          p_transmission_type?: string
-          p_fuel_type?: string
-          p_body_type?: string
-        }
-        Returns: {
-          vehicle_id: string
-          external_id: number
-          title: string
-          make: string
-          model: string
-          year: number
-          price: number
-          mileage: number
-          fuel_type: string
-          transmission: string
-          body_type: string
-          color: string
-          condition: string
-          is_featured: boolean
-          status: string
-          image_feature: string
-          accessories: string[]
-        }[]
-      }
+      filter_products:
+        | {
+            Args: {
+              p_search_term?: string
+              p_marca?: string
+              p_ano_min?: string
+              p_price_min?: number
+              p_price_max?: number
+              p_mileage_min?: number
+              p_mileage_max?: number
+              p_transmission_type?: string
+              p_fuel_type?: string
+              p_body_type?: string
+            }
+            Returns: {
+              vehicle_id: string
+              external_id: number
+              title: string
+              make: string
+              model: string
+              year: number
+              price: number
+              mileage: number
+              fuel_type: string
+              transmission: string
+              body_type: string
+              color: string
+              condition: string
+              is_featured: boolean
+              status: string
+              image_feature: string
+              accessories: string[]
+            }[]
+          }
+        | {
+            Args: {
+              p_search_term?: string
+              p_marca?: string
+              p_ano_min?: string
+              p_price_min?: number
+              p_price_max?: number
+              p_mileage_min?: number
+              p_mileage_max?: number
+              p_transmission_type?: string
+              p_fuel_type?: string
+              p_body_type?: string
+              p_color?: string
+            }
+            Returns: {
+              vehicle_id: string
+              external_id: number
+              title: string
+              make: string
+              model: string
+              year: number
+              price: number
+              mileage: number
+              fuel_type: string
+              transmission: string
+              body_type: string
+              color: string
+              condition: string
+              is_featured: boolean
+              status: string
+              image_feature: string
+              accessories: string[]
+            }[]
+          }
       filtered_products: {
         Args: {
           _make: string

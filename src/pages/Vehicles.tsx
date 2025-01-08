@@ -48,7 +48,7 @@ export default function Vehicles() {
           p_transmission_type: filters.transmission || null,
           p_fuel_type: filters.fuelType || null,
           p_body_type: filters.bodyType || null,
-          p_color: filters.color || null
+          p_color: filters.color || null,
         });
 
         if (error) {
@@ -70,17 +70,6 @@ export default function Vehicles() {
       }
     },
   });
-
-  // Pagination logic
-  const totalPages = vehicles ? Math.ceil(vehicles.length / ITEMS_PER_PAGE) : 0;
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentVehicles = vehicles?.slice(startIndex, endIndex);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
