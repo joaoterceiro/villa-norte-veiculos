@@ -46,16 +46,16 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
         <span className="text-xl font-bold text-primary block mb-3">
           {formatPrice(vehicle.price || 0)}
         </span>
-        <div className="flex flex-wrap gap-4 text-muted text-sm">
-          <span className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between text-muted text-sm whitespace-nowrap">
+          <span className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             {vehicle.year}
           </span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1">
             <Car className="w-4 h-4" />
             {vehicle.mileage?.toLocaleString("pt-BR")} km
           </span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1">
             <Fuel className="w-4 h-4" />
             {vehicle.fuel_type?.toLowerCase()}
           </span>
