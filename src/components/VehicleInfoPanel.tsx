@@ -23,9 +23,9 @@ export const VehicleInfoPanel = ({
   };
 
   return (
-    <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
+    <div className="space-y-6 bg-background p-6 rounded-lg shadow-sm border">
       <div>
-        <div className="flex items-center gap-2 text-sm text-muted mb-2">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
           <span className="uppercase">{condition}</span>
           {location && (
             <>
@@ -34,7 +34,7 @@ export const VehicleInfoPanel = ({
             </>
           )}
         </div>
-        <h1 className="text-2xl font-bold">{title}</h1>
+        <h1 className="text-2xl font-bold text-foreground">{title}</h1>
         <div className="mt-4">
           <span className="text-3xl font-bold text-primary">
             {formatPrice(price || 0)}
