@@ -111,7 +111,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
         <div className="space-y-2">
           <Label>Marca</Label>
           <Input
-            placeholder="Ex: Toyota, Honda, Fiat..."
+            placeholder="Digite a marca do veículo..."
             value={filters.make}
             onChange={(e) => handleChange("make", e.target.value)}
             className="bg-white"
@@ -130,7 +130,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           <Label>Ano mínimo</Label>
           <Input
             type="number"
-            placeholder="Ex: 2020"
+            placeholder="Digite o ano mínimo..."
             value={filters.yearMin}
             onChange={(e) => handleChange("yearMin", e.target.value)}
             className="bg-white"
@@ -143,8 +143,8 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           maxValue={filters.priceMax}
           onMinChange={(value) => handleChange("priceMin", value)}
           onMaxChange={(value) => handleChange("priceMax", value)}
-          minPlaceholder="R$ mínimo"
-          maxPlaceholder="R$ máximo"
+          minPlaceholder="R$ 0,00"
+          maxPlaceholder="R$ 999.999,99"
         />
 
         <RangeFilter
@@ -153,8 +153,8 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           maxValue={filters.mileageMax}
           onMinChange={(value) => handleChange("mileageMin", value)}
           onMaxChange={(value) => handleChange("mileageMax", value)}
-          minPlaceholder="KM mínimo"
-          maxPlaceholder="KM máximo"
+          minPlaceholder="0 KM"
+          maxPlaceholder="500.000 KM"
         />
 
         <SelectFilter
