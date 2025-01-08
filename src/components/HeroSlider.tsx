@@ -47,6 +47,23 @@ export const HeroSlider = () => {
     return null;
   }
 
+  const renderSlideContent = (slide: typeof slides[0], style: React.CSSProperties) => (
+    <>
+      <img
+        src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
+        alt={slide.title}
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent">
+        <div className="container mx-auto h-full flex items-center">
+          <h1 className="text-white text-5xl font-bold max-w-2xl">
+            {slide.title}
+          </h1>
+        </div>
+      </div>
+    </>
+  );
+
   return (
     <div className="relative h-[500px] overflow-hidden">
       <div
@@ -56,29 +73,25 @@ export const HeroSlider = () => {
         }}
       >
         {slides.map((slide, index) => {
-          const SlideWrapper = slide.link ? Link : "div";
-          const wrapperProps = slide.link ? { to: slide.link } : {};
-
-          return (
-            <SlideWrapper
+          const style = { left: `${index * 100}%` };
+          
+          return slide.link ? (
+            <Link
               key={index}
-              {...wrapperProps}
+              to={slide.link}
               className="absolute inset-0 w-full h-full"
-              style={{ left: `${index * 100}%` }}
+              style={style}
             >
-              <img
-                src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent">
-                <div className="container mx-auto h-full flex items-center">
-                  <h1 className="text-white text-5xl font-bold max-w-2xl">
-                    {slide.title}
-                  </h1>
-                </div>
-              </div>
-            </SlideWrapper>
+              {renderSlideContent(slide, style)}
+            </Link>
+          ) : (
+            <div
+              key={index}
+              className="absolute inset-0 w-full h-full"
+              style={style}
+            >
+              {renderSlideContent(slide, style)}
+            </div>
           );
         })}
       </div>
