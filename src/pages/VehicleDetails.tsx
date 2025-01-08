@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Car,
 } from "lucide-react";
+import { VehicleSpecifications } from "@/components/VehicleSpecifications";
 
 const VehicleDetails = () => {
   const { id } = useParams();
@@ -82,6 +83,19 @@ const VehicleDetails = () => {
     );
   };
 
+  const specifications = [
+    { label: "Marca", value: vehicle.make },
+    { label: "Modelo", value: vehicle.model },
+    { label: "Ano", value: vehicle.year },
+    { label: "Versão", value: vehicle.base_model },
+    { label: "Cor", value: vehicle.color },
+    { label: "Combustível", value: vehicle.fuel_type },
+    { label: "Portas", value: vehicle.doors },
+    { label: "Transmissão", value: vehicle.transmission },
+    { label: "Motor", value: vehicle.engine },
+    { label: "Quilometragem", value: vehicle.mileage?.toLocaleString("pt-BR") }
+  ];
+
   return (
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -118,56 +132,9 @@ const VehicleDetails = () => {
         />
       </div>
 
-      {/* Rest of the component */}
       <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Sobre o veículo</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Marca</div>
-            <div className="font-medium">{vehicle.make}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Modelo</div>
-            <div className="font-medium">{vehicle.model}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Ano</div>
-            <div className="font-medium">{vehicle.year}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Versão</div>
-            <div className="font-medium">{vehicle.base_model}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Cor</div>
-            <div className="font-medium">{vehicle.color}</div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Combustível</div>
-            <div className="font-medium">{vehicle.fuel_type}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Portas</div>
-            <div className="font-medium">{vehicle.doors}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Transmissão</div>
-            <div className="font-medium">{vehicle.transmission}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Motor</div>
-            <div className="font-medium">{vehicle.engine}</div>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-muted text-sm">Quilometragem</div>
-            <div className="font-medium">
-              {vehicle.mileage?.toLocaleString("pt-BR")}
-            </div>
-          </div>
-        </div>
+        <h2 className="text-2xl font-semibold mb-6">Especificações</h2>
+        <VehicleSpecifications specifications={specifications} />
       </div>
 
       <Separator className="my-8" />
@@ -210,7 +177,6 @@ const VehicleDetails = () => {
         </>
       )}
 
-      {/* Lightbox Dialog */}
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
         <DialogContent className="max-w-screen-lg w-full p-0 bg-black">
           <div className="relative">
