@@ -13,7 +13,7 @@ const Specification = ({ label, value, className }: SpecificationProps) => {
       className
     )}>
       <div className="text-[#8A8A8A] text-sm font-medium mb-1.5">{label}</div>
-      <div className="text-[#333333] font-semibold">
+      <div className="text-[#14181B] font-semibold">
         {value || "—"}
       </div>
     </div>

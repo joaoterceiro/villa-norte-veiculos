@@ -34,7 +34,7 @@ export const VehicleInfoPanel = ({
             </>
           )}
         </div>
-        <h1 className="text-3xl font-bold text-[#333333]">{title}</h1>
+        <h1 className="text-3xl font-bold text-[#14181B]">{title}</h1>
         <div className="mt-4">
           <span className="text-4xl font-bold text-primary">
             {formatPrice(price || 0)}
