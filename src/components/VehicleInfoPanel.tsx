@@ -25,7 +25,7 @@ export const VehicleInfoPanel = ({
   return (
     <div className="space-y-6 bg-background p-6 rounded-lg shadow-sm border">
       <div>
-        <div className="flex items-center gap-2 text-sm text-[#8A8A8A] mb-2">
+        <div className="flex items-center gap-2 text-base text-[#8A8A8A] mb-2">
           <span className="uppercase">{condition}</span>
           {location && (
             <>
@@ -34,53 +34,53 @@ export const VehicleInfoPanel = ({
             </>
           )}
         </div>
-        <h1 className="text-2xl font-bold text-[#333333]">{title}</h1>
+        <h1 className="text-3xl font-bold text-[#333333]">{title}</h1>
         <div className="mt-4">
-          <span className="text-3xl font-bold text-primary">
+          <span className="text-4xl font-bold text-primary">
             {formatPrice(price || 0)}
           </span>
         </div>
       </div>
 
       <div className="space-y-4">
-        <Button className="w-full" size="lg">
-          <MessageSquare className="w-5 h-5" />
+        <Button className="w-full text-lg" size="lg">
+          <MessageSquare className="w-6 h-6 mr-2" />
           Tenho interesse
         </Button>
-        <Button variant="outline" className="w-full" size="lg">
-          <Calculator className="w-5 h-5" />
+        <Button variant="outline" className="w-full text-lg" size="lg">
+          <Calculator className="w-6 h-6 mr-2" />
           Faça uma simulação
         </Button>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
-          <span className="text-sm text-[#8A8A8A]">
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <CheckCircle className="w-5 h-5 text-[#8A8A8A]" />
+          <span className="text-base text-[#8A8A8A]">
             Veículos revisados e periciados
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
-          <span className="text-sm text-[#8A8A8A]">
+        <div className="flex items-center gap-3">
+          <CheckCircle className="w-5 h-5 text-[#8A8A8A]" />
+          <span className="text-base text-[#8A8A8A]">
             Bônus na troca
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
-          <span className="text-sm text-[#8A8A8A]">
+        <div className="flex items-center gap-3">
+          <CheckCircle className="w-5 h-5 text-[#8A8A8A]" />
+          <span className="text-base text-[#8A8A8A]">
             90 dias de garantia da loja
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
-          <span className="text-sm text-[#8A8A8A]">
+        <div className="flex items-center gap-3">
+          <CheckCircle className="w-5 h-5 text-[#8A8A8A]" />
+          <span className="text-base text-[#8A8A8A]">
             Entrada Parcelada em até 21x
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
-          <span className="text-sm text-[#8A8A8A]">
+        <div className="flex items-center gap-3">
+          <CheckCircle className="w-5 h-5 text-[#8A8A8A]" />
+          <span className="text-base text-[#8A8A8A]">
             Pague em até 60 Meses
           </span>
         </div>
