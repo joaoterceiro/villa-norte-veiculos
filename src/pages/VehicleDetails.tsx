@@ -8,7 +8,7 @@ import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleInfoPanel } from "@/components/VehicleInfoPanel";
 import { VehicleSpecifications } from "@/components/VehicleSpecifications";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, Car } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
@@ -108,8 +108,8 @@ const VehicleDetails = () => {
       <Navbar />
       <main className="min-h-screen bg-background">
         <div className="container mx-auto py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="relative rounded-lg overflow-hidden bg-gray-100">
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-12 lg:col-span-8 relative rounded-lg overflow-hidden bg-gray-100">
               <img
                 src={hasImages ? images[currentImageIndex].image_url : vehicle.image_feature}
                 alt={vehicle.title}
@@ -134,12 +134,14 @@ const VehicleDetails = () => {
               )}
             </div>
 
-            <VehicleInfoPanel
-              title={vehicle.title}
-              condition={vehicle.condition}
-              price={vehicle.price}
-              location="São José dos Campos"
-            />
+            <div className="col-span-12 lg:col-span-4">
+              <VehicleInfoPanel
+                title={vehicle.title}
+                condition={vehicle.condition}
+                price={vehicle.price}
+                location="São José dos Campos"
+              />
+            </div>
           </div>
 
           <div className="mt-8">
