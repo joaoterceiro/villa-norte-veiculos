@@ -109,7 +109,7 @@ export default function Vehicles() {
           </div>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[...Array(8)].map((_, i) => (
                 <div
                   key={i}
@@ -125,7 +125,7 @@ export default function Vehicles() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {currentVehicles.map((vehicle) => (
                   <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
                 ))}
