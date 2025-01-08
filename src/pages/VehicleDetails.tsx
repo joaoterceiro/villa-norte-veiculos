@@ -153,7 +153,7 @@ const VehicleDetails = () => {
 
           <div>
             <h2 className="text-xl font-semibold mb-4">Descrição</h2>
-            <p className="text-muted-foreground whitespace-pre-line">
+            <p className="text-[#666666] whitespace-pre-line text-base">
               {vehicle.description}
             </p>
           </div>
