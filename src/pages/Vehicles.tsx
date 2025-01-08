@@ -5,9 +5,9 @@ import { Navbar } from "@/components/Navbar";
 import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleFilters } from "@/components/VehicleFilters";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Vehicles() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     make: "",
     yearMin: "",
@@ -18,26 +18,50 @@ export default function Vehicles() {
     transmission: "",
     fuelType: "",
     bodyType: "",
+    condition: "",
+    color: "",
   });
 
   const { data: vehicles, isLoading } = useQuery({
-    queryKey: ["vehicles", filters, searchTerm],
+    queryKey: ["vehicles", filters],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("filter_products", {
-        p_search_term: searchTerm || null,
-        p_marca: filters.make || null,
-        p_ano_min: filters.yearMin || null,
-        p_price_min: filters.priceMin ? Number(filters.priceMin) : null,
-        p_price_max: filters.priceMax ? Number(filters.priceMax) : null,
-        p_mileage_min: filters.mileageMin ? Number(filters.mileageMin) : null,
-        p_mileage_max: filters.mileageMax ? Number(filters.mileageMax) : null,
-        p_transmission_type: filters.transmission || null,
-        p_fuel_type: filters.fuelType || null,
-        p_body_type: filters.bodyType || null,
-      });
+      try {
+        const { data, error } = await supabase.rpc("filter_products", {
+          p_search_term: null,
+          p_marca: filters.make || null,
+          p_ano_min: filters.yearMin || null,
+          p_price_min: filters.priceMin ? Number(filters.priceMin) : null,
+          p_price_max: filters.priceMax ? Number(filters.priceMax) : null,
+          p_mileage_min: filters.mileageMin ? Number(filters.mileageMin) : null,
+          p_mileage_max: filters.mileageMax ? Number(filters.mileageMax) : null,
+          p_transmission_type: filters.transmission || null,
+          p_fuel_type: filters.fuelType || null,
+          p_body_type: filters.bodyType || null,
+        });
 
-      if (error) throw error;
-      return data;
+        if (error) {
+          toast.error("Erro ao carregar veículos");
+          throw error;
+        }
+
+        // Apply additional filters that aren't in the database function
+        let filteredData = data;
+        if (filters.condition) {
+          filteredData = filteredData.filter(
+            (vehicle) => vehicle.condition === filters.condition
+          );
+        }
+        if (filters.color) {
+          filteredData = filteredData.filter(
+            (vehicle) => vehicle.color === filters.color
+          );
+        }
+
+        return filteredData;
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+        throw error;
+      }
     },
   });
 
