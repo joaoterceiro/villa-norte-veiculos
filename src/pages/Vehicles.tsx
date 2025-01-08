@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleFilters } from "@/components/VehicleFilters";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Pagination,
@@ -49,6 +48,7 @@ export default function Vehicles() {
           p_transmission_type: filters.transmission || null,
           p_fuel_type: filters.fuelType || null,
           p_body_type: filters.bodyType || null,
+          p_color: filters.color || null
         });
 
         if (error) {
@@ -60,11 +60,6 @@ export default function Vehicles() {
         if (filters.condition) {
           filteredData = filteredData.filter(
             (vehicle) => vehicle.condition === filters.condition
-          );
-        }
-        if (filters.color) {
-          filteredData = filteredData.filter(
-            (vehicle) => vehicle.color === filters.color
           );
         }
 
@@ -126,34 +121,34 @@ export default function Vehicles() {
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {currentVehicles.map((vehicle) => (
+                {vehicles.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((vehicle) => (
                   <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
                 ))}
               </div>
 
-              {totalPages > 1 && (
+              {Math.ceil(vehicles.length / ITEMS_PER_PAGE) > 1 && (
                 <div className="mt-8">
                   <Pagination>
                     <PaginationContent>
                       <PaginationItem>
                         <PaginationPrevious
-                          onClick={() => handlePageChange(currentPage - 1)}
+                          onClick={() => setCurrentPage(currentPage - 1)}
                           className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                         />
                       </PaginationItem>
                       
-                      {[...Array(totalPages)].map((_, i) => {
+                      {[...Array(Math.ceil(vehicles.length / ITEMS_PER_PAGE))].map((_, i) => {
                         const page = i + 1;
                         
                         if (
                           page === 1 ||
-                          page === totalPages ||
+                          page === Math.ceil(vehicles.length / ITEMS_PER_PAGE) ||
                           (page >= currentPage - 1 && page <= currentPage + 1)
                         ) {
                           return (
                             <PaginationItem key={page}>
                               <PaginationLink
-                                onClick={() => handlePageChange(page)}
+                                onClick={() => setCurrentPage(page)}
                                 isActive={currentPage === page}
                                 className="cursor-pointer"
                               >
@@ -163,7 +158,7 @@ export default function Vehicles() {
                           );
                         }
 
-                        if (page === 2 || page === totalPages - 1) {
+                        if (page === 2 || page === Math.ceil(vehicles.length / ITEMS_PER_PAGE) - 1) {
                           return (
                             <PaginationItem key={page}>
                               <PaginationEllipsis />
@@ -176,8 +171,8 @@ export default function Vehicles() {
 
                       <PaginationItem>
                         <PaginationNext
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          onClick={() => setCurrentPage(currentPage + 1)}
+                          className={currentPage === Math.ceil(vehicles.length / ITEMS_PER_PAGE) ? "pointer-events-none opacity-50" : "cursor-pointer"}
                         />
                       </PaginationItem>
                     </PaginationContent>
