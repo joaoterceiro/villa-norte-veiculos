@@ -25,7 +25,7 @@ export const VehicleInfoPanel = ({
   return (
     <div className="space-y-6 bg-background p-6 rounded-lg shadow-sm border">
       <div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+        <div className="flex items-center gap-2 text-sm text-[#8A8A8A] mb-2">
           <span className="uppercase">{condition}</span>
           {location && (
             <>
@@ -34,7 +34,7 @@ export const VehicleInfoPanel = ({
             </>
           )}
         </div>
-        <h1 className="text-2xl font-bold text-foreground">{title}</h1>
+        <h1 className="text-2xl font-bold text-[#333333]">{title}</h1>
         <div className="mt-4">
           <span className="text-3xl font-bold text-primary">
             {formatPrice(price || 0)}
@@ -55,32 +55,32 @@ export const VehicleInfoPanel = ({
 
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">
+          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
+          <span className="text-sm text-[#8A8A8A]">
             Veículos revisados e periciados
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">
+          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
+          <span className="text-sm text-[#8A8A8A]">
             Bônus na troca
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">
+          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
+          <span className="text-sm text-[#8A8A8A]">
             90 dias de garantia da loja
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">
+          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
+          <span className="text-sm text-[#8A8A8A]">
             Entrada Parcelada em até 21x
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">
+          <CheckCircle className="w-4 h-4 text-[#8A8A8A]" />
+          <span className="text-sm text-[#8A8A8A]">
             Pague em até 60 Meses
           </span>
         </div>
