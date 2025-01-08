@@ -1,31 +1,17 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Calendar } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
-const formSchema = z.object({
-  nome: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
-  telefone: z.string().min(14, "Telefone inválido"),
-  valor_entrada: z.string().min(1, "Valor de entrada é obrigatório"),
-  data_nascimento: z.date({
-    required_error: "Data de nascimento é obrigatória",
-  }),
-  cpf: z.string().min(14, "CPF inválido"),
-  carro_troca: z.enum(["true", "false"]),
-  cnh: z.enum(["true", "false"]),
-});
+import { format } from "date-fns";
+import { FormStepper } from "./financing/FormStepper";
+import { PersonalDataStep } from "./financing/PersonalDataStep";
+import { FinancialDataStep } from "./financing/FinancialDataStep";
+import { DocumentationStep } from "./financing/DocumentationStep";
+import { formSchema } from "./financing/schema";
+import { z } from "zod";
 
 interface FinancingFormProps {
   onSuccess: () => void;
@@ -118,194 +104,22 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormStepper currentStep={step} totalSteps={3} />
+        
         {step === 1 && (
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="nome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qual é o seu nome?</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="telefone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qual é o seu contato?</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      maxLength={15}
-                      onChange={(e) => {
-                        field.onChange(formatPhone(e.target.value));
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <PersonalDataStep form={form} formatPhone={formatPhone} />
         )}
 
         {step === 2 && (
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="valor_entrada"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qual é o valor de entrada?</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(formatCurrency(e.target.value));
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="data_nascimento"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Qual é a sua data de nascimento?</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP", { locale: ptBR })
-                          ) : (
-                            <span>Selecione uma data</span>
-                          )}
-                          <Calendar className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <CalendarComponent
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                        locale={ptBR}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="cpf"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qual é o seu CPF?</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      maxLength={14}
-                      onChange={(e) => {
-                        field.onChange(formatCPF(e.target.value));
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FinancialDataStep
+            form={form}
+            formatCurrency={formatCurrency}
+            formatCPF={formatCPF}
+          />
         )}
 
         {step === 3 && (
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="carro_troca"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Possui carro na troca?</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-col space-y-1"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="true" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Sim</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="false" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Não</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="cnh"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Possui CNH?</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-col space-y-1"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="true" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Sim</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="false" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Não</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <DocumentationStep form={form} />
         )}
 
         <div className="flex justify-between">
