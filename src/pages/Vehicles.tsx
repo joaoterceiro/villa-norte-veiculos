@@ -51,7 +51,7 @@ export default function Vehicles() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <SearchBar onSearch={setSearchTerm} />
+      <SearchBar onSearch={setSearchTerm} className="" />
       
       <SidebarProvider defaultOpen={false}>
         <div className="container mx-auto flex min-h-screen w-full gap-8 py-8">

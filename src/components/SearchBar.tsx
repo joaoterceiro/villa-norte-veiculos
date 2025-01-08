@@ -3,9 +3,10 @@ import { useState } from "react";
 
 interface SearchBarProps {
   onSearch?: (term: string) => void;
+  className?: string;
 }
 
-export const SearchBar = ({ onSearch }: SearchBarProps) => {
+export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg p-6" }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -15,7 +16,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
 
   return (
     <div className="container mx-auto -mt-8 relative z-10 px-4">
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className={className}>
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
             <input
