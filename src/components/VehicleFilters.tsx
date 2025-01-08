@@ -111,7 +111,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
         <div className="space-y-2">
           <Label>Marca</Label>
           <Input
-            placeholder="Ex: Toyota"
+            placeholder="Ex: Toyota, Honda, Fiat..."
             value={filters.make}
             onChange={(e) => handleChange("make", e.target.value)}
             className="bg-white"
@@ -123,6 +123,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           value={filters.condition}
           onValueChange={(value) => handleChange("condition", value)}
           options={conditions}
+          placeholder="Selecione o estado do veículo"
         />
 
         <div className="space-y-2">
@@ -142,6 +143,8 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           maxValue={filters.priceMax}
           onMinChange={(value) => handleChange("priceMin", value)}
           onMaxChange={(value) => handleChange("priceMax", value)}
+          minPlaceholder="R$ mínimo"
+          maxPlaceholder="R$ máximo"
         />
 
         <RangeFilter
@@ -150,6 +153,8 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           maxValue={filters.mileageMax}
           onMinChange={(value) => handleChange("mileageMin", value)}
           onMaxChange={(value) => handleChange("mileageMax", value)}
+          minPlaceholder="KM mínimo"
+          maxPlaceholder="KM máximo"
         />
 
         <SelectFilter
@@ -157,6 +162,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           value={filters.transmission}
           onValueChange={(value) => handleChange("transmission", value)}
           options={transmissions}
+          placeholder="Selecione o tipo de câmbio"
         />
 
         <SelectFilter
@@ -164,6 +170,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           value={filters.fuelType}
           onValueChange={(value) => handleChange("fuelType", value)}
           options={fuelTypes}
+          placeholder="Selecione o tipo de combustível"
         />
 
         <SelectFilter
@@ -171,6 +178,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           value={filters.bodyType}
           onValueChange={(value) => handleChange("bodyType", value)}
           options={bodyTypes}
+          placeholder="Selecione o tipo de carroceria"
         />
 
         <SelectFilter
@@ -178,6 +186,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           value={filters.color}
           onValueChange={(value) => handleChange("color", value)}
           options={carColors}
+          placeholder="Selecione a cor"
         />
       </div>
     </div>

@@ -8,6 +8,8 @@ interface RangeFilterProps {
   onMinChange: (value: string) => void;
   onMaxChange: (value: string) => void;
   type?: "number" | "text";
+  minPlaceholder?: string;
+  maxPlaceholder?: string;
 }
 
 export const RangeFilter = ({
@@ -17,6 +19,8 @@ export const RangeFilter = ({
   onMinChange,
   onMaxChange,
   type = "number",
+  minPlaceholder = "Mínimo",
+  maxPlaceholder = "Máximo",
 }: RangeFilterProps) => {
   return (
     <div className="space-y-2">
@@ -24,14 +28,14 @@ export const RangeFilter = ({
       <div className="flex gap-2">
         <Input
           type={type}
-          placeholder="Mín"
+          placeholder={minPlaceholder}
           value={minValue}
           onChange={(e) => onMinChange(e.target.value)}
           className="bg-white"
         />
         <Input
           type={type}
-          placeholder="Máx"
+          placeholder={maxPlaceholder}
           value={maxValue}
           onChange={(e) => onMaxChange(e.target.value)}
           className="bg-white"

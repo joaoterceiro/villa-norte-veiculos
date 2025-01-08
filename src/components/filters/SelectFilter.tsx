@@ -19,7 +19,7 @@ export const SelectFilter = ({
   label,
   value,
   onValueChange,
-  placeholder = "Selecione",
+  placeholder = "Selecione uma opção",
   options,
 }: SelectFilterProps) => {
   return (
