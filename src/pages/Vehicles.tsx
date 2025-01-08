@@ -110,9 +110,11 @@ export default function Vehicles() {
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {vehicles.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((vehicle) => (
-                  <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
-                ))}
+                {vehicles
+                  .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+                  .map((vehicle) => (
+                    <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
+                  ))}
               </div>
 
               {Math.ceil(vehicles.length / ITEMS_PER_PAGE) > 1 && (
@@ -161,7 +163,11 @@ export default function Vehicles() {
                       <PaginationItem>
                         <PaginationNext
                           onClick={() => setCurrentPage(currentPage + 1)}
-                          className={currentPage === Math.ceil(vehicles.length / ITEMS_PER_PAGE) ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          className={
+                            currentPage === Math.ceil(vehicles.length / ITEMS_PER_PAGE)
+                              ? "pointer-events-none opacity-50"
+                              : "cursor-pointer"
+                          }
                         />
                       </PaginationItem>
                     </PaginationContent>
