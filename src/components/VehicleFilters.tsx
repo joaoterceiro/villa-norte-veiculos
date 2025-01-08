@@ -1,71 +1,21 @@
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
-import { RotateCcw } from "lucide-react";
+import { FilterHeader } from "./filters/FilterHeader";
+import { YearFilter } from "./filters/YearFilter";
 import { SelectFilter } from "./filters/SelectFilter";
 import { RangeFilter } from "./filters/RangeFilter";
 import { BrandFilter } from "./filters/BrandFilter";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-
-interface FiltersState {
-  make: string;
-  yearMin: string;
-  priceMin: string;
-  priceMax: string;
-  mileageMin: string;
-  mileageMax: string;
-  transmission: string;
-  fuelType: string;
-  bodyType: string;
-  condition: string;
-  color: string;
-}
+import { FiltersState } from "./filters/types/filters";
+import {
+  carColors,
+  conditions,
+  transmissions,
+  fuelTypes,
+  bodyTypes,
+} from "./filters/constants/filter-options";
 
 interface VehicleFiltersProps {
   filters: FiltersState;
   onFilterChange: (filters: FiltersState) => void;
 }
-
-const carColors = [
-  { value: "PRETO", label: "Preto" },
-  { value: "BRANCO", label: "Branco" },
-  { value: "PRATA", label: "Prata" },
-  { value: "CINZA", label: "Cinza" },
-  { value: "VERMELHO", label: "Vermelho" },
-  { value: "AZUL", label: "Azul" },
-  { value: "VERDE", label: "Verde" },
-  { value: "AMARELO", label: "Amarelo" },
-  { value: "MARROM", label: "Marrom" },
-  { value: "BEGE", label: "Bege" },
-];
-
-const conditions = [
-  { value: "NOVO", label: "Novo" },
-  { value: "SEMINOVO", label: "Seminovo" },
-  { value: "USADO", label: "Usado" },
-];
-
-const transmissions = [
-  { value: "MANUAL", label: "Manual" },
-  { value: "AUTOMATICO", label: "Automático" },
-];
-
-const fuelTypes = [
-  { value: "Flex", label: "Flex" },
-  { value: "Gasolina", label: "Gasolina" },
-  { value: "Etanol", label: "Etanol" },
-  { value: "Diesel", label: "Diesel" },
-  { value: "Elétrico", label: "Elétrico" },
-  { value: "Híbrido", label: "Híbrido" },
-];
-
-const bodyTypes = [
-  { value: "SUV", label: "SUV" },
-  { value: "HATCH", label: "Hatch" },
-  { value: "SEDAN", label: "Sedã" },
-  { value: "PICKUP", label: "Picape" },
-  { value: "COUPE", label: "Coupé" },
-];
 
 export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps) => {
   const handleChange = (key: keyof FiltersState, value: string) => {
@@ -93,20 +43,7 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Filtros</h2>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground hover:text-primary"
-          onClick={resetFilters}
-        >
-          <RotateCcw className="mr-2 h-4 w-4" />
-          Limpar filtros
-        </Button>
-      </div>
-
-      <Separator />
+      <FilterHeader onReset={resetFilters} />
 
       <div className="space-y-4">
         <BrandFilter
@@ -114,16 +51,10 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           onBrandSelect={(brand) => handleChange("make", brand)}
         />
 
-        <div className="space-y-2">
-          <Label>Ano mínimo</Label>
-          <Input
-            type="number"
-            placeholder="Digite o ano mínimo..."
-            value={filters.yearMin}
-            onChange={(e) => handleChange("yearMin", e.target.value)}
-            className="bg-white placeholder:text-gray-500"
-          />
-        </div>
+        <YearFilter 
+          value={filters.yearMin}
+          onChange={(value) => handleChange("yearMin", value)}
+        />
 
         <RangeFilter
           label="Preço"
@@ -169,6 +100,14 @@ export const VehicleFilters = ({ filters, onFilterChange }: VehicleFiltersProps)
           onValueChange={(value) => handleChange("bodyType", value)}
           options={bodyTypes}
           placeholder="Selecione o tipo de carroceria"
+        />
+
+        <SelectFilter
+          label="Condição"
+          value={filters.condition}
+          onValueChange={(value) => handleChange("condition", value)}
+          options={conditions}
+          placeholder="Selecione a condição"
         />
 
         <SelectFilter
