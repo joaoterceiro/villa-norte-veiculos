@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { VehicleCard } from "@/components/VehicleCard";
+import { VehicleInfoPanel } from "@/components/VehicleInfoPanel";
 import {
   Dialog,
   DialogContent,
@@ -14,9 +14,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Car,
-  MessageSquare,
-  Calculator,
-  CheckCircle,
 } from "lucide-react";
 
 const VehicleDetails = () => {
@@ -70,13 +67,6 @@ const VehicleDetails = () => {
     return <div>Veículo não encontrado</div>;
   }
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(price);
-  };
-
   const images = vehicle.product_images || [];
   const hasImages = images.length > 0;
 
@@ -95,7 +85,6 @@ const VehicleDetails = () => {
   return (
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Carrossel de Imagens */}
         <div className="relative rounded-lg overflow-hidden bg-gray-100">
           <img
             src={hasImages ? images[currentImageIndex].image_url : vehicle.image_feature}
@@ -121,64 +110,12 @@ const VehicleDetails = () => {
           )}
         </div>
 
-        {/* Rest of the vehicle details */}
-        <div className="space-y-6">
-          <div>
-            <div className="flex items-center gap-2 text-sm text-muted mb-2">
-              <span className="uppercase">{vehicle.condition}</span>
-            </div>
-            <h1 className="text-2xl font-bold">{vehicle.title}</h1>
-            <div className="mt-4">
-              <span className="text-3xl font-bold text-primary">
-                {formatPrice(vehicle.price || 0)}
-              </span>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <Button className="w-full" size="lg">
-              <MessageSquare className="w-5 h-5" />
-              Tenho interesse
-            </Button>
-            <Button variant="outline" className="w-full" size="lg">
-              <Calculator className="w-5 h-5" />
-              Faça uma simulação
-            </Button>
-          </div>
-
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary">
-                <CheckCircle className="w-4 h-4 mr-1" />
-                Veículos revisados e periciados
-              </Badge>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary">
-                <CheckCircle className="w-4 h-4 mr-1" />
-                Bônus na troca
-              </Badge>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary">
-                <CheckCircle className="w-4 h-4 mr-1" />
-                90 dias de garantia da loja
-              </Badge>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary">
-                <CheckCircle className="w-4 h-4 mr-1" />
-                Entrada Parcelada em até 21x
-              </Badge>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary">
-                <CheckCircle className="w-4 h-4 mr-1" />
-                Pague em até 60 Meses
-              </Badge>
-            </div>
-          </div>
-        </div>
+        <VehicleInfoPanel
+          title={vehicle.title}
+          condition={vehicle.condition}
+          price={vehicle.price}
+          location="São José dos Campos"
+        />
       </div>
 
       {/* Rest of the component */}
