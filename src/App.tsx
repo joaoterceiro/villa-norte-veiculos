@@ -7,6 +7,7 @@ import { useState } from "react";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Vehicles from "./pages/Vehicles";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/carros" element={<Vehicles />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
