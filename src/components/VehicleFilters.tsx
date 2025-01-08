@@ -47,16 +47,16 @@ const conditions = [
 
 const transmissions = [
   { value: "MANUAL", label: "Manual" },
-  { value: "AUTOMATIC", label: "Automático" },
+  { value: "AUTOMATICO", label: "Automático" },
 ];
 
 const fuelTypes = [
-  { value: "FLEX", label: "Flex" },
-  { value: "GASOLINE", label: "Gasolina" },
-  { value: "ETHANOL", label: "Etanol" },
-  { value: "DIESEL", label: "Diesel" },
-  { value: "ELECTRIC", label: "Elétrico" },
-  { value: "HYBRID", label: "Híbrido" },
+  { value: "Flex", label: "Flex" },
+  { value: "Gasolina", label: "Gasolina" },
+  { value: "Etanol", label: "Etanol" },
+  { value: "Diesel", label: "Diesel" },
+  { value: "Elétrico", label: "Elétrico" },
+  { value: "Híbrido", label: "Híbrido" },
 ];
 
 const bodyTypes = [
