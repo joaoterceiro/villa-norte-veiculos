@@ -6,8 +6,20 @@ import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleFilters } from "@/components/VehicleFilters";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+const ITEMS_PER_PAGE = 12;
 
 export default function Vehicles() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     make: "",
     yearMin: "",
@@ -44,7 +56,6 @@ export default function Vehicles() {
           throw error;
         }
 
-        // Apply additional filters that aren't in the database function
         let filteredData = data;
         if (filters.condition) {
           filteredData = filteredData.filter(
@@ -64,6 +75,17 @@ export default function Vehicles() {
       }
     },
   });
+
+  // Pagination logic
+  const totalPages = vehicles ? Math.ceil(vehicles.length / ITEMS_PER_PAGE) : 0;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentVehicles = vehicles?.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,8 +109,13 @@ export default function Vehicles() {
           </div>
 
           {isLoading ? (
-            <div className="flex h-[400px] items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="aspect-[4/3] bg-gray-200 rounded-lg animate-pulse"
+                />
+              ))}
             </div>
           ) : !vehicles || vehicles.length === 0 ? (
             <div className="flex h-[400px] items-center justify-center">
@@ -97,11 +124,67 @@ export default function Vehicles() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {vehicles.map((vehicle) => (
-                <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {currentVehicles.map((vehicle) => (
+                  <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="mt-8">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                      
+                      {[...Array(totalPages)].map((_, i) => {
+                        const page = i + 1;
+                        
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationLink
+                                onClick={() => handlePageChange(page)}
+                                isActive={currentPage === page}
+                                className="cursor-pointer"
+                              >
+                                {page}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        }
+
+                        if (page === 2 || page === totalPages - 1) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationEllipsis />
+                            </PaginationItem>
+                          );
+                        }
+
+                        return null;
+                      })}
+
+                      <PaginationItem>
+                        <PaginationNext
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </>
           )}
         </main>
       </div>
