@@ -26,7 +26,7 @@ export function FeaturedVehicles() {
       setIsLoading(true);
       try {
         const { data, error } = await supabase
-          .from("vehicles")
+          .from("product")  // Changed from "vehicles" to "product"
           .select("*")
           .eq("is_featured", true);
 
