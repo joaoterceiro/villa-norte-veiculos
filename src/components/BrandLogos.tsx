@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const brands = [
   { name: "Volkswagen", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/volkswagen.jpg" },
@@ -24,23 +25,25 @@ export const BrandLogos = () => {
         <p className="text-center text-muted mb-12 text-base max-w-3xl mx-auto">
           Explore nossa seleção exclusiva e descubra as melhores opções de veículos das marcas mais renomadas.
         </p>
-        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11 gap-4 md:gap-6 items-center">
-          {brands.map((brand) => (
-            <Link
-              key={brand.name}
-              to={`/carros?marca=${encodeURIComponent(brand.name)}`}
-              className="group"
-            >
-              <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 aspect-square flex items-center justify-center relative overflow-hidden">
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="w-full h-auto object-contain transition-all duration-300 group-hover:scale-110"
-                />
-              </div>
-            </Link>
-          ))}
-        </div>
+        <ScrollArea className="w-full whitespace-nowrap rounded-2xl pb-4">
+          <div className="flex gap-3 px-4">
+            {brands.map((brand) => (
+              <Link
+                key={brand.name}
+                to={`/carros?marca=${encodeURIComponent(brand.name.toLowerCase())}`}
+                className="group shrink-0"
+              >
+                <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-4 w-[120px] aspect-square flex items-center justify-center relative overflow-hidden">
+                  <img
+                    src={brand.logo}
+                    alt={brand.name}
+                    className="w-full h-auto object-contain transition-all duration-300 group-hover:scale-110"
+                  />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );
