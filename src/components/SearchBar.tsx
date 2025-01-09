@@ -35,12 +35,28 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
         const { data, error } = await supabase
           .rpc('filter_products', {
             p_search_term: searchTerm,
+            p_marca: null,
+            p_ano_min: null,
+            p_price_min: null,
+            p_price_max: null,
+            p_mileage_min: null,
+            p_mileage_max: null,
+            p_transmission_type: null,
+            p_fuel_type: null,
+            p_body_type: null,
+            p_color: null
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Supabase error:", error);
+          throw error;
+        }
+
+        console.log("Search results:", data);
         setSearchResults(data || []);
       } catch (error) {
         console.error("Error searching vehicles:", error);
+        setSearchResults([]);
       } finally {
         setIsLoading(false);
       }
