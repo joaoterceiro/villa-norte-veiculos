@@ -2,7 +2,6 @@ import { Navbar } from "@/components/Navbar";
 import { HeroSlider } from "@/components/HeroSlider";
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedVehicles } from "@/components/FeaturedVehicles";
-import { BrandLogos } from "@/components/BrandLogos";
 import { VehicleTypes } from "@/components/VehicleTypes";
 import { FinancingSteps } from "@/components/FinancingSteps";
 import { Showrooms } from "@/components/Showrooms";
@@ -28,7 +27,7 @@ const Index = () => {
           .from("product")
           .select("*")
           .eq("status", "active")
-          .eq("is_featured", false) // Add this line to exclude featured vehicles
+          .eq("is_featured", false)
           .order("date_added", { ascending: false })
           .limit(30);
 
@@ -95,7 +94,6 @@ const Index = () => {
             )}
           </div>
         </section>
-        <BrandLogos />
         <VehicleTypes />
         <FinancingSteps />
         <Showrooms />
