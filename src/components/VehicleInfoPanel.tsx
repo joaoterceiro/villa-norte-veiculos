@@ -101,7 +101,7 @@ export const VehicleInfoPanel = ({
           <div className="pt-4 border-t">
             <Button
               variant="outline"
-              className="w-full text-lg text-secondary hover:text-secondary-foreground"
+              className="w-full text-lg text-[#8A8A8A] hover:text-[#666666]"
               size="lg"
               onClick={() => window.open(downloadUrl, "_blank")}
             >
