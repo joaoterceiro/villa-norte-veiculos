@@ -81,6 +81,7 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
   return (
     <div className="container mx-auto -mt-8 relative z-10 px-4">
       <div className={className}>
+        <h2 className="text-2xl font-semibold mb-4">Encontre o veículo perfeito entre mais de 100 disponíveis!</h2>
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
             <input
@@ -92,7 +93,6 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
             />
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             
-            {/* Search Results Dropdown */}
             {searchTerm.length >= 2 && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg max-h-[60vh] overflow-y-auto">
                 {isLoading ? (
@@ -140,9 +140,9 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
           </div>
           <button
             type="submit"
-            className="bg-primary hover:bg-accent transition-colors text-white px-8 py-3 rounded-lg font-semibold whitespace-nowrap"
+            className="bg-[#FF5B00] hover:bg-[#FF5B00]/90 transition-colors text-white px-8 py-3 rounded-lg font-semibold whitespace-nowrap"
           >
-            BUSCAR
+            VER OFERTAS (108)
           </button>
         </form>
       </div>
