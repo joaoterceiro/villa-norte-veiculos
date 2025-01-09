@@ -13,7 +13,7 @@ export const VehiclesGrid = ({ vehicles, currentPage, itemsPerPage }: VehiclesGr
   const displayLimit = isMobile ? 6 : itemsPerPage;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 px-2 sm:px-0">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 px-1 sm:px-0">
       {vehicles
         .slice((currentPage - 1) * displayLimit, currentPage * displayLimit)
         .map((vehicle) => (
