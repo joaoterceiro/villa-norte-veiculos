@@ -1,26 +1,71 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <nav className="bg-secondary py-4">
-      <div className="container mx-auto flex items-center justify-between">
-        <Logo />
-        <div className="flex items-center space-x-6">
-          <Link to="/" className="text-white hover:text-primary">
-            Home
-          </Link>
-          <Link to="/carros" className="text-white hover:text-primary">
-            Comprar carro
-          </Link>
-          <Link to="/vender" className="text-white hover:text-primary">
-            Vender meu carro
-          </Link>
-          <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors">
-            Simular financiamento
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between">
+          <Logo />
+          
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden text-white hover:text-primary"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
+
+          {/* Desktop menu */}
+          <div className="hidden md:flex items-center space-x-6">
+            <Link to="/" className="text-white hover:text-primary">
+              Home
+            </Link>
+            <Link to="/carros" className="text-white hover:text-primary">
+              Comprar carro
+            </Link>
+            <Link to="/vender" className="text-white hover:text-primary">
+              Vender meu carro
+            </Link>
+            <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors">
+              Simular financiamento
+            </button>
+          </div>
         </div>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 space-y-4 pb-4">
+            <Link
+              to="/"
+              className="block text-white hover:text-primary"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              to="/carros"
+              className="block text-white hover:text-primary"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Comprar carro
+            </Link>
+            <Link
+              to="/vender"
+              className="block text-white hover:text-primary"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Vender meu carro
+            </Link>
+            <button className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors">
+              Simular financiamento
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );
