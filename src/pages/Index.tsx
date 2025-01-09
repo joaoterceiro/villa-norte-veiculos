@@ -66,7 +66,7 @@ const Index = () => {
               <img 
                 src="/lovable-uploads/4e2f1aea-9282-4da5-b917-1da0cb88dad4.png" 
                 alt="Mais de 100 veículos esperando por você" 
-                className="w-full h-auto object-cover"
+                className="w-full h-auto object-cover rounded-2xl"
               />
             </Link>
           </div>
