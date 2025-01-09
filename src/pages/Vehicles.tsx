@@ -5,6 +5,9 @@ import { Navbar } from "@/components/Navbar";
 import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleFilters } from "@/components/VehicleFilters";
 import { toast } from "sonner";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { FilterIcon } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -68,7 +71,6 @@ export default function Vehicles() {
 
         const filteredData = data || [];
         
-        // Aplicar filtro de condição após receber os dados
         const finalData = filters.condition
           ? filteredData.filter((vehicle) => 
               vehicle.condition?.toLowerCase() === filters.condition.toLowerCase()
@@ -85,110 +87,138 @@ export default function Vehicles() {
     },
   });
 
+  const FiltersContent = () => (
+    <div className="w-full h-full overflow-y-auto">
+      <VehicleFilters filters={filters} onFilterChange={setFilters} />
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      <div className="container mx-auto flex min-h-screen w-full gap-8 py-8">
-        <aside className="w-[280px] shrink-0 rounded-lg bg-white p-4 shadow-sm">
-          <VehicleFilters filters={filters} onFilterChange={setFilters} />
-        </aside>
+      <div className="container mx-auto px-4 lg:px-8 py-4 lg:py-8">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          {/* Desktop Filters */}
+          <aside className="hidden lg:block w-[280px] shrink-0">
+            <div className="sticky top-4 rounded-lg bg-white p-4 shadow-sm">
+              <FiltersContent />
+            </div>
+          </aside>
 
-        <main className="flex-1">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Veículos disponíveis
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">
-              {vehicles.length} veículos encontrados
-            </p>
+          {/* Mobile Filters */}
+          <div className="lg:hidden mb-4">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="w-full">
+                  <FilterIcon className="w-4 h-4 mr-2" />
+                  Filtros
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-full sm:w-[380px] p-0">
+                <div className="p-4 h-full overflow-y-auto">
+                  <FiltersContent />
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
 
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[...Array(8)].map((_, i) => (
-                <div
-                  key={i}
-                  className="aspect-[4/3] bg-gray-200 rounded-lg animate-pulse"
-                />
-              ))}
-            </div>
-          ) : !vehicles || vehicles.length === 0 ? (
-            <div className="flex h-[400px] items-center justify-center">
-              <p className="text-lg text-gray-500">
-                Nenhum veículo encontrado com os filtros selecionados
+          <main className="flex-1">
+            <div className="mb-4 lg:mb-6">
+              <h1 className="text-xl lg:text-2xl font-bold text-gray-900">
+                Veículos disponíveis
+              </h1>
+              <p className="text-sm text-gray-500 mt-1">
+                {vehicles.length} veículos encontrados
               </p>
             </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {vehicles
-                  .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
-                  .map((vehicle) => (
-                    <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
-                  ))}
+
+            {isLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {[...Array(8)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="aspect-[4/3] bg-gray-200 rounded-lg animate-pulse"
+                  />
+                ))}
               </div>
-
-              {Math.ceil(vehicles.length / ITEMS_PER_PAGE) > 1 && (
-                <div className="mt-8">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          onClick={() => setCurrentPage(currentPage - 1)}
-                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                        />
-                      </PaginationItem>
-                      
-                      {[...Array(Math.ceil(vehicles.length / ITEMS_PER_PAGE))].map((_, i) => {
-                        const page = i + 1;
-                        
-                        if (
-                          page === 1 ||
-                          page === Math.ceil(vehicles.length / ITEMS_PER_PAGE) ||
-                          (page >= currentPage - 1 && page <= currentPage + 1)
-                        ) {
-                          return (
-                            <PaginationItem key={page}>
-                              <PaginationLink
-                                onClick={() => setCurrentPage(page)}
-                                isActive={currentPage === page}
-                                className="cursor-pointer"
-                              >
-                                {page}
-                              </PaginationLink>
-                            </PaginationItem>
-                          );
-                        }
-
-                        if (page === 2 || page === Math.ceil(vehicles.length / ITEMS_PER_PAGE) - 1) {
-                          return (
-                            <PaginationItem key={page}>
-                              <PaginationEllipsis />
-                            </PaginationItem>
-                          );
-                        }
-
-                        return null;
-                      })}
-
-                      <PaginationItem>
-                        <PaginationNext
-                          onClick={() => setCurrentPage(currentPage + 1)}
-                          className={
-                            currentPage === Math.ceil(vehicles.length / ITEMS_PER_PAGE)
-                              ? "pointer-events-none opacity-50"
-                              : "cursor-pointer"
-                          }
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
+            ) : !vehicles || vehicles.length === 0 ? (
+              <div className="flex h-[400px] items-center justify-center">
+                <p className="text-lg text-gray-500">
+                  Nenhum veículo encontrado com os filtros selecionados
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {vehicles
+                    .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+                    .map((vehicle) => (
+                      <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
+                    ))}
                 </div>
-              )}
-            </>
-          )}
-        </main>
+
+                {Math.ceil(vehicles.length / ITEMS_PER_PAGE) > 1 && (
+                  <div className="mt-8 flex justify-center">
+                    <Pagination>
+                      <PaginationContent className="flex-wrap justify-center gap-2">
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                        
+                        {[...Array(Math.ceil(vehicles.length / ITEMS_PER_PAGE))].map((_, i) => {
+                          const page = i + 1;
+                          
+                          if (
+                            page === 1 ||
+                            page === Math.ceil(vehicles.length / ITEMS_PER_PAGE) ||
+                            (page >= currentPage - 1 && page <= currentPage + 1)
+                          ) {
+                            return (
+                              <PaginationItem key={page}>
+                                <PaginationLink
+                                  onClick={() => setCurrentPage(page)}
+                                  isActive={currentPage === page}
+                                  className="cursor-pointer"
+                                >
+                                  {page}
+                                </PaginationLink>
+                              </PaginationItem>
+                            );
+                          }
+
+                          if (page === 2 || page === Math.ceil(vehicles.length / ITEMS_PER_PAGE) - 1) {
+                            return (
+                              <PaginationItem key={page}>
+                                <PaginationEllipsis />
+                              </PaginationItem>
+                            );
+                          }
+
+                          return null;
+                        })}
+
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            className={
+                              currentPage === Math.ceil(vehicles.length / ITEMS_PER_PAGE)
+                                ? "pointer-events-none opacity-50"
+                                : "cursor-pointer"
+                            }
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
+              </>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );
