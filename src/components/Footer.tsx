@@ -5,8 +5,8 @@ import { Logo } from "./Logo";
 export const Footer = () => {
   return (
     <footer className="bg-secondary text-white">
-      <div className="container mx-auto py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container mx-auto py-8 px-4 md:py-12 md:px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <Logo className="mb-4" />
             <p className="text-sm text-muted-foreground">
