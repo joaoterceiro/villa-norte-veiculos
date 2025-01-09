@@ -1,39 +1,27 @@
 import { useEffect, useState } from "react";
 import { VehicleCard } from "./VehicleCard";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
-const ITEMS_PER_PAGE = 4;
 
 export function FeaturedVehicles() {
   const [vehicles, setVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     const fetchVehicles = async () => {
       setIsLoading(true);
       try {
         const { data, error } = await supabase
-          .from("product")  // Changed from "vehicles" to "product"
+          .from("product")
           .select("*")
-          .eq("is_featured", true);
+          .eq("is_featured", true)
+          .limit(10);
 
         if (error) throw error;
 
         setVehicles(data);
-        setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE));
       } catch (error) {
         toast.error("Erro ao carregar veículos em destaque");
         console.error("Error fetching featured vehicles:", error);
@@ -45,13 +33,19 @@ export function FeaturedVehicles() {
     fetchVehicles();
   }, []);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const nextPage = () => {
+    setCurrentPage((prev) => 
+      prev + 1 >= Math.ceil(vehicles.length / 5) ? 0 : prev + 1
+    );
   };
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentVehicles = vehicles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const prevPage = () => {
+    setCurrentPage((prev) => 
+      prev - 1 < 0 ? Math.ceil(vehicles.length / 5) - 1 : prev - 1
+    );
+  };
+
+  const displayedVehicles = vehicles.slice(currentPage * 5, (currentPage * 5) + 5);
 
   return (
     <section className="py-16 bg-gray-50">
@@ -66,8 +60,8 @@ export function FeaturedVehicles() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(8)].map((_, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {[...Array(5)].map((_, i) => (
               <div
                 key={i}
                 className="aspect-[4/3] bg-gray-200 rounded-lg animate-pulse"
@@ -75,67 +69,32 @@ export function FeaturedVehicles() {
             ))}
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {currentVehicles.map((vehicle) => (
+          <div className="relative">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {displayedVehicles.map((vehicle) => (
                 <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
               ))}
             </div>
 
-            {totalPages > 1 && (
-              <div className="mt-8">
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                    
-                    {[...Array(totalPages)].map((_, i) => {
-                      const page = i + 1;
-                      
-                      if (
-                        page === 1 ||
-                        page === totalPages ||
-                        (page >= currentPage - 1 && page <= currentPage + 1)
-                      ) {
-                        return (
-                          <PaginationItem key={page}>
-                            <PaginationLink
-                              onClick={() => handlePageChange(page)}
-                              isActive={currentPage === page}
-                              className="cursor-pointer"
-                            >
-                              {page}
-                            </PaginationLink>
-                          </PaginationItem>
-                        );
-                      }
-
-                      if (page === 2 || page === totalPages - 1) {
-                        return (
-                          <PaginationItem key={page}>
-                            <PaginationEllipsis />
-                          </PaginationItem>
-                        );
-                      }
-
-                      return null;
-                    })}
-
-                    <PaginationItem>
-                      <PaginationNext
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
+            {vehicles.length > 5 && (
+              <>
+                <button
+                  onClick={prevPage}
+                  className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+                  aria-label="Previous vehicles"
+                >
+                  <ChevronLeft className="text-gray-600" size={24} />
+                </button>
+                <button
+                  onClick={nextPage}
+                  className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+                  aria-label="Next vehicles"
+                >
+                  <ChevronRight className="text-gray-600" size={24} />
+                </button>
+              </>
             )}
-          </>
+          </div>
         )}
       </div>
     </section>

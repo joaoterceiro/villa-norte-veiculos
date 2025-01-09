@@ -53,18 +53,24 @@ export type Database = {
       }
       portal_settings: {
         Row: {
+          body_type_icons: Json[] | null
+          brand_logos: Json[] | null
           created_at: string | null
           id: string
           updated_at: string | null
           whatsapp_number: string
         }
         Insert: {
+          body_type_icons?: Json[] | null
+          brand_logos?: Json[] | null
           created_at?: string | null
           id?: string
           updated_at?: string | null
           whatsapp_number: string
         }
         Update: {
+          body_type_icons?: Json[] | null
+          brand_logos?: Json[] | null
           created_at?: string | null
           id?: string
           updated_at?: string | null
