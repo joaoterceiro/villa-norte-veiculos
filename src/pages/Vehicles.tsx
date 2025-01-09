@@ -11,7 +11,6 @@ import { FilterProductsParams } from "@/integrations/supabase/types/filter-produ
 import { VehiclesHeader } from "@/components/vehicles/VehiclesHeader";
 import { VehiclesGrid } from "@/components/vehicles/VehiclesGrid";
 import { VehiclesPagination } from "@/components/vehicles/VehiclesPagination";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -80,6 +79,7 @@ export default function Vehicles() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      
       <div className="container mx-auto px-3 lg:px-8 py-4 lg:py-8">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Desktop Filters */}
@@ -142,7 +142,6 @@ export default function Vehicles() {
           </main>
         </div>
       </div>
-      <WhatsAppButton />
     </div>
   );
 }

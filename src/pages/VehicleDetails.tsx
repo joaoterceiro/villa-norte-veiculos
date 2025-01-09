@@ -11,20 +11,15 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { VehicleImageGallery } from "@/components/VehicleImageGallery";
 import { VehicleSimilar } from "@/components/VehicleSimilar";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 const VehicleDetails = () => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  console.log("Vehicle ID:", id); // Debug log
-
-  const { data: vehicle, isLoading, error } = useQuery({
+  const { data: vehicle, isLoading } = useQuery({
     queryKey: ["vehicle", id],
     queryFn: async () => {
-      console.log("Fetching vehicle data for ID:", id); // Debug log
-      
       const { data, error } = await supabase
         .from("product")
         .select(`
@@ -33,17 +28,11 @@ const VehicleDetails = () => {
           product_images (image_url, image_url_large)
         `)
         .eq("vehicle_id", id)
-        .maybeSingle();
+        .single();
 
-      if (error) {
-        console.error("Supabase error:", error); // Debug log
-        throw error;
-      }
-
-      console.log("Fetched vehicle data:", data); // Debug log
+      if (error) throw error;
       return data;
     },
-    enabled: !!id,
   });
 
   const { data: similarVehicles } = useQuery({
@@ -78,7 +67,6 @@ const VehicleDetails = () => {
     );
   };
 
-  // Show loading state
   if (isLoading) {
     return (
       <>
@@ -91,20 +79,6 @@ const VehicleDetails = () => {
     );
   }
 
-  // Show error state
-  if (error) {
-    return (
-      <>
-        <Navbar />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-lg text-red-500">Erro ao carregar o veículo. Por favor, tente novamente.</div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
-  // Show not found state
   if (!vehicle) {
     return (
       <>
@@ -210,7 +184,6 @@ const VehicleDetails = () => {
         </div>
       </main>
       <Footer />
-      <WhatsAppButton />
     </>
   );
 };
