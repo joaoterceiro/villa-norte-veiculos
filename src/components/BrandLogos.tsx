@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 
 const brands = [
-  { name: "Volkswagen", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Fiat", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Chevrolet", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Ford", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Honda", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Jeep", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Renault", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Hyundai", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Mitsubishi", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Land Rover", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
-  { name: "Mercedes", logo: "/lovable-uploads/764452cf-53dc-4fb3-b41c-611a42467469.png" },
+  { name: "Volkswagen", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/volkswagen.jpg" },
+  { name: "Fiat", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/fiat.jpg" },
+  { name: "Chevrolet", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/chevrolet.jpg" },
+  { name: "Ford", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/ford.jpg" },
+  { name: "Honda", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/honda.jpg" },
+  { name: "Jeep", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/jeep.jpg" },
+  { name: "Renault", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/renault.jpg" },
+  { name: "Hyundai", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/hyundai.jpg" },
+  { name: "Mitsubishi", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/mitsubishi.jpg" },
+  { name: "Land Rover", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/land rover.jpg" },
+  { name: "Mercedes", logo: "https://bwghpkijwhhkqfcibyyf.supabase.co/storage/v1/object/public/slides/marcas/mercedes-benz.jpg" },
 ];
 
 export const BrandLogos = () => {
