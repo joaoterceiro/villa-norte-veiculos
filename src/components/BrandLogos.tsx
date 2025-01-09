@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Json } from "@/integrations/supabase/types";
 
 interface Brand {
   name: string;
@@ -24,7 +25,12 @@ export const BrandLogos = () => {
       }
 
       if (settings?.brand_logos) {
-        setBrands(settings.brand_logos as Brand[]);
+        // Type assertion to convert Json[] to Brand[]
+        const brandData = (settings.brand_logos as Json[]).map((item) => ({
+          name: (item as { name: string }).name,
+          logo: (item as { logo: string }).logo,
+        }));
+        setBrands(brandData);
       }
     };
 

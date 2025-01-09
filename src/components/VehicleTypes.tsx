@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Json } from "@/integrations/supabase/types";
 
 interface VehicleType {
   name: string;
@@ -24,7 +25,12 @@ export const VehicleTypes = () => {
       }
 
       if (settings?.body_type_icons) {
-        setTypes(settings.body_type_icons as VehicleType[]);
+        // Type assertion to convert Json[] to VehicleType[]
+        const typeData = (settings.body_type_icons as Json[]).map((item) => ({
+          name: (item as { name: string }).name,
+          icon: (item as { icon: string }).icon,
+        }));
+        setTypes(typeData);
       }
     };
 
