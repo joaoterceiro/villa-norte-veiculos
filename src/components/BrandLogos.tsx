@@ -16,26 +16,26 @@ const brands = [
 
 export const BrandLogos = () => {
   return (
-    <div className="py-12 bg-gray-50">
+    <div className="py-16 bg-gray-50/50">
       <div className="container mx-auto max-w-[1400px] px-1 sm:px-4">
         <h2 className="text-2xl font-bold text-center mb-4">
           Encontre o carro dos seus sonhos por marca
         </h2>
-        <p className="text-center text-muted mb-8 text-sm">
-          Explore nossa seleção exclusiva e descubra o veículo perfeito para suas necessidades.
+        <p className="text-center text-muted mb-12 text-base max-w-3xl mx-auto">
+          Explore nossa seleção exclusiva e descubra as melhores opções de veículos das marcas mais renomadas.
         </p>
-        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11 gap-8 items-center">
+        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11 gap-4 md:gap-6 items-center">
           {brands.map((brand) => (
             <Link
               key={brand.name}
               to={`/carros?marca=${encodeURIComponent(brand.name)}`}
-              className="flex items-center justify-center hover:opacity-75 transition-opacity"
+              className="group"
             >
-              <div className="bg-white p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow w-full aspect-square flex items-center justify-center">
+              <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 aspect-square flex items-center justify-center relative overflow-hidden">
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className="h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all"
+                  className="w-full h-auto object-contain transition-all duration-300 group-hover:scale-110"
                 />
               </div>
             </Link>
