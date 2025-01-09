@@ -11,6 +11,9 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { VehicleImageGallery } from "@/components/VehicleImageGallery";
 import { VehicleSimilar } from "@/components/VehicleSimilar";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
+
+// ... keep existing code (component implementation)
 
 const VehicleDetails = () => {
   const { id } = useParams();
@@ -184,6 +187,7 @@ const VehicleDetails = () => {
         </div>
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   );
 };

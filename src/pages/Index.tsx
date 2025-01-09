@@ -11,6 +11,9 @@ import { VehiclesPagination } from "@/components/vehicles/VehiclesPagination";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
+
+// ... keep existing code (component implementation)
 
 const Index = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -135,6 +138,7 @@ const Index = () => {
           </div>
         </div>
       </footer>
+      <WhatsAppButton />
     </div>
   );
 };
