@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { VehicleCard } from "./VehicleCard";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
@@ -39,6 +40,10 @@ export function FeaturedVehicles() {
     fetchVehicles();
   }, []);
 
+  const plugin = useState(() => 
+    Autoplay({ delay: 4000, stopOnInteraction: true })
+  )[0];
+
   return (
     <section className="bg-gray-50 py-16">
       <div className="container">
@@ -68,6 +73,7 @@ export function FeaturedVehicles() {
               align: "start",
               loop: true,
             }}
+            plugins={[plugin]}
             className="relative mx-auto w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
