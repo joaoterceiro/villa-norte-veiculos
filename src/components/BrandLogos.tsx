@@ -1,5 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const brands = [
@@ -21,7 +20,10 @@ export const BrandLogos = () => {
 
   const handleBrandClick = (brandName: string) => {
     const formattedBrand = brandName.toLowerCase();
-    navigate(`/carros?marca=${formattedBrand}`);
+    navigate({
+      pathname: "/carros",
+      search: `?make=${formattedBrand}`,
+    });
   };
 
   return (
