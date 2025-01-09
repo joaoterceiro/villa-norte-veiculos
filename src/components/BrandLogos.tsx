@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const brands = [
@@ -32,7 +33,7 @@ export const BrandLogos = () => {
         <p className="text-center text-muted mb-12 text-base max-w-3xl mx-auto">
           Explore nossa seleção exclusiva e descubra as melhores opções de veículos das marcas mais renomadas.
         </p>
-        <ScrollArea className="w-full whitespace-nowrap rounded-2xl pb-4" orientation="horizontal">
+        <ScrollArea className="w-full whitespace-nowrap rounded-2xl pb-4">
           <div className="flex gap-3 px-4">
             {brands.map((brand) => (
               <button
