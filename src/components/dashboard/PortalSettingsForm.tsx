@@ -5,17 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Json } from "@/integrations/supabase/types";
+
+interface BrandLogo {
+  name: string;
+  logo: string;
+}
+
+interface BodyTypeIcon {
+  name: string;
+  icon: string;
+}
 
 interface PortalSettingsFormData {
   whatsapp_number: string;
-  brand_logos: {
-    name: string;
-    logo: string;
-  }[];
-  body_type_icons: {
-    name: string;
-    icon: string;
-  }[];
+  brand_logos: BrandLogo[];
+  body_type_icons: BodyTypeIcon[];
 }
 
 export const PortalSettingsForm = () => {
@@ -36,8 +41,18 @@ export const PortalSettingsForm = () => {
 
       if (data) {
         setValue("whatsapp_number", data.whatsapp_number);
-        setValue("brand_logos", data.brand_logos || []);
-        setValue("body_type_icons", data.body_type_icons || []);
+        // Type assertion to ensure proper type conversion
+        const brandLogos = (data.brand_logos as Json[] || []).map((item) => ({
+          name: (item as { name: string }).name,
+          logo: (item as { logo: string }).logo,
+        }));
+        setValue("brand_logos", brandLogos);
+
+        const bodyTypeIcons = (data.body_type_icons as Json[] || []).map((item) => ({
+          name: (item as { name: string }).name,
+          icon: (item as { icon: string }).icon,
+        }));
+        setValue("body_type_icons", bodyTypeIcons);
       }
     };
 
@@ -49,7 +64,10 @@ export const PortalSettingsForm = () => {
     try {
       const { error } = await supabase
         .from("portal_settings")
-        .update(data)
+        .update({
+          ...data,
+          updated_at: new Date().toISOString(),
+        })
         .eq("id", 1);
 
       if (error) throw error;
