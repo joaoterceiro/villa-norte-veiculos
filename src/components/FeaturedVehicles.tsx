@@ -56,7 +56,7 @@ export function FeaturedVehicles() {
   return (
     <section className="py-8 md:py-16 bg-gray-50">
       <div className="container">
-        <div className="flex items-center justify-between mb-6 md:mb-8 px-4 sm:px-0">
+        <div className="flex items-center justify-between mb-6 md:mb-8 px-1 sm:px-4">
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-gray-900">Veículos em destaque</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -66,7 +66,7 @@ export function FeaturedVehicles() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 px-4 sm:px-0">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 px-1 sm:px-4">
             {[...Array(isMobile ? 2 : 5)].map((_, i) => (
               <div
                 key={i}
@@ -75,7 +75,7 @@ export function FeaturedVehicles() {
             ))}
           </div>
         ) : (
-          <div className="relative px-4 sm:px-0">
+          <div className="relative px-1 sm:px-4">
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
               {displayedVehicles.map((vehicle) => (
                 <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
