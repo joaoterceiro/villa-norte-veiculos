@@ -22,6 +22,25 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalVehicles, setTotalVehicles] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchTotalVehicles = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('vehicle_count')
+          .select('total_vehicles')
+          .single();
+        
+        if (error) throw error;
+        setTotalVehicles(data?.total_vehicles || 0);
+      } catch (error) {
+        console.error("Error fetching total vehicles:", error);
+      }
+    };
+
+    fetchTotalVehicles();
+  }, []);
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -81,7 +100,7 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
   return (
     <div className="container mx-auto -mt-8 relative z-10 px-4">
       <div className={className}>
-        <h2 className="text-2xl font-semibold mb-4">Encontre o veículo perfeito entre mais de 100 disponíveis!</h2>
+        <h2 className="text-2xl font-semibold mb-4">Encontre o veículo perfeito entre mais de {totalVehicles} disponíveis!</h2>
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
             <input
@@ -142,7 +161,7 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
             type="submit"
             className="bg-[#FF5B00] hover:bg-[#FF5B00]/90 transition-colors text-white px-8 py-3 rounded-lg font-semibold whitespace-nowrap"
           >
-            VER OFERTAS (108)
+            VER OFERTAS ({totalVehicles})
           </button>
         </form>
       </div>
