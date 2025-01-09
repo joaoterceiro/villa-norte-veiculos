@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { FinancingForm } from "./FinancingForm";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showFinancingModal, setShowFinancingModal] = useState(false);
 
   return (
     <nav className="bg-secondary py-4">
@@ -31,7 +34,10 @@ export const Navbar = () => {
             <Link to="/vender" className="text-white hover:text-primary">
               Vender meu carro
             </Link>
-            <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors">
+            <button 
+              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors"
+              onClick={() => setShowFinancingModal(true)}
+            >
               Simular financiamento
             </button>
           </div>
@@ -61,12 +67,30 @@ export const Navbar = () => {
             >
               Vender meu carro
             </Link>
-            <button className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors">
+            <button 
+              className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors"
+              onClick={() => {
+                setShowFinancingModal(true);
+                setIsMenuOpen(false);
+              }}
+            >
               Simular financiamento
             </button>
           </div>
         )}
       </div>
+
+      <Dialog open={showFinancingModal} onOpenChange={setShowFinancingModal}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Simulação de Financiamento</DialogTitle>
+          </DialogHeader>
+          <FinancingForm
+            onSuccess={() => setShowFinancingModal(false)}
+            vehicleTitle="Simulação Geral"
+          />
+        </DialogContent>
+      </Dialog>
     </nav>
   );
 };
