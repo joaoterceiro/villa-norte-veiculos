@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Calculator, CheckCircle } from "lucide-react";
+import { MessageSquare, Calculator, CheckCircle, Download } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -13,6 +13,7 @@ interface VehicleInfoPanelProps {
   location?: string;
   price: number;
   category?: string;
+  downloadUrl?: string;
 }
 
 export const VehicleInfoPanel = ({
@@ -21,6 +22,7 @@ export const VehicleInfoPanel = ({
   location,
   price,
   category = "carro",
+  downloadUrl,
 }: VehicleInfoPanelProps) => {
   const [showFinancingModal, setShowFinancingModal] = useState(false);
 
@@ -94,6 +96,20 @@ export const VehicleInfoPanel = ({
             Faça uma simulação
           </Button>
         </div>
+
+        {downloadUrl && (
+          <div className="pt-4 border-t">
+            <Button
+              variant="outline"
+              className="w-full text-base"
+              size="lg"
+              onClick={() => window.open(downloadUrl, "_blank")}
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Baixe as fotos deste anúncio
+            </Button>
+          </div>
+        )}
 
         <div className="space-y-4">
           <div className="flex items-center gap-3">

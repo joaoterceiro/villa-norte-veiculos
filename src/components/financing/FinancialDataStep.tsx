@@ -1,6 +1,5 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -50,20 +49,15 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
-                  <Button
-                    variant={"outline"}
+                  <Input
                     className={cn(
-                      "w-full pl-3 text-left font-normal bg-white",
+                      "pl-3 text-left font-normal bg-white",
                       !field.value && "text-gray-400"
                     )}
-                  >
-                    {field.value ? (
-                      format(field.value, "PPP", { locale: ptBR })
-                    ) : (
-                      <span>Selecione uma data</span>
-                    )}
-                    <Calendar className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
+                    placeholder="Selecione uma data"
+                    value={field.value ? format(field.value, "dd/MM/yyyy", { locale: ptBR }) : ""}
+                    readOnly
+                  />
                 </FormControl>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 bg-white" align="start">

@@ -123,6 +123,7 @@ const VehicleDetails = () => {
                 price={vehicle.price}
                 location="São José dos Campos"
                 category={vehicle.category}
+                downloadUrl={vehicle.download}
               />
             </div>
           </div>
