@@ -25,12 +25,12 @@ export const VehicleTypes = () => {
       }
 
       if (settings?.body_type_icons) {
-        // Type assertion to convert Json[] to VehicleType[]
-        const typeData = (settings.body_type_icons as Json[]).map((item) => ({
-          name: (item as { name: string }).name,
-          icon: (item as { icon: string }).icon,
-        }));
-        setTypes(typeData);
+        // First cast to unknown, then to the specific type
+        const typeIcons = settings.body_type_icons as unknown as Array<{
+          name: string;
+          icon: string;
+        }>;
+        setTypes(typeIcons);
       }
     };
 

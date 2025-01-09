@@ -25,12 +25,12 @@ export const BrandLogos = () => {
       }
 
       if (settings?.brand_logos) {
-        // Type assertion to convert Json[] to Brand[]
-        const brandData = (settings.brand_logos as Json[]).map((item) => ({
-          name: (item as { name: string }).name,
-          logo: (item as { logo: string }).logo,
-        }));
-        setBrands(brandData);
+        // First cast to unknown, then to the specific type
+        const brandLogos = settings.brand_logos as unknown as Array<{
+          name: string;
+          logo: string;
+        }>;
+        setBrands(brandLogos);
       }
     };
 
