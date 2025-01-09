@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Json } from "@/integrations/supabase/types";
 
 interface Brand {
   name: string;
@@ -25,11 +24,7 @@ export const BrandLogos = () => {
       }
 
       if (settings?.brand_logos) {
-        const brandLogos = (settings.brand_logos as Json[]).map((item) => ({
-          name: (item as { name: string }).name,
-          logo: (item as { logo: string }).logo,
-        }));
-        setBrands(brandLogos);
+        setBrands(settings.brand_logos);
       }
     };
 
@@ -44,7 +39,7 @@ export const BrandLogos = () => {
 
   return (
     <div className="bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <h2 className="mb-4 text-center text-2xl font-bold">
           Encontre o carro dos seus sonhos por marca
         </h2>
@@ -52,7 +47,7 @@ export const BrandLogos = () => {
           Explore nossas opções exclusivas e descubra o veículo perfeito para suas
           necessidades.
         </p>
-        <div className="grid grid-cols-2 items-center gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-3 items-center gap-8 md:grid-cols-6 lg:grid-cols-8">
           {brands.map((brand) => (
             <button
               key={brand.name}

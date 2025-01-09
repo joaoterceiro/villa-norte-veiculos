@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { VehicleCard } from "./VehicleCard";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
@@ -24,7 +23,7 @@ export function FeaturedVehicles() {
           .from("product")
           .select("*")
           .eq("is_featured", true)
-          .limit(10);
+          .limit(5);
 
         if (error) throw error;
 
@@ -39,10 +38,6 @@ export function FeaturedVehicles() {
 
     fetchVehicles();
   }, []);
-
-  const plugin = useState(() => 
-    Autoplay({ delay: 4000, stopOnInteraction: true })
-  )[0];
 
   return (
     <section className="bg-gray-50 py-16">
@@ -60,7 +55,7 @@ export function FeaturedVehicles() {
 
         {isLoading ? (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-            {[...Array(10)].map((_, i) => (
+            {[...Array(5)].map((_, i) => (
               <div
                 key={i}
                 className="aspect-[4/3] animate-pulse rounded-lg bg-gray-200"
@@ -73,14 +68,13 @@ export function FeaturedVehicles() {
               align: "start",
               loop: true,
             }}
-            plugins={[plugin]}
             className="relative mx-auto w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {vehicles.map((vehicle) => (
                 <CarouselItem
                   key={vehicle.vehicle_id}
-                  className="pl-2 md:basis-1/5 lg:basis-1/5 md:pl-4"
+                  className="pl-2 md:basis-1/3 lg:basis-1/5 md:pl-4"
                 >
                   <VehicleCard vehicle={vehicle} />
                 </CarouselItem>
