@@ -54,7 +54,7 @@ export function FeaturedVehicles() {
   );
 
   return (
-    <section className="py-8 md:py-16 bg-gray-50">
+    <section className="py-8 md:py-16 bg-white">
       <div className="container">
         <div className="flex items-center justify-between mb-6 md:mb-8 px-1 sm:px-4">
           <div>
