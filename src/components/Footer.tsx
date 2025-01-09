@@ -5,41 +5,46 @@ import { Logo } from "./Logo";
 export const Footer = () => {
   return (
     <footer className="bg-secondary text-white">
-      <div className="container mx-auto py-8 px-4 md:py-12 md:px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          <div>
-            <Logo className="mb-4" />
+      <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Logo and Description */}
+          <div className="text-center sm:text-left">
+            <Logo className="mx-auto mb-4 sm:mx-0" />
             <p className="text-sm text-muted-foreground">
               Sua melhor escolha em veículos seminovos em São José dos Campos e região.
             </p>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Links Rápidos</h3>
+
+          {/* Quick Links */}
+          <div className="text-center sm:text-left">
+            <h3 className="mb-4 text-lg font-semibold">Links Rápidos</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
+                <Link to="/" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/carros" className="text-sm text-muted-foreground hover:text-primary">
+                <Link to="/carros" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Nossos Carros
                 </Link>
               </li>
               <li>
-                <Link to="/vender" className="text-sm text-muted-foreground hover:text-primary">
+                <Link to="/vender" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Vender meu Carro
                 </Link>
               </li>
               <li>
-                <Link to="/financiamento" className="text-sm text-muted-foreground hover:text-primary">
+                <Link to="/financiamento" className="text-sm text-muted-foreground transition-colors hover:text-primary">
                   Financiamento
                 </Link>
               </li>
             </ul>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contato</h3>
+
+          {/* Contact Information */}
+          <div className="text-center sm:text-left">
+            <h3 className="mb-4 text-lg font-semibold">Contato</h3>
             <ul className="space-y-2">
               <li className="text-sm text-muted-foreground">
                 Av. São João, 2200 - Jardim das Colinas
@@ -55,23 +60,39 @@ export const Footer = () => {
               </li>
             </ul>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Redes Sociais</h3>
-            <div className="flex space-x-4">
-              <a href="#" className="text-white hover:text-primary">
-                <Facebook className="w-6 h-6" />
+
+          {/* Social Media */}
+          <div className="text-center sm:text-left">
+            <h3 className="mb-4 text-lg font-semibold">Redes Sociais</h3>
+            <div className="flex justify-center space-x-4 sm:justify-start">
+              <a 
+                href="#" 
+                className="text-white transition-colors hover:text-primary"
+                aria-label="Facebook"
+              >
+                <Facebook className="h-6 w-6" />
               </a>
-              <a href="#" className="text-white hover:text-primary">
-                <Instagram className="w-6 h-6" />
+              <a 
+                href="#" 
+                className="text-white transition-colors hover:text-primary"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-6 w-6" />
               </a>
-              <a href="#" className="text-white hover:text-primary">
-                <Youtube className="w-6 h-6" />
+              <a 
+                href="#" 
+                className="text-white transition-colors hover:text-primary"
+                aria-label="Youtube"
+              >
+                <Youtube className="h-6 w-6" />
               </a>
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
+
+        {/* Copyright */}
+        <div className="mt-8 border-t border-gray-700 pt-8">
+          <p className="text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} Villa Norte. Todos os direitos reservados.
           </p>
         </div>
