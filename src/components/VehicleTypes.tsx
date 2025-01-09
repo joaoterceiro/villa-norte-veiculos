@@ -1,27 +1,63 @@
-const types = [
-  { name: "SUV", icon: "/placeholder.svg" },
-  { name: "HATCH", icon: "/placeholder.svg" },
-  { name: "SEDÃ", icon: "/placeholder.svg" },
-  { name: "PICK-UP", icon: "/placeholder.svg" },
-  { name: "COUPÉ", icon: "/placeholder.svg" },
-  { name: "HÍBRIDO", icon: "/placeholder.svg" },
-];
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+
+interface VehicleType {
+  name: string;
+  icon: string;
+}
 
 export const VehicleTypes = () => {
+  const [types, setTypes] = useState<VehicleType[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      const { data: settings, error } = await supabase
+        .from("portal_settings")
+        .select("body_type_icons")
+        .single();
+
+      if (error) {
+        console.error("Error fetching vehicle types:", error);
+        return;
+      }
+
+      if (settings?.body_type_icons) {
+        setTypes(settings.body_type_icons);
+      }
+    };
+
+    fetchTypes();
+  }, []);
+
+  const handleTypeClick = (type: string) => {
+    navigate(`/carros?body_type=${encodeURIComponent(type)}`);
+  };
+
+  if (types.length === 0) return null;
+
   return (
-    <div className="container mx-auto py-8 px-4 md:py-12 md:px-6">
-      <h2 className="text-xl md:text-2xl font-semibold text-center mb-6 md:mb-8">
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      <h2 className="mb-6 text-center text-xl font-semibold md:mb-8 md:text-2xl">
         Escolha seu carro ideal pelo tipo de carroceria
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-8">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {types.map((type) => (
-          <div
+          <button
             key={type.name}
-            className="flex flex-col items-center gap-3 md:gap-4 hover:text-primary transition-colors cursor-pointer"
+            onClick={() => handleTypeClick(type.name)}
+            className="flex cursor-pointer flex-col items-center gap-3 transition-colors hover:text-primary md:gap-4"
           >
-            <img src={type.icon} alt={type.name} className="w-16 h-16 md:w-24 md:h-24" />
-            <span className="text-sm md:text-base font-semibold text-center">{type.name}</span>
-          </div>
+            <img
+              src={type.icon}
+              alt={type.name}
+              className="h-16 w-16 md:h-24 md:w-24"
+            />
+            <span className="text-center text-sm font-semibold md:text-base">
+              {type.name}
+            </span>
+          </button>
         ))}
       </div>
     </div>
