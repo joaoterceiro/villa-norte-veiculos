@@ -66,6 +66,8 @@ const Auth = () => {
           appearance={{ theme: ThemeSupa }}
           providers={[]}
           redirectTo={window.location.origin}
+          showLinks={false}
+          view="sign_in"
         />
       </div>
     </div>
