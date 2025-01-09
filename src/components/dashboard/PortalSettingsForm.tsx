@@ -62,13 +62,18 @@ export const PortalSettingsForm = () => {
   const onSubmit = async (data: PortalSettingsFormData) => {
     setIsLoading(true);
     try {
+      // Convert typed arrays back to Json[] format
+      const updateData = {
+        whatsapp_number: data.whatsapp_number,
+        brand_logos: data.brand_logos as Json[],
+        body_type_icons: data.body_type_icons as Json[],
+        updated_at: new Date().toISOString(),
+      };
+
       const { error } = await supabase
         .from("portal_settings")
-        .update({
-          ...data,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", 1);
+        .update(updateData)
+        .eq("id", "1"); // Convert number to string
 
       if (error) throw error;
 
