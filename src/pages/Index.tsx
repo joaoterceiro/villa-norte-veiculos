@@ -28,7 +28,7 @@ const Index = () => {
           .from("product")
           .select("*")
           .eq("status", "active")
-          .order("is_featured", { ascending: false })
+          .eq("is_featured", false) // Add this line to exclude featured vehicles
           .order("date_added", { ascending: false })
           .limit(30);
 
@@ -70,7 +70,7 @@ const Index = () => {
             </div>
 
             {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
                 {[...Array(10)].map((_, i) => (
                   <div
                     key={i}
