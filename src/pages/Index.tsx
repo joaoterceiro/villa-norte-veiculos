@@ -2,7 +2,6 @@ import { Navbar } from "@/components/Navbar";
 import { HeroSlider } from "@/components/HeroSlider";
 import { SearchBar } from "@/components/SearchBar";
 import { FeaturedVehicles } from "@/components/FeaturedVehicles";
-import { VehicleTypes } from "@/components/VehicleTypes";
 import { FinancingSteps } from "@/components/FinancingSteps";
 import { Showrooms } from "@/components/Showrooms";
 import { LogIn } from "lucide-react";
@@ -94,7 +93,6 @@ const Index = () => {
             )}
           </div>
         </section>
-        <VehicleTypes />
         <FinancingSteps />
         <Showrooms />
       </main>
