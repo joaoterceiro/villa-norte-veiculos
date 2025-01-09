@@ -26,13 +26,15 @@ export const VehiclesPagination = ({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="mt-8 flex justify-center">
+    <div className="mt-6 sm:mt-8 flex justify-center px-2 sm:px-0">
       <Pagination>
-        <PaginationContent className="flex-wrap justify-center gap-2">
+        <PaginationContent className="flex-wrap justify-center gap-1 sm:gap-2">
           <PaginationItem>
             <PaginationPrevious
               onClick={() => onPageChange(currentPage - 1)}
-              className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              className={`${
+                currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
+              } text-xs sm:text-sm`}
             />
           </PaginationItem>
           
@@ -49,7 +51,7 @@ export const VehiclesPagination = ({
                   <PaginationLink
                     onClick={() => onPageChange(page)}
                     isActive={currentPage === page}
-                    className="cursor-pointer"
+                    className="cursor-pointer text-xs sm:text-sm"
                   >
                     {page}
                   </PaginationLink>
@@ -71,11 +73,11 @@ export const VehiclesPagination = ({
           <PaginationItem>
             <PaginationNext
               onClick={() => onPageChange(currentPage + 1)}
-              className={
+              className={`${
                 currentPage === totalPages
                   ? "pointer-events-none opacity-50"
                   : "cursor-pointer"
-              }
+              } text-xs sm:text-sm`}
             />
           </PaginationItem>
         </PaginationContent>

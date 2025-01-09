@@ -80,7 +80,7 @@ export default function Vehicles() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      <div className="container mx-auto px-3 lg:px-8 py-4 lg:py-8">
+      <div className="container mx-auto px-0 sm:px-4 lg:px-8 py-4 lg:py-8">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Desktop Filters */}
           <aside className="hidden lg:block w-[280px] shrink-0">
@@ -90,7 +90,7 @@ export default function Vehicles() {
           </aside>
 
           {/* Mobile Filters */}
-          <div className="lg:hidden mb-4">
+          <div className="lg:hidden px-2 sm:px-0">
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" className="w-full">
@@ -110,7 +110,7 @@ export default function Vehicles() {
             <VehiclesHeader totalVehicles={vehicles.length} />
 
             {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 px-2 sm:px-0">
                 {[...Array(8)].map((_, i) => (
                   <div
                     key={i}
@@ -119,8 +119,8 @@ export default function Vehicles() {
                 ))}
               </div>
             ) : !vehicles || vehicles.length === 0 ? (
-              <div className="flex h-[400px] items-center justify-center">
-                <p className="text-lg text-gray-500">
+              <div className="flex h-[400px] items-center justify-center px-2 sm:px-0">
+                <p className="text-sm sm:text-base lg:text-lg text-gray-500 text-center">
                   Nenhum veículo encontrado com os filtros selecionados
                 </p>
               </div>
