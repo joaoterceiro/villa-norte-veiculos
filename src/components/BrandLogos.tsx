@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const brands = [
@@ -16,6 +16,13 @@ const brands = [
 ];
 
 export const BrandLogos = () => {
+  const navigate = useNavigate();
+
+  const handleBrandClick = (brandName: string) => {
+    const formattedBrand = brandName.toLowerCase();
+    navigate(`/carros?marca=${formattedBrand}`);
+  };
+
   return (
     <div className="py-16 bg-gray-50/50">
       <div className="container mx-auto max-w-[1400px] px-1 sm:px-4">
@@ -25,12 +32,12 @@ export const BrandLogos = () => {
         <p className="text-center text-muted mb-12 text-base max-w-3xl mx-auto">
           Explore nossa seleção exclusiva e descubra as melhores opções de veículos das marcas mais renomadas.
         </p>
-        <ScrollArea className="w-full whitespace-nowrap rounded-2xl pb-4">
+        <ScrollArea className="w-full whitespace-nowrap rounded-2xl pb-4" orientation="horizontal">
           <div className="flex gap-3 px-4">
             {brands.map((brand) => (
-              <Link
+              <button
                 key={brand.name}
-                to={`/carros?marca=${encodeURIComponent(brand.name.toLowerCase())}`}
+                onClick={() => handleBrandClick(brand.name)}
                 className="group shrink-0"
               >
                 <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-4 w-[120px] aspect-square flex items-center justify-center relative overflow-hidden">
@@ -40,7 +47,7 @@ export const BrandLogos = () => {
                     className="w-full h-auto object-contain transition-all duration-300 group-hover:scale-110"
                   />
                 </div>
-              </Link>
+              </button>
             ))}
           </div>
         </ScrollArea>
