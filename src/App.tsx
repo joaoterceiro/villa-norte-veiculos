@@ -9,6 +9,10 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetails from "./pages/VehicleDetails";
+import Dashboard from "./pages/dashboard/Dashboard";
+import DashboardSettings from "./pages/dashboard/DashboardSettings";
+import DashboardVehicles from "./pages/dashboard/DashboardVehicles";
+import DashboardLeads from "./pages/dashboard/DashboardLeads";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -25,6 +29,11 @@ const App = () => {
             <Route path="/admin" element={<Admin />} />
             <Route path="/carros" element={<Vehicles />} />
             <Route path="/carros/:id" element={<VehicleDetails />} />
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="settings" element={<DashboardSettings />} />
+              <Route path="vehicles" element={<DashboardVehicles />} />
+              <Route path="leads" element={<DashboardLeads />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
