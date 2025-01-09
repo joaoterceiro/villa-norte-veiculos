@@ -10,12 +10,14 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Footer } from "@/components/Footer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const [vehicles, setVehicles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const itemsPerPage = 10;
+  const isMobile = useIsMobile();
+  const itemsPerPage = isMobile ? 6 : 10;
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -55,10 +57,10 @@ const Index = () => {
         <HeroSlider />
         <SearchBar />
         <FeaturedVehicles />
-        <section className="py-16 bg-white">
-          <div className="container">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">
+        <section className="py-8 md:py-16 bg-white">
+          <div className="container max-w-[1400px] mx-auto">
+            <div className="mb-6 md:mb-8 px-4 sm:px-0">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900">
                 Nossos veículos
               </h2>
               <p className="text-sm text-gray-500 mt-1">
@@ -67,8 +69,8 @@ const Index = () => {
             </div>
 
             {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
-                {[...Array(10)].map((_, i) => (
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-4 px-4 sm:px-0">
+                {[...Array(isMobile ? 6 : 10)].map((_, i) => (
                   <div
                     key={i}
                     className="aspect-[4/3] bg-gray-200 rounded-lg animate-pulse"
@@ -82,12 +84,14 @@ const Index = () => {
                   currentPage={currentPage}
                   itemsPerPage={itemsPerPage}
                 />
-                <VehiclesPagination
-                  currentPage={currentPage}
-                  totalItems={vehicles.length}
-                  itemsPerPage={itemsPerPage}
-                  onPageChange={handlePageChange}
-                />
+                <div className="mt-8 px-4 sm:px-0">
+                  <VehiclesPagination
+                    currentPage={currentPage}
+                    totalItems={vehicles.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
               </>
             )}
           </div>

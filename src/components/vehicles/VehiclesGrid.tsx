@@ -1,5 +1,6 @@
 import { VehicleCard } from "@/components/VehicleCard";
 import { FilteredVehicle } from "@/integrations/supabase/types/filter-products.types";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VehiclesGridProps {
   vehicles: FilteredVehicle[];
@@ -8,10 +9,13 @@ interface VehiclesGridProps {
 }
 
 export const VehiclesGrid = ({ vehicles, currentPage, itemsPerPage }: VehiclesGridProps) => {
+  const isMobile = useIsMobile();
+  const displayLimit = isMobile ? 6 : itemsPerPage;
+
   return (
-    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 px-2 sm:px-0">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 px-2 sm:px-0">
       {vehicles
-        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+        .slice((currentPage - 1) * displayLimit, currentPage * displayLimit)
         .map((vehicle) => (
           <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
         ))}
