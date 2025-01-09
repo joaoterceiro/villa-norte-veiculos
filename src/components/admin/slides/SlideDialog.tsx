@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { SlideForm } from "./SlideForm";
 import { slideFormSchema, type SlideFormValues } from "./slide-schema";
+import { useEffect } from "react";
 
 interface SlideDialogProps {
   open: boolean;
@@ -21,7 +22,7 @@ export function SlideDialog({ open, onOpenChange, slideId, initialData }: SlideD
 
   const form = useForm<SlideFormValues>({
     resolver: zodResolver(slideFormSchema),
-    defaultValues: initialData || {
+    defaultValues: {
       title: "",
       desktop_image_url: "",
       mobile_image_url: "",
@@ -33,12 +34,27 @@ export function SlideDialog({ open, onOpenChange, slideId, initialData }: SlideD
     },
   });
 
+  useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    }
+  }, [form, initialData]);
+
   const onSubmit = async (data: SlideFormValues) => {
     try {
       if (isEditing) {
         const { error } = await supabase
           .from("slides")
-          .update(data)
+          .update({
+            title: data.title,
+            desktop_image_url: data.desktop_image_url,
+            mobile_image_url: data.mobile_image_url,
+            alt_text: data.alt_text,
+            link: data.link,
+            type: data.type,
+            display_order: data.display_order,
+            is_active: data.is_active,
+          })
           .eq("id", slideId);
 
         if (error) throw error;
@@ -49,7 +65,16 @@ export function SlideDialog({ open, onOpenChange, slideId, initialData }: SlideD
       } else {
         const { error } = await supabase
           .from("slides")
-          .insert(data);
+          .insert({
+            title: data.title,
+            desktop_image_url: data.desktop_image_url,
+            mobile_image_url: data.mobile_image_url,
+            alt_text: data.alt_text,
+            link: data.link,
+            type: data.type,
+            display_order: data.display_order,
+            is_active: data.is_active,
+          });
 
         if (error) throw error;
 
