@@ -13,16 +13,18 @@ import { VehicleImageGallery } from "@/components/VehicleImageGallery";
 import { VehicleSimilar } from "@/components/VehicleSimilar";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 
-// ... keep existing code (component implementation)
-
 const VehicleDetails = () => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  const { data: vehicle, isLoading } = useQuery({
+  console.log("Vehicle ID:", id); // Debug log
+
+  const { data: vehicle, isLoading, error } = useQuery({
     queryKey: ["vehicle", id],
     queryFn: async () => {
+      console.log("Fetching vehicle data for ID:", id); // Debug log
+      
       const { data, error } = await supabase
         .from("product")
         .select(`
@@ -31,11 +33,17 @@ const VehicleDetails = () => {
           product_images (image_url, image_url_large)
         `)
         .eq("vehicle_id", id)
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error); // Debug log
+        throw error;
+      }
+
+      console.log("Fetched vehicle data:", data); // Debug log
       return data;
     },
+    enabled: !!id,
   });
 
   const { data: similarVehicles } = useQuery({
@@ -70,6 +78,7 @@ const VehicleDetails = () => {
     );
   };
 
+  // Show loading state
   if (isLoading) {
     return (
       <>
@@ -82,6 +91,20 @@ const VehicleDetails = () => {
     );
   }
 
+  // Show error state
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-lg text-red-500">Erro ao carregar o veículo. Por favor, tente novamente.</div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Show not found state
   if (!vehicle) {
     return (
       <>
