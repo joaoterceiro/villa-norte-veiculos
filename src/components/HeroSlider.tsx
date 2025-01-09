@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 export const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<{
+    title: string;
     desktop_image_url: string;
     mobile_image_url: string;
     link?: string | null;
@@ -17,7 +18,7 @@ export const HeroSlider = () => {
     const fetchSlides = async () => {
       const { data, error } = await supabase
         .from("slides")
-        .select("desktop_image_url, mobile_image_url, link")
+        .select("title, desktop_image_url, mobile_image_url, link")
         .eq("is_active", true)
         .order("display_order", { ascending: true });
 
@@ -34,16 +35,6 @@ export const HeroSlider = () => {
     fetchSlides();
   }, []);
 
-  useEffect(() => {
-    if (slides.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // Change slide every 5 seconds
-
-    return () => clearInterval(interval);
-  }, [slides.length]);
-
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
@@ -56,16 +47,25 @@ export const HeroSlider = () => {
     return null;
   }
 
-  const renderSlideContent = (slide: typeof slides[0]) => (
-    <img
-      src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
-      alt=""
-      className="h-full w-full object-cover"
-    />
+  const renderSlideContent = (slide: typeof slides[0], style: React.CSSProperties) => (
+    <>
+      <img
+        src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
+        alt={slide.title}
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent">
+        <div className="container mx-auto h-full flex items-center">
+          <h1 className="text-white text-5xl font-bold max-w-2xl">
+            {slide.title}
+          </h1>
+        </div>
+      </div>
+    </>
   );
 
   return (
-    <div className="relative h-[300px] overflow-hidden sm:h-[400px] md:h-[500px]">
+    <div className="relative h-[500px] overflow-hidden">
       <div
         className="absolute inset-0 transition-transform duration-500 ease-in-out"
         style={{
@@ -79,18 +79,18 @@ export const HeroSlider = () => {
             <Link
               key={index}
               to={slide.link}
-              className="absolute inset-0 h-full w-full"
+              className="absolute inset-0 w-full h-full"
               style={style}
             >
-              {renderSlideContent(slide)}
+              {renderSlideContent(slide, style)}
             </Link>
           ) : (
             <div
               key={index}
-              className="absolute inset-0 h-full w-full"
+              className="absolute inset-0 w-full h-full"
               style={style}
             >
-              {renderSlideContent(slide)}
+              {renderSlideContent(slide, style)}
             </div>
           );
         })}
@@ -99,15 +99,15 @@ export const HeroSlider = () => {
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 hover:bg-white/40 transition-colors"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors"
           >
-            <ChevronLeft className="h-6 w-6 text-white" />
+            <ChevronLeft className="text-white" size={24} />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 hover:bg-white/40 transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors"
           >
-            <ChevronRight className="h-6 w-6 text-white" />
+            <ChevronRight className="text-white" size={24} />
           </button>
         </>
       )}

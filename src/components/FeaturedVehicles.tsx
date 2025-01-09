@@ -1,33 +1,39 @@
 import { useEffect, useState } from "react";
 import { VehicleCard } from "./VehicleCard";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+const ITEMS_PER_PAGE = 4;
 
 export function FeaturedVehicles() {
   const [vehicles, setVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchVehicles = async () => {
       setIsLoading(true);
       try {
         const { data, error } = await supabase
-          .from("product")
+          .from("product")  // Changed from "vehicles" to "product"
           .select("*")
-          .eq("is_featured", true)
-          .limit(5);
+          .eq("is_featured", true);
 
         if (error) throw error;
 
         setVehicles(data);
+        setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE));
       } catch (error) {
         toast.error("Erro ao carregar veículos em destaque");
         console.error("Error fetching featured vehicles:", error);
@@ -39,50 +45,97 @@ export function FeaturedVehicles() {
     fetchVehicles();
   }, []);
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentVehicles = vehicles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="py-16 bg-gray-50">
       <div className="container">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              Veículos em destaque
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <h2 className="text-2xl font-bold text-gray-900">Veículos em destaque</h2>
+            <p className="text-sm text-gray-500 mt-1">
               Confira nossa seleção especial de veículos
             </p>
           </div>
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-            {[...Array(5)].map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, i) => (
               <div
                 key={i}
-                className="aspect-[4/3] animate-pulse rounded-lg bg-gray-200"
+                className="aspect-[4/3] bg-gray-200 rounded-lg animate-pulse"
               />
             ))}
           </div>
         ) : (
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="relative mx-auto w-full"
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {vehicles.map((vehicle) => (
-                <CarouselItem
-                  key={vehicle.vehicle_id}
-                  className="pl-2 md:basis-1/3 lg:basis-1/5 md:pl-4"
-                >
-                  <VehicleCard vehicle={vehicle} />
-                </CarouselItem>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {currentVehicles.map((vehicle) => (
+                <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
               ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute -left-12 top-1/2 hidden -translate-y-1/2 md:flex" />
-            <CarouselNext className="absolute -right-12 top-1/2 hidden -translate-y-1/2 md:flex" />
-          </Carousel>
+            </div>
+
+            {totalPages > 1 && (
+              <div className="mt-8">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                    
+                    {[...Array(totalPages)].map((_, i) => {
+                      const page = i + 1;
+                      
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
+                        return (
+                          <PaginationItem key={page}>
+                            <PaginationLink
+                              onClick={() => handlePageChange(page)}
+                              isActive={currentPage === page}
+                              className="cursor-pointer"
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
+                      }
+
+                      if (page === 2 || page === totalPages - 1) {
+                        return (
+                          <PaginationItem key={page}>
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        );
+                      }
+
+                      return null;
+                    })}
+
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
