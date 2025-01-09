@@ -24,7 +24,7 @@ export function FeaturedVehicles() {
           .from("product")
           .select("*")
           .eq("is_featured", true)
-          .limit(5);
+          .limit(10); // Increased from 5 to 10 featured vehicles
 
         if (error) throw error;
 
@@ -60,7 +60,7 @@ export function FeaturedVehicles() {
 
         {isLoading ? (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-            {[...Array(5)].map((_, i) => (
+            {[...Array(10)].map((_, i) => (
               <div
                 key={i}
                 className="aspect-[4/3] animate-pulse rounded-lg bg-gray-200"
