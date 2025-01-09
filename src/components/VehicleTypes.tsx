@@ -24,7 +24,7 @@ export const VehicleTypes = () => {
       }
 
       if (settings?.body_type_icons) {
-        setTypes(settings.body_type_icons);
+        setTypes(settings.body_type_icons as VehicleType[]);
       }
     };
 
