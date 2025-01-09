@@ -7,6 +7,7 @@ import { SlideDialog } from "./SlideDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { ImagePreview } from "./ImagePreview";
 
 interface Slide {
   id: string;
@@ -82,6 +83,7 @@ export const AdminSlidesTable = ({ slides }: AdminSlidesTableProps) => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Imagem</TableHead>
               <TableHead>Título</TableHead>
               <TableHead>Tipo</TableHead>
               <TableHead>Ordem</TableHead>
@@ -92,6 +94,13 @@ export const AdminSlidesTable = ({ slides }: AdminSlidesTableProps) => {
           <TableBody>
             {slides.map((slide) => (
               <TableRow key={slide.id}>
+                <TableCell>
+                  <ImagePreview 
+                    url={slide.desktop_image_url} 
+                    className="w-24"
+                    alt={slide.alt_text || slide.title}
+                  />
+                </TableCell>
                 <TableCell>{slide.title}</TableCell>
                 <TableCell>{slide.type}</TableCell>
                 <TableCell>{slide.display_order}</TableCell>

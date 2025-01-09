@@ -4,44 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { UseFormReturn } from "react-hook-form";
 import { SlideFormValues } from "./slide-schema";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
+import { ImageUploadField } from "./ImageUploadField";
 
 interface SlideFormProps {
   form: UseFormReturn<SlideFormValues>;
   onSubmit: (data: SlideFormValues) => Promise<void>;
   onCancel: () => void;
+  isSubmitting?: boolean;
 }
 
-export function SlideForm({ form, onSubmit, onCancel }: SlideFormProps) {
-  const [isUploading, setIsUploading] = useState(false);
-
-  const handleFileUpload = async (file: File, field: "desktop_image_url" | "mobile_image_url") => {
-    try {
-      setIsUploading(true);
-      const fileExt = file.name.split('.').pop();
-      const filePath = `${crypto.randomUUID()}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('slides')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('slides')
-        .getPublicUrl(filePath);
-
-      form.setValue(field, publicUrl);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
+export function SlideForm({ form, onSubmit, onCancel, isSubmitting }: SlideFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -59,72 +32,16 @@ export function SlideForm({ form, onSubmit, onCancel }: SlideFormProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
+        <ImageUploadField
+          form={form}
           name="desktop_image_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Imagem Desktop</FormLabel>
-              <Tabs defaultValue="upload" className="w-full">
-                <TabsList className="mb-4">
-                  <TabsTrigger value="upload">Upload</TabsTrigger>
-                  <TabsTrigger value="url">URL</TabsTrigger>
-                </TabsList>
-                <TabsContent value="upload">
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleFileUpload(file, "desktop_image_url");
-                      }}
-                    />
-                  </FormControl>
-                </TabsContent>
-                <TabsContent value="url">
-                  <FormControl>
-                    <Input {...field} placeholder="https://" />
-                  </FormControl>
-                </TabsContent>
-              </Tabs>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Imagem Desktop"
         />
 
-        <FormField
-          control={form.control}
+        <ImageUploadField
+          form={form}
           name="mobile_image_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Imagem Mobile</FormLabel>
-              <Tabs defaultValue="upload" className="w-full">
-                <TabsList className="mb-4">
-                  <TabsTrigger value="upload">Upload</TabsTrigger>
-                  <TabsTrigger value="url">URL</TabsTrigger>
-                </TabsList>
-                <TabsContent value="upload">
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleFileUpload(file, "mobile_image_url");
-                      }}
-                    />
-                  </FormControl>
-                </TabsContent>
-                <TabsContent value="url">
-                  <FormControl>
-                    <Input {...field} placeholder="https://" />
-                  </FormControl>
-                </TabsContent>
-              </Tabs>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Imagem Mobile"
         />
 
         <FormField
@@ -206,8 +123,8 @@ export function SlideForm({ form, onSubmit, onCancel }: SlideFormProps) {
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit" disabled={isUploading}>
-            {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Salvar
           </Button>
         </div>
