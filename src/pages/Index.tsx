@@ -58,7 +58,7 @@ const Index = () => {
         <SearchBar />
         <FeaturedVehicles />
         <section className="py-8 md:py-16 bg-white">
-          <div className="container max-w-[1400px] mx-auto">
+          <div className="container max-w-[1400px] mx-auto px-1 sm:px-4">
             <div className="mb-6 md:mb-8 px-4 sm:px-0">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900">
                 Nossos veículos
@@ -69,7 +69,7 @@ const Index = () => {
             </div>
 
             {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-4 px-4 sm:px-0">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-4 px-1 sm:px-0">
                 {[...Array(isMobile ? 6 : 10)].map((_, i) => (
                   <div
                     key={i}
