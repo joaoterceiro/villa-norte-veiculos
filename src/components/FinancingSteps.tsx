@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { FinancingForm } from "@/components/FinancingForm";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -108,21 +108,18 @@ export const FinancingSteps = () => {
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <div className="fixed inset-0 z-50 bg-black/50" />
-        <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
-          <div className="flex flex-col space-y-1.5 text-center sm:text-left">
-            <h2 className="text-lg font-semibold leading-none tracking-tight">
-              Simulação de Financiamento
-            </h2>
-            <p className="text-sm text-muted-foreground">
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Simulação de Financiamento</DialogTitle>
+            <DialogDescription>
               Preencha o formulário abaixo para simular seu financiamento
-            </p>
-          </div>
+            </DialogDescription>
+          </DialogHeader>
           <FinancingForm
             onSuccess={() => setIsModalOpen(false)}
             vehicleTitle="Simulação Geral"
           />
-        </div>
+        </DialogContent>
       </Dialog>
     </div>
   );
