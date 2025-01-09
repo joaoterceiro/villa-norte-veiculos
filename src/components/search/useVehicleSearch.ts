@@ -10,7 +10,7 @@ interface SearchResult {
   image_feature: string;
 }
 
-export const useVehicleSearch = (searchTerm: string) => {
+export const useVehicleSearch = (searchTerm: string, make?: string | null) => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalVehicles, setTotalVehicles] = useState<number>(0);
@@ -35,7 +35,7 @@ export const useVehicleSearch = (searchTerm: string) => {
 
   useEffect(() => {
     const fetchResults = async () => {
-      if (searchTerm.length < 2) {
+      if (searchTerm.length < 2 && !make) {
         setSearchResults([]);
         return;
       }
@@ -44,8 +44,8 @@ export const useVehicleSearch = (searchTerm: string) => {
       try {
         const { data, error } = await supabase
           .rpc('filter_products', {
-            p_search_term: searchTerm,
-            p_marca: null,
+            p_search_term: searchTerm.length >= 2 ? searchTerm : null,
+            p_marca: make,
             p_ano_min: null,
             p_price_min: null,
             p_price_max: null,
@@ -69,7 +69,7 @@ export const useVehicleSearch = (searchTerm: string) => {
 
     const debounceTimer = setTimeout(fetchResults, 300);
     return () => clearTimeout(debounceTimer);
-  }, [searchTerm]);
+  }, [searchTerm, make]);
 
   return { searchResults, isLoading, totalVehicles };
 };

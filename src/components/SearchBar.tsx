@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchInput } from "./search/SearchInput";
 import { SearchResults } from "./search/SearchResults";
 import { useVehicleSearch } from "./search/useVehicleSearch";
+import { useSearchParams } from "react-router-dom";
 
 interface SearchBarProps {
   onSearch?: (term: string) => void;
@@ -9,8 +10,10 @@ interface SearchBarProps {
 }
 
 export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg p-6" }: SearchBarProps) => {
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
-  const { searchResults, isLoading, totalVehicles } = useVehicleSearch(searchTerm);
+  const make = searchParams.get("make");
+  const { searchResults, isLoading, totalVehicles } = useVehicleSearch(searchTerm, make);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
