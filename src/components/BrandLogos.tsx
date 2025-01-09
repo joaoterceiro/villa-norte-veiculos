@@ -25,11 +25,10 @@ export const BrandLogos = () => {
       }
 
       if (settings?.brand_logos) {
-        // First cast to unknown, then to the specific type
-        const brandLogos = settings.brand_logos as unknown as Array<{
-          name: string;
-          logo: string;
-        }>;
+        const brandLogos = (settings.brand_logos as Json[]).map((item) => ({
+          name: (item as { name: string }).name,
+          logo: (item as { logo: string }).logo,
+        }));
         setBrands(brandLogos);
       }
     };
