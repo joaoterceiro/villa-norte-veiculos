@@ -108,8 +108,8 @@ const VehicleDetails = () => {
     <>
       <Navbar />
       <main className="min-h-screen bg-background">
-        <div className="container mx-auto py-4 px-4 md:py-8 md:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8">
+        <div className="container mx-auto py-3 px-3 md:py-6 md:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-6">
             <VehicleImageGallery
               images={vehicle.product_images || []}
               title={vehicle.title}
@@ -120,42 +120,40 @@ const VehicleDetails = () => {
               onImageClick={() => setLightboxOpen(true)}
             />
 
-            <div className="lg:col-span-4">
-              <VehicleInfoPanel
-                title={vehicle.title}
-                condition={vehicle.condition}
-                price={vehicle.price}
-                location="São José dos Campos"
-                category={vehicle.category}
-                downloadUrl={vehicle.download}
-              />
-            </div>
+            <VehicleInfoPanel
+              title={vehicle.title}
+              condition={vehicle.condition}
+              price={vehicle.price}
+              location="São José dos Campos"
+              category={vehicle.category}
+              downloadUrl={vehicle.download}
+            />
           </div>
 
-          <div className="mt-6 md:mt-8">
-            <h2 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6">Especificações</h2>
+          <div className="mt-4 md:mt-6">
+            <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Especificações</h2>
             <VehicleSpecifications specifications={specifications} />
           </div>
 
-          <Separator className="my-6 md:my-8" />
+          <Separator className="my-4 md:my-6" />
 
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-4">Descrição</h2>
+            <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Descrição</h2>
             <p className="text-[#666666] whitespace-pre-line text-sm md:text-base">
               {vehicle.description}
             </p>
           </div>
 
-          <Separator className="my-6 md:my-8" />
+          <Separator className="my-4 md:my-6" />
 
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-4">Acessórios</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4">
+            <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Acessórios</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
               {vehicle.product_accessories?.map((item, index) => (
                 <Badge
                   key={index}
                   variant="outline"
-                  className="justify-start py-1.5 md:py-2 px-3 md:px-4 text-xs md:text-sm"
+                  className="justify-start py-1 md:py-1.5 px-2 md:px-3 text-xs md:text-sm"
                 >
                   {item.accessory}
                 </Badge>
@@ -165,7 +163,7 @@ const VehicleDetails = () => {
 
           {similarVehicles && similarVehicles.length > 0 && (
             <>
-              <Separator className="my-6 md:my-8" />
+              <Separator className="my-4 md:my-6" />
               <VehicleSimilar vehicles={similarVehicles} />
             </>
           )}
