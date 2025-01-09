@@ -24,7 +24,7 @@ export function FeaturedVehicles() {
           .from("product")
           .select("*")
           .eq("is_featured", true)
-          .limit(10); // Increased from 5 to 10 featured vehicles
+          .limit(10);
 
         if (error) throw error;
 
@@ -80,7 +80,7 @@ export function FeaturedVehicles() {
               {vehicles.map((vehicle) => (
                 <CarouselItem
                   key={vehicle.vehicle_id}
-                  className="pl-2 md:basis-1/3 lg:basis-1/5 md:pl-4"
+                  className="pl-2 md:basis-1/5 lg:basis-1/5 md:pl-4"
                 >
                   <VehicleCard vehicle={vehicle} />
                 </CarouselItem>
