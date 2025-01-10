@@ -27,9 +27,9 @@ export default function ProductManager() {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [makeFilter, setMakeFilter] = useState("");
-  const [conditionFilter, setConditionFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [makeFilter, setMakeFilter] = useState("all");
+  const [conditionFilter, setConditionFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const { data: products, isLoading: isLoadingProducts } = useQuery({
     queryKey: ["products", searchTerm, makeFilter, conditionFilter, statusFilter],
@@ -43,15 +43,15 @@ export default function ProductManager() {
         query = query.or(`title.ilike.%${searchTerm}%,make.ilike.%${searchTerm}%,model.ilike.%${searchTerm}%`);
       }
       
-      if (makeFilter) {
+      if (makeFilter && makeFilter !== "all") {
         query = query.eq("make", makeFilter);
       }
       
-      if (conditionFilter) {
+      if (conditionFilter && conditionFilter !== "all") {
         query = query.eq("condition", conditionFilter);
       }
       
-      if (statusFilter) {
+      if (statusFilter && statusFilter !== "all") {
         query = query.eq("status", statusFilter);
       }
 
@@ -167,7 +167,7 @@ export default function ProductManager() {
               <SelectValue placeholder="Filtrar por marca" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas as marcas</SelectItem>
+              <SelectItem value="all">Todas as marcas</SelectItem>
               {makes?.map((make) => (
                 <SelectItem key={make} value={make}>
                   {make}
@@ -181,7 +181,7 @@ export default function ProductManager() {
               <SelectValue placeholder="Filtrar por condição" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas as condições</SelectItem>
+              <SelectItem value="all">Todas as condições</SelectItem>
               <SelectItem value="new">Novo</SelectItem>
               <SelectItem value="used">Usado</SelectItem>
             </SelectContent>
@@ -192,7 +192,7 @@ export default function ProductManager() {
               <SelectValue placeholder="Filtrar por status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os status</SelectItem>
+              <SelectItem value="all">Todos os status</SelectItem>
               <SelectItem value="active">Ativo</SelectItem>
               <SelectItem value="inactive">Inativo</SelectItem>
             </SelectContent>
