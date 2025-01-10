@@ -9,9 +9,13 @@ export const FooterContact = () => {
       const { data, error } = await supabase
         .from('portal_settings')
         .select('address, email, phone')
-        .maybeSingle();
+        .limit(1)
+        .single();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching portal settings:', error);
+        return null;
+      }
       return data;
     },
   });
