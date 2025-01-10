@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Toaster } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 import Index from "@/pages/Index";
 import Vehicles from "@/pages/Vehicles";
 import VehicleDetails from "@/pages/VehicleDetails";
