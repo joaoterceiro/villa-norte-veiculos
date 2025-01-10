@@ -14,6 +14,14 @@ import { VehicleSimilar } from "@/components/VehicleSimilar";
 import { Calculator, MessageSquare } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { FinancingForm } from "@/components/FinancingForm";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
 
 const VehicleDetails = () => {
   const { id } = useParams();
@@ -134,6 +142,22 @@ const VehicleDetails = () => {
       <Navbar />
       <main className="min-h-screen bg-background pb-20 md:pb-0">
         <div className="container mx-auto py-3 px-3 md:py-6 md:px-6">
+          <Breadcrumb className="mb-4">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/carros">Carros</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{vehicle.title}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-6">
             <VehicleImageGallery
               images={vehicle.product_images || []}
