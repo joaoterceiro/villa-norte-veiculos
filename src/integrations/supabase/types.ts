@@ -315,6 +315,36 @@ export type Database = {
         }
         Relationships: []
       }
+      top_banners: {
+        Row: {
+          created_at: string | null
+          desktop_image_url: string
+          id: string
+          is_active: boolean | null
+          link: string | null
+          mobile_image_url: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          desktop_image_url: string
+          id?: string
+          is_active?: boolean | null
+          link?: string | null
+          mobile_image_url: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          desktop_image_url?: string
+          id?: string
+          is_active?: boolean | null
+          link?: string | null
+          mobile_image_url?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       users_sis: {
         Row: {
           cnpj: string | null
