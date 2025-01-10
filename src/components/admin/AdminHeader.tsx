@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,10 +7,15 @@ import { Logo } from "@/components/Logo";
 
 export const AdminHeader = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
@@ -22,19 +27,25 @@ export const AdminHeader = () => {
             <nav className="flex items-center space-x-4">
               <Link
                 to="/admin"
-                className="text-sm font-medium text-white hover:text-white/80 transition-colors"
+                className={`text-sm font-medium text-white hover:text-white/80 transition-colors ${
+                  isActive("/admin") ? "text-primary border-b-2 border-primary pb-1" : ""
+                }`}
               >
                 Dashboard
               </Link>
               <Link
                 to="/admin/media"
-                className="text-sm font-medium text-white hover:text-white/80 transition-colors"
+                className={`text-sm font-medium text-white hover:text-white/80 transition-colors ${
+                  isActive("/admin/media") ? "text-primary border-b-2 border-primary pb-1" : ""
+                }`}
               >
                 Mídia
               </Link>
               <Link
                 to="/admin/settings"
-                className="text-sm font-medium text-white hover:text-white/80 transition-colors"
+                className={`text-sm font-medium text-white hover:text-white/80 transition-colors ${
+                  isActive("/admin/settings") ? "text-primary border-b-2 border-primary pb-1" : ""
+                }`}
               >
                 Configurações
               </Link>
