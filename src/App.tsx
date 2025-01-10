@@ -10,6 +10,7 @@ import Admin from "./pages/Admin";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetails from "./pages/VehicleDetails";
 import BrandVehicles from "./pages/BrandVehicles";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/carros" element={<Vehicles />} />
             <Route path="/carros/:id" element={<VehicleDetails />} />
             <Route path="/marca/:brand" element={<BrandVehicles />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
