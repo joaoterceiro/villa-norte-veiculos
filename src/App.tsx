@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetails from "./pages/VehicleDetails";
+import BrandVehicles from "./pages/BrandVehicles";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="/admin" element={<Admin />} />
             <Route path="/carros" element={<Vehicles />} />
             <Route path="/carros/:id" element={<VehicleDetails />} />
+            <Route path="/marca/:brand" element={<BrandVehicles />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

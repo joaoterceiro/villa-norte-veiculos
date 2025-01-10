@@ -20,10 +20,7 @@ export const BrandLogos = () => {
 
   const handleBrandClick = (brandName: string) => {
     const formattedBrand = brandName.toLowerCase();
-    navigate({
-      pathname: "/carros",
-      search: `?make=${formattedBrand}`,
-    });
+    navigate(`/marca/${formattedBrand}`);
   };
 
   return (
