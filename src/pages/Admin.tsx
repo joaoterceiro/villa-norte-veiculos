@@ -99,13 +99,13 @@ const Admin = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground">
             Bem-vindo ao painel administrativo
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total de Veículos</CardTitle>
@@ -175,8 +175,8 @@ const Admin = () => {
           </Card>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+          <Card className="col-span-1">
             <CardHeader>
               <CardTitle className="text-lg">Leads Recentes</CardTitle>
             </CardHeader>
@@ -188,7 +188,7 @@ const Admin = () => {
               ) : (
                 <div className="space-y-4">
                   {recentLeads?.map((lead) => (
-                    <div key={lead.lead_id} className="flex items-center justify-between border-b pb-2">
+                    <div key={lead.lead_id} className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-2 gap-2">
                       <div>
                         <p className="font-medium">{lead.nome}</p>
                         <p className="text-sm text-muted-foreground">{lead.telefone}</p>
@@ -206,7 +206,7 @@ const Admin = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="col-span-1">
             <CardHeader>
               <CardTitle className="text-lg">Veículos Recentes</CardTitle>
             </CardHeader>
@@ -218,7 +218,7 @@ const Admin = () => {
               ) : (
                 <div className="space-y-4">
                   {recentVehicles?.map((vehicle) => (
-                    <div key={vehicle.vehicle_id} className="flex items-center justify-between border-b pb-2">
+                    <div key={vehicle.vehicle_id} className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-2 gap-2">
                       <div>
                         <p className="font-medium">{vehicle.title}</p>
                         <p className="text-sm text-muted-foreground">
