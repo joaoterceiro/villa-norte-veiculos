@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,39 +9,40 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const BannerManager = () => {
-  const { data: banners, refetch } = useQuery({
+  const { data: banners, isLoading } = useQuery({
     queryKey: ["banners"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("top_banners")
-        .select("*")
-        .order("created_at", { ascending: false });
-
+        .select("*");
+      
       if (error) throw error;
       return data;
     },
   });
 
-  const toggleBannerStatus = async (id: string, currentStatus: boolean) => {
-    try {
-      const { error } = await supabase
-        .from("top_banners")
-        .update({ is_active: !currentStatus })
-        .eq("id", id);
+  const handleStatusChange = async (id: string, isActive: boolean) => {
+    const { error } = await supabase
+      .from("top_banners")
+      .update({ is_active: isActive })
+      .eq("id", id);
 
-      if (error) throw error;
-
-      toast.success("Status do banner atualizado com sucesso!");
-      refetch();
-    } catch (error) {
-      console.error("Error updating banner status:", error);
+    if (error) {
       toast.error("Erro ao atualizar status do banner");
+      return;
     }
+
+    toast.success("Status do banner atualizado com sucesso");
   };
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <div className="rounded-md border">
@@ -52,30 +51,26 @@ export const BannerManager = () => {
           <TableRow>
             <TableHead>Link</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Data de Criação</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
+            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {banners?.map((banner) => (
             <TableRow key={banner.id}>
-              <TableCell>{banner.link || "-"}</TableCell>
+              <TableCell>{banner.link || "Sem link"}</TableCell>
               <TableCell>
                 <Switch
                   checked={banner.is_active}
-                  onCheckedChange={() =>
-                    toggleBannerStatus(banner.id, banner.is_active)
+                  onCheckedChange={(checked) =>
+                    handleStatusChange(banner.id, checked)
                   }
                 />
               </TableCell>
-              <TableCell>
-                {new Date(banner.created_at).toLocaleDateString("pt-BR")}
-              </TableCell>
-              <TableCell className="text-right space-x-2">
-                <Button variant="ghost" size="icon">
+              <TableCell className="space-x-2">
+                <Button variant="outline" size="icon">
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button variant="outline" size="icon">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </TableCell>

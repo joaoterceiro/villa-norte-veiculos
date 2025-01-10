@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,39 +9,41 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const SlideManager = () => {
-  const { data: slides, refetch } = useQuery({
+  const { data: slides, isLoading } = useQuery({
     queryKey: ["slides"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("slides")
         .select("*")
-        .order("display_order", { ascending: true });
-
+        .order("display_order");
+      
       if (error) throw error;
       return data;
     },
   });
 
-  const toggleSlideStatus = async (id: string, currentStatus: boolean) => {
-    try {
-      const { error } = await supabase
-        .from("slides")
-        .update({ is_active: !currentStatus })
-        .eq("id", id);
+  const handleStatusChange = async (id: string, isActive: boolean) => {
+    const { error } = await supabase
+      .from("slides")
+      .update({ is_active: isActive })
+      .eq("id", id);
 
-      if (error) throw error;
-
-      toast.success("Status do slide atualizado com sucesso!");
-      refetch();
-    } catch (error) {
-      console.error("Error updating slide status:", error);
+    if (error) {
       toast.error("Erro ao atualizar status do slide");
+      return;
     }
+
+    toast.success("Status do slide atualizado com sucesso");
   };
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <div className="rounded-md border">
@@ -53,8 +53,7 @@ export const SlideManager = () => {
             <TableHead>Título</TableHead>
             <TableHead>Ordem</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Link</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
+            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -65,17 +64,16 @@ export const SlideManager = () => {
               <TableCell>
                 <Switch
                   checked={slide.is_active}
-                  onCheckedChange={() =>
-                    toggleSlideStatus(slide.id, slide.is_active)
+                  onCheckedChange={(checked) =>
+                    handleStatusChange(slide.id, checked)
                   }
                 />
               </TableCell>
-              <TableCell>{slide.link || "-"}</TableCell>
-              <TableCell className="text-right space-x-2">
-                <Button variant="ghost" size="icon">
+              <TableCell className="space-x-2">
+                <Button variant="outline" size="icon">
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button variant="outline" size="icon">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </TableCell>
