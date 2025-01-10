@@ -5,6 +5,7 @@ import BrandVehicles from "@/pages/BrandVehicles";
 import Vehicles from "@/pages/Vehicles";
 import FeaturedVehicles from "@/pages/FeaturedVehicles";
 import NotFound from "@/pages/NotFound";
+import Settings from "@/pages/admin/Settings";
 import { Toaster } from "@/components/ui/sonner";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/carros/:id" element={<VehicleDetails />} />
         <Route path="/marca/:brand" element={<BrandVehicles />} />
         <Route path="/destaques" element={<FeaturedVehicles />} />
+        <Route path="/admin/configuracoes" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
