@@ -1,59 +1,63 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { AdminLayout } from "@/layouts/AdminLayout";
 
 const Admin = () => {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    checkUser();
-  }, []);
-
-  const checkUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: userProfile, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", session.user.id)
-        .single();
-
-      if (error || userProfile?.role !== "admin") {
-        navigate("/");
-        return;
-      }
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error checking user:", error);
-      navigate("/");
-    }
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Painel Administrativo</h1>
-        <Button onClick={handleSignOut}>Sair</Button>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Bem-vindo ao painel administrativo
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl border bg-card text-card-foreground shadow">
+            <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">
+                Total de Veículos
+              </h3>
+            </div>
+            <div className="p-6 pt-0">
+              <div className="text-2xl font-bold">0</div>
+            </div>
+          </div>
+          
+          <div className="rounded-xl border bg-card text-card-foreground shadow">
+            <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">
+                Leads do Mês
+              </h3>
+            </div>
+            <div className="p-6 pt-0">
+              <div className="text-2xl font-bold">0</div>
+            </div>
+          </div>
+          
+          <div className="rounded-xl border bg-card text-card-foreground shadow">
+            <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">
+                Veículos em Destaque
+              </h3>
+            </div>
+            <div className="p-6 pt-0">
+              <div className="text-2xl font-bold">0</div>
+            </div>
+          </div>
+          
+          <div className="rounded-xl border bg-card text-card-foreground shadow">
+            <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">
+                Veículos Vendidos
+              </h3>
+            </div>
+            <div className="p-6 pt-0">
+              <div className="text-2xl font-bold">0</div>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* Add your admin dashboard content here */}
-    </div>
+    </AdminLayout>
   );
 };
 
