@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
@@ -12,9 +11,9 @@ export default function NotFound() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow flex items-center justify-center p-4 md:p-8">
-        <motion.div 
-          className="max-w-2xl w-full text-center space-y-6"
+      <main className="flex-grow flex items-center justify-center p-4">
+        <motion.div
+          className="text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -33,50 +32,35 @@ export default function NotFound() {
             />
           </motion.div>
 
-          {/* Error Message */}
           <motion.h1
+            className="text-4xl font-bold mb-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-4xl md:text-5xl font-bold text-secondary"
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             404 - Página não encontrada
           </motion.h1>
 
-          {/* Friendly Message */}
-          <motion.h2
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="text-xl md:text-2xl font-medium text-muted"
-          >
-            Ops! Parece que você se perdeu...
-          </motion.h2>
-
-          {/* Explanation */}
           <motion.p
+            className="text-lg text-muted-foreground mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="text-base md:text-lg text-muted"
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
             A página que você está procurando pode ter sido removida, renomeada ou está temporariamente indisponível.
           </motion.p>
 
-          {/* Return Button */}
-          <motion.div
+          <motion.button
+            onClick={() => navigate("/")}
+            className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1 }}
-            className="pt-4"
+            transition={{ duration: 0.5, delay: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Button
-              onClick={() => navigate("/")}
-              className="px-8 py-6 text-lg transition-transform hover:scale-105"
-            >
-              Voltar para a Home
-            </Button>
-          </motion.div>
+            Voltar para a Home
+          </motion.button>
         </motion.div>
       </main>
 
