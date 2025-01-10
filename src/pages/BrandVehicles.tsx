@@ -46,13 +46,11 @@ const BrandVehicles = () => {
 
         if (error) throw error;
 
-        // Sort the results based on the selected option
         return [...(data || [])].sort((a, b) => {
           if (sort === "price-asc") return (a.price || 0) - (b.price || 0);
           if (sort === "price-desc") return (b.price || 0) - (a.price || 0);
           if (sort === "name-asc") return a.title.localeCompare(b.title);
           if (sort === "name-desc") return b.title.localeCompare(a.title);
-          // Default: newest first (based on featured status and year)
           if (a.is_featured !== b.is_featured) return b.is_featured ? 1 : -1;
           return b.year - a.year;
         });
@@ -71,12 +69,12 @@ const BrandVehicles = () => {
 
   const handleSortChange = (value: string) => {
     searchParams.set("sort", value);
-    searchParams.delete("page"); // Reset to first page when sorting changes
+    searchParams.delete("page");
     setSearchParams(searchParams);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       
       <div className="container mx-auto px-4 py-8 flex-grow">
