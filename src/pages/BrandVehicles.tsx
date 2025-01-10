@@ -2,6 +2,7 @@ import { useParams, Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { VehiclesGrid } from "@/components/vehicles/VehiclesGrid";
 import { VehiclesPagination } from "@/components/vehicles/VehiclesPagination";
 import { Button } from "@/components/ui/button";
@@ -40,21 +41,21 @@ const BrandVehicles = () => {
           p_transmission_type: null,
           p_fuel_type: null,
           p_body_type: null,
+          p_color: null
         });
 
         if (error) throw error;
 
         // Sort the results based on the selected option
-        const sortedData = [...(data || [])].sort((a, b) => {
+        return [...(data || [])].sort((a, b) => {
           if (sort === "price-asc") return (a.price || 0) - (b.price || 0);
           if (sort === "price-desc") return (b.price || 0) - (a.price || 0);
           if (sort === "name-asc") return a.title.localeCompare(b.title);
           if (sort === "name-desc") return b.title.localeCompare(a.title);
           // Default: newest first (based on featured status and year)
+          if (a.is_featured !== b.is_featured) return b.is_featured ? 1 : -1;
           return b.year - a.year;
         });
-
-        return sortedData;
       } catch (error) {
         console.error("Error fetching vehicles:", error);
         throw error;
@@ -75,10 +76,10 @@ const BrandVehicles = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 flex-grow">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
           <Link to="/" className="hover:text-primary">
@@ -145,6 +146,7 @@ const BrandVehicles = () => {
           </>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
