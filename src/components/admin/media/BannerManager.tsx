@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, Link as LinkIcon } from "lucide-react";
+import { Pencil, Trash2, Link as LinkIcon, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
 
 export const BannerManager = () => {
   const { data: banners, isLoading } = useQuery({
@@ -12,7 +13,8 @@ export const BannerManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("top_banners")
-        .select("*");
+        .select("*")
+        .order('created_at', { ascending: false });
       
       if (error) throw error;
       return data;
@@ -34,7 +36,26 @@ export const BannerManager = () => {
   };
 
   if (isLoading) {
-    return <div className="flex items-center justify-center p-8 text-muted-foreground">Carregando...</div>;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div 
+            key={i}
+            className="bg-card animate-pulse rounded-lg border shadow-sm overflow-hidden"
+          >
+            <div className="aspect-video bg-muted" />
+            <div className="p-6 space-y-4">
+              <div className="h-4 bg-muted rounded w-1/3" />
+              <div className="h-4 bg-muted rounded w-2/3" />
+              <div className="flex space-x-2 pt-2">
+                <div className="h-9 bg-muted rounded flex-1" />
+                <div className="h-9 bg-muted rounded flex-1" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -43,7 +64,10 @@ export const BannerManager = () => {
         {banners?.map((banner) => (
           <div 
             key={banner.id} 
-            className="group bg-card hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden transition-colors duration-200"
+            className={cn(
+              "group bg-card hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden transition-all duration-200",
+              !banner.is_active && "opacity-75"
+            )}
           >
             <AspectRatio ratio={16/9} className="bg-muted relative">
               <img 
@@ -51,7 +75,20 @@ export const BannerManager = () => {
                 alt="Banner preview"
                 className="object-cover w-full h-full"
               />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              <div className="absolute bottom-3 left-3 flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                {banner.is_active ? (
+                  <>
+                    <Eye className="h-4 w-4" />
+                    <span className="text-sm font-medium">Ativo</span>
+                  </>
+                ) : (
+                  <>
+                    <EyeOff className="h-4 w-4" />
+                    <span className="text-sm font-medium">Inativo</span>
+                  </>
+                )}
+              </div>
             </AspectRatio>
             <div className="p-6 space-y-4">
               <div className="flex items-center justify-between">
@@ -64,13 +101,13 @@ export const BannerManager = () => {
                 />
               </div>
               {banner.link && (
-                <div className="flex items-start gap-2 text-sm">
-                  <LinkIcon className="h-4 w-4 mt-1 text-muted-foreground" />
+                <div className="flex items-start gap-2 text-sm group/link">
+                  <LinkIcon className="h-4 w-4 mt-1 text-muted-foreground group-hover/link:text-primary transition-colors" />
                   <a 
                     href={banner.link} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-primary hover:underline break-all"
+                    className="text-muted-foreground hover:text-primary transition-colors break-all line-clamp-2"
                   >
                     {banner.link}
                   </a>
@@ -80,7 +117,7 @@ export const BannerManager = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="flex-1 text-secondary hover:text-secondary hover:bg-secondary/5"
+                  className="flex-1 text-secondary hover:text-secondary hover:bg-secondary/5 transition-colors"
                 >
                   <Pencil className="h-4 w-4 mr-2" />
                   Editar
@@ -88,7 +125,7 @@ export const BannerManager = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/5"
+                  className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/5 transition-colors"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Excluir
