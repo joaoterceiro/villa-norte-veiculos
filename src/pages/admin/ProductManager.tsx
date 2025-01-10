@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import {
@@ -11,11 +11,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Package, Plus, Pencil, Trash2 } from "lucide-react";
+import { Package, Plus, Pencil, Trash2, Star, StarOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ProductManager() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: products, isLoading: isLoadingProducts } = useQuery({
@@ -56,6 +57,29 @@ export default function ProductManager() {
       toast({
         title: "Produto deletado com sucesso",
       });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    }
+    setIsLoading(false);
+  };
+
+  const handleToggleFeatured = async (vehicleId: string, currentValue: boolean) => {
+    setIsLoading(true);
+    const { error } = await supabase
+      .from("product")
+      .update({ is_featured: !currentValue })
+      .eq("vehicle_id", vehicleId);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao atualizar destaque",
+        description: error.message,
+      });
+    } else {
+      toast({
+        title: `Produto ${!currentValue ? "destacado" : "removido dos destaques"} com sucesso`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     }
     setIsLoading(false);
   };
@@ -123,6 +147,19 @@ export default function ProductManager() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        disabled={isLoading}
+                        onClick={() => handleToggleFeatured(product.vehicle_id, product.is_featured || false)}
+                        title={product.is_featured ? "Remover destaque" : "Destacar produto"}
+                      >
+                        {product.is_featured ? (
+                          <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                        ) : (
+                          <StarOff className="h-4 w-4" />
+                        )}
+                      </Button>
                       <Button variant="outline" size="icon">
                         <Pencil className="h-4 w-4" />
                       </Button>
