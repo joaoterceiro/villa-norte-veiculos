@@ -7,17 +7,18 @@ import VehicleDetails from "@/pages/VehicleDetails";
 import BrandVehicles from "@/pages/BrandVehicles";
 import FeaturedVehicles from "@/pages/FeaturedVehicles";
 import Auth from "@/pages/Auth";
-import Admin from "@/pages/Admin";
+import Admin from "@/pages/admin/Admin";
 import MediaManager from "@/pages/admin/MediaManager";
 import Settings from "@/pages/admin/Settings";
 import ProductManager from "@/pages/admin/ProductManager";
 import NotFound from "@/pages/NotFound";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
       retry: 1,
-      refetchOnWindowFocus: false,
     },
   },
 });
@@ -73,6 +74,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <WhatsAppButton />
       <Toaster />
     </QueryClientProvider>
   );
