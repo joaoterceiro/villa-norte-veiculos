@@ -60,6 +60,19 @@ const VehicleDetails = () => {
     },
   });
 
+  const { data: settings } = useQuery({
+    queryKey: ["portal-settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("portal_settings")
+        .select("*")
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => 
       prev === 0 ? (vehicle?.product_images?.length || 1) - 1 : prev - 1
@@ -73,9 +86,9 @@ const VehicleDetails = () => {
   };
 
   const handleWhatsAppClick = () => {
-    if (!vehicle) return;
+    if (!vehicle || !settings?.whatsapp_number) return;
     const message = `Olá! Tenho interesse no veículo: ${vehicle.title}`;
-    const whatsappUrl = `https://wa.me/5512996301903?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${settings.whatsapp_number}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
