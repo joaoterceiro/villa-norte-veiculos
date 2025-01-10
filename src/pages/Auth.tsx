@@ -4,6 +4,7 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Logo } from "@/components/Logo";
 import type { AuthError } from "@supabase/supabase-js";
 
 const Auth = () => {
@@ -49,10 +50,11 @@ const Auth = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <div className="flex flex-col items-center">
+          <Logo className="mb-8" />
+          <h2 className="text-center text-3xl font-extrabold text-gray-900">
             Login Administrativo
           </h2>
         </div>
@@ -61,14 +63,26 @@ const Auth = () => {
             <AlertDescription>{errorMessage}</AlertDescription>
           </Alert>
         )}
-        <SupabaseAuth 
-          supabaseClient={supabase}
-          appearance={{ theme: ThemeSupa }}
-          providers={[]}
-          redirectTo={window.location.origin}
-          showLinks={false}
-          view="sign_in"
-        />
+        <div className="bg-white p-8 rounded-lg shadow">
+          <SupabaseAuth 
+            supabaseClient={supabase}
+            appearance={{ 
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    brand: '#FF6500',
+                    brandAccent: '#e65a00',
+                  },
+                },
+              },
+            }}
+            providers={[]}
+            redirectTo={window.location.origin}
+            showLinks={false}
+            view="sign_in"
+          />
+        </div>
       </div>
     </div>
   );
