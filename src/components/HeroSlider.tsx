@@ -3,9 +3,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Link } from "react-router-dom";
+import { Skeleton } from "./ui/skeleton";
 
 export const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [slides, setSlides] = useState<{
     desktop_image_url: string;
     mobile_image_url: string;
@@ -15,19 +17,24 @@ export const HeroSlider = () => {
 
   useEffect(() => {
     const fetchSlides = async () => {
-      const { data, error } = await supabase
-        .from("slides")
-        .select("desktop_image_url, mobile_image_url, link")
-        .eq("is_active", true)
-        .order("display_order", { ascending: true });
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("slides")
+          .select("desktop_image_url, mobile_image_url, link")
+          .eq("is_active", true)
+          .order("display_order", { ascending: true });
 
-      if (error) {
-        console.error("Error fetching slides:", error);
-        return;
-      }
+        if (error) {
+          console.error("Error fetching slides:", error);
+          return;
+        }
 
-      if (data) {
-        setSlides(data);
+        if (data) {
+          setSlides(data);
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -35,6 +42,8 @@ export const HeroSlider = () => {
   }, []);
 
   useEffect(() => {
+    if (slides.length === 0) return;
+    
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000); // Change slide every 5 seconds
@@ -50,6 +59,14 @@ export const HeroSlider = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  if (isLoading) {
+    return (
+      <div className="h-[500px] w-full">
+        <Skeleton className="w-full h-full" />
+      </div>
+    );
+  }
+
   if (slides.length === 0) {
     return null;
   }
@@ -59,6 +76,8 @@ export const HeroSlider = () => {
       src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
       alt=""
       className="w-full h-full object-cover"
+      loading="eager"
+      fetchPriority="high"
     />
   );
 
