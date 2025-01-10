@@ -145,15 +145,21 @@ const VehicleDetails = () => {
           <Breadcrumb className="mb-4">
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/" className="text-muted hover:text-primary transition-colors">
+                  Home
+                </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="text-muted" />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/carros">Carros</BreadcrumbLink>
+                <BreadcrumbLink href="/carros" className="text-muted hover:text-primary transition-colors">
+                  Carros
+                </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="text-muted" />
               <BreadcrumbItem>
-                <BreadcrumbPage>{vehicle.title}</BreadcrumbPage>
+                <BreadcrumbPage className="text-primary font-medium">
+                  {vehicle.title}
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
