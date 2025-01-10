@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export const BannerManager = () => {
   const { data: banners, isLoading } = useQuery({
@@ -41,43 +42,53 @@ export const BannerManager = () => {
   };
 
   if (isLoading) {
-    return <div>Carregando...</div>;
+    return <div className="flex items-center justify-center p-8">Carregando...</div>;
   }
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Link</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {banners?.map((banner) => (
-            <TableRow key={banner.id}>
-              <TableCell>{banner.link || "Sem link"}</TableCell>
-              <TableCell>
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {banners?.map((banner) => (
+          <div key={banner.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <AspectRatio ratio={16/9} className="bg-muted">
+              <img 
+                src={banner.desktop_image_url} 
+                alt="Banner preview"
+                className="object-cover w-full h-full"
+              />
+            </AspectRatio>
+            <div className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Status</span>
                 <Switch
                   checked={banner.is_active}
                   onCheckedChange={(checked) =>
                     handleStatusChange(banner.id, checked)
                   }
                 />
-              </TableCell>
-              <TableCell className="space-x-2">
-                <Button variant="outline" size="icon">
-                  <Pencil className="h-4 w-4" />
+              </div>
+              {banner.link && (
+                <div className="text-sm">
+                  <span className="font-medium">Link: </span>
+                  <a href={banner.link} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                    {banner.link}
+                  </a>
+                </div>
+              )}
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm" className="flex-1">
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Editar
                 </Button>
-                <Button variant="outline" size="icon">
-                  <Trash2 className="h-4 w-4" />
+                <Button variant="outline" size="sm" className="flex-1">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Excluir
                 </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
