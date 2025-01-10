@@ -18,7 +18,7 @@ export const VehicleDetailsBreadcrumb = ({ title }: VehicleDetailsBreadcrumbProp
           url: window.location.href,
         });
       } catch (error) {
-        console.log('Error sharing:', error);
+        console.error("Error sharing:", error);
       }
     } else {
       // Fallback to copying to clipboard
@@ -30,8 +30,8 @@ export const VehicleDetailsBreadcrumb = ({ title }: VehicleDetailsBreadcrumbProp
   };
 
   return (
-    <div className="flex justify-between items-center mb-4 md:mb-6">
-      <ol className="flex items-center space-x-2 text-sm md:text-base">
+    <div className="flex items-center justify-between py-3 md:py-4">
+      <ol className="flex items-center space-x-2 text-sm md:text-base flex-wrap">
         <li>
           <Link to="/" className="text-muted hover:text-primary transition-colors">
             Home
@@ -48,14 +48,14 @@ export const VehicleDetailsBreadcrumb = ({ title }: VehicleDetailsBreadcrumbProp
         <li>
           <ChevronRight className="w-4 h-4 text-muted" />
         </li>
-        <li>
-          <span className="text-primary font-medium">{title}</span>
+        <li className="text-primary font-medium break-all line-clamp-2 md:line-clamp-1">
+          {title}
         </li>
       </ol>
       <Button
         variant="ghost"
         size="icon"
-        className="hover:bg-primary/10 hover:text-primary transition-colors"
+        className="hover:bg-primary/10 hover:text-primary transition-colors flex-shrink-0 ml-2"
         onClick={handleShare}
       >
         <Share2 className="h-4 w-4" />
