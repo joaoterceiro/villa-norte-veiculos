@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Link } from "react-router-dom";
+import { FiltersState } from "@/components/filters/types/filters";
 
 const BrandVehicles = () => {
   const { brand } = useParams<{ brand: string }>();
@@ -18,6 +19,19 @@ const BrandVehicles = () => {
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useIsMobile();
   const itemsPerPage = isMobile ? 6 : 10;
+  const [filters, setFilters] = useState<FiltersState>({
+    make: brand || "",
+    yearMin: "",
+    priceMin: "",
+    priceMax: "",
+    mileageMin: "",
+    mileageMax: "",
+    transmission: "",
+    fuelType: "",
+    bodyType: "",
+    condition: "",
+    color: "",
+  });
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -49,6 +63,11 @@ const BrandVehicles = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleFilterChange = (newFilters: FiltersState) => {
+    setFilters(newFilters);
+    // You can add filter logic here if needed
+  };
+
   const formattedBrand = brand ? brand.charAt(0).toUpperCase() + brand.slice(1) : '';
 
   return (
@@ -72,11 +91,11 @@ const BrandVehicles = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink as={Link} to="/">Home</BreadcrumbLink>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink as={Link} to="/carros">Carros</BreadcrumbLink>
+              <BreadcrumbLink href="/carros">Carros</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -86,7 +105,10 @@ const BrandVehicles = () => {
         </Breadcrumb>
 
         <div className="mt-6">
-          <VehicleFilters />
+          <VehicleFilters 
+            filters={filters}
+            onFilterChange={handleFilterChange}
+          />
         </div>
 
         {isLoading ? (
