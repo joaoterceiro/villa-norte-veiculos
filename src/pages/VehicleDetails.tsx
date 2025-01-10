@@ -11,14 +11,11 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { VehicleImageGallery } from "@/components/VehicleImageGallery";
 import { VehicleSimilar } from "@/components/VehicleSimilar";
-import { FixedBottomBar } from "@/components/FixedBottomBar";
-import { FinancingForm } from "@/components/FinancingForm";
 
 const VehicleDetails = () => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [showFinancingModal, setShowFinancingModal] = useState(false);
 
   const { data: vehicle, isLoading } = useQuery({
     queryKey: ["vehicle", id],
@@ -38,28 +35,25 @@ const VehicleDetails = () => {
     },
   });
 
-  const { data: settings } = useQuery({
-    queryKey: ["portal-settings"],
+  const { data: similarVehicles } = useQuery({
+    queryKey: ["similar-vehicles", vehicle?.make, vehicle?.model],
+    enabled: !!vehicle,
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("portal_settings")
-        .select("*")
-        .single();
+        .from("product")
+        .select("*, product_accessories(accessory)")
+        .eq("make", vehicle?.make)
+        .neq("vehicle_id", id)
+        .limit(5);
 
       if (error) throw error;
-      return data;
+      
+      return data.map(v => ({
+        ...v,
+        accessories: v.product_accessories?.map(a => a.accessory) || []
+      }));
     },
   });
-
-  const handleWhatsAppClick = () => {
-    if (!settings?.whatsapp_number || !vehicle) return;
-
-    const message = encodeURIComponent(
-      `Oi, acabei de ver o ${vehicle.category} ${vehicle.title} e queria saber mais detalhes de como adquirir.`
-    );
-    const whatsappUrl = `https://wa.me/${settings.whatsapp_number}?text=${message}`;
-    window.open(whatsappUrl, "_blank");
-  };
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => 
@@ -113,7 +107,7 @@ const VehicleDetails = () => {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background pb-24">
+      <main className="min-h-screen bg-background">
         <div className="container mx-auto py-3 px-3 md:py-6 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-6">
             <VehicleImageGallery
@@ -187,25 +181,9 @@ const VehicleDetails = () => {
               />
             </DialogContent>
           </Dialog>
-
-          <Dialog open={showFinancingModal} onOpenChange={setShowFinancingModal}>
-            <DialogContent className="sm:max-w-[500px]">
-              <DialogHeader>
-                <DialogTitle>Simulação de Financiamento</DialogTitle>
-              </DialogHeader>
-              <FinancingForm
-                onSuccess={() => setShowFinancingModal(false)}
-                vehicleTitle={vehicle.title}
-              />
-            </DialogContent>
-          </Dialog>
         </div>
       </main>
       <Footer />
-      <FixedBottomBar
-        onSimularClick={() => setShowFinancingModal(true)}
-        onInteresseClick={handleWhatsAppClick}
-      />
     </>
   );
 };
