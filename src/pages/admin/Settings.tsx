@@ -22,9 +22,9 @@ const formSchema = z.object({
   phone: z.string().optional(),
   email: z.string().email("Email inválido").optional().nullable(),
   address: z.string().optional().nullable(),
-  facebook_url: z.string().url("URL inválida").optional().nullable(),
-  instagram_url: z.string().url("URL inválida").optional().nullable(),
-  youtube_url: z.string().url("URL inválida").optional().nullable(),
+  facebook_url: z.string().url("URL inválida").optional().nullable().or(z.literal("")),
+  instagram_url: z.string().url("URL inválida").optional().nullable().or(z.literal("")),
+  youtube_url: z.string().url("URL inválida").optional().nullable().or(z.literal("")),
 });
 
 export default function Settings() {
