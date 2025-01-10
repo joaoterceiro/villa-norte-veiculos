@@ -112,13 +112,13 @@ export default function ProductManager() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Título</TableHead>
-                <TableHead>Marca</TableHead>
-                <TableHead>Modelo</TableHead>
-                <TableHead>Ano</TableHead>
-                <TableHead>Preço</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
+                <TableHead className="text-black">Título</TableHead>
+                <TableHead className="text-black">Marca</TableHead>
+                <TableHead className="text-black">Modelo</TableHead>
+                <TableHead className="text-black">Ano</TableHead>
+                <TableHead className="text-black">Preço</TableHead>
+                <TableHead className="text-black">Status</TableHead>
+                <TableHead className="text-right text-black">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
