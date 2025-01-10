@@ -29,7 +29,7 @@ export const SelectFilter = ({
         <SelectTrigger className="w-full bg-white border-input">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent className="bg-white">
+        <SelectContent className="bg-white border shadow-md">
           <SelectItem value="all">Todos</SelectItem>
           {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>
