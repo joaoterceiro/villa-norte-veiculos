@@ -12,7 +12,7 @@ import MediaManager from "@/pages/admin/MediaManager";
 import Settings from "@/pages/admin/Settings";
 import ProductManager from "@/pages/admin/ProductManager";
 import NotFound from "@/pages/NotFound";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { RootLayout } from "@/layouts/RootLayout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,48 +25,53 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Index />,
-  },
-  {
-    path: "/vehicles",
-    element: <Vehicles />,
-  },
-  {
-    path: "/vehicles/:vehicleId",
-    element: <VehicleDetails />,
-  },
-  {
-    path: "/brand/:brand",
-    element: <BrandVehicles />,
-  },
-  {
-    path: "/featured",
-    element: <FeaturedVehicles />,
-  },
-  {
-    path: "/auth",
-    element: <Auth />,
-  },
-  {
-    path: "/admin",
-    element: <Admin />,
-  },
-  {
-    path: "/admin/media",
-    element: <MediaManager />,
-  },
-  {
-    path: "/admin/settings",
-    element: <Settings />,
-  },
-  {
-    path: "/admin/products",
-    element: <ProductManager />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Index />,
+      },
+      {
+        path: "/vehicles",
+        element: <Vehicles />,
+      },
+      {
+        path: "/vehicles/:vehicleId",
+        element: <VehicleDetails />,
+      },
+      {
+        path: "/brand/:brand",
+        element: <BrandVehicles />,
+      },
+      {
+        path: "/featured",
+        element: <FeaturedVehicles />,
+      },
+      {
+        path: "/auth",
+        element: <Auth />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
+      },
+      {
+        path: "/admin/media",
+        element: <MediaManager />,
+      },
+      {
+        path: "/admin/settings",
+        element: <Settings />,
+      },
+      {
+        path: "/admin/products",
+        element: <ProductManager />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
   },
 ]);
 
