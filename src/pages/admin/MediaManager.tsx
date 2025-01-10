@@ -22,21 +22,29 @@ const MediaManager = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="slides" className="space-y-6">
-          <TabsList className="w-full justify-start bg-card">
-            <TabsTrigger value="slides" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+        <Tabs defaultValue="slides" className="w-full">
+          <TabsList className="w-full grid grid-cols-2 gap-4 bg-transparent p-0">
+            <TabsTrigger 
+              value="slides" 
+              className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none border-2 border-transparent data-[state=active]:border-primary py-3 rounded-lg transition-all duration-200"
+            >
               Slides
             </TabsTrigger>
-            <TabsTrigger value="banners" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <TabsTrigger 
+              value="banners" 
+              className="w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none border-2 border-transparent data-[state=active]:border-primary py-3 rounded-lg transition-all duration-200"
+            >
               Banners
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="slides" className="space-y-4">
-            <SlideManager />
-          </TabsContent>
-          <TabsContent value="banners" className="space-y-4">
-            <BannerManager />
-          </TabsContent>
+          <div className="mt-6">
+            <TabsContent value="slides" className="space-y-4 m-0">
+              <SlideManager />
+            </TabsContent>
+            <TabsContent value="banners" className="space-y-4 m-0">
+              <BannerManager />
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </AdminLayout>
