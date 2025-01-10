@@ -7,65 +7,72 @@ import VehicleDetails from "@/pages/VehicleDetails";
 import BrandVehicles from "@/pages/BrandVehicles";
 import FeaturedVehicles from "@/pages/FeaturedVehicles";
 import Auth from "@/pages/Auth";
-import Admin from "@/pages/admin/Admin";
+import Admin from "@/pages/Admin";
 import MediaManager from "@/pages/admin/MediaManager";
 import Settings from "@/pages/admin/Settings";
 import ProductManager from "@/pages/admin/ProductManager";
 import NotFound from "@/pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Index />,
+  },
+  {
+    path: "/vehicles",
+    element: <Vehicles />,
+  },
+  {
+    path: "/vehicles/:vehicleId",
+    element: <VehicleDetails />,
+  },
+  {
+    path: "/brand/:brand",
+    element: <BrandVehicles />,
+  },
+  {
+    path: "/featured",
+    element: <FeaturedVehicles />,
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+  },
+  {
+    path: "/admin/media",
+    element: <MediaManager />,
+  },
+  {
+    path: "/admin/settings",
+    element: <Settings />,
+  },
+  {
+    path: "/admin/products",
+    element: <ProductManager />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider
-        router={createBrowserRouter([
-          {
-            path: "/",
-            element: <Index />,
-          },
-          {
-            path: "/vehicles",
-            element: <Vehicles />,
-          },
-          {
-            path: "/vehicles/:vehicleId",
-            element: <VehicleDetails />,
-          },
-          {
-            path: "/brand/:brand",
-            element: <BrandVehicles />,
-          },
-          {
-            path: "/featured",
-            element: <FeaturedVehicles />,
-          },
-          {
-            path: "/auth",
-            element: <Auth />,
-          },
-          {
-            path: "/admin",
-            element: <Admin />,
-          },
-          {
-            path: "/admin/media",
-            element: <MediaManager />,
-          },
-          {
-            path: "/admin/settings",
-            element: <Settings />,
-          },
-          {
-            path: "/admin/products",
-            element: <ProductManager />,
-          },
-          {
-            path: "*",
-            element: <NotFound />,
-          },
-        ])}
-      />
+      <RouterProvider router={router} />
       <Toaster />
     </QueryClientProvider>
   );
