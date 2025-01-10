@@ -36,7 +36,7 @@ export const Navbar = () => {
               <Link 
                 to="/" 
                 className={`text-white hover:text-primary transition-colors ${
-                  isActive("/") ? "text-primary font-semibold" : ""
+                  isActive("/") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
               >
                 Home
@@ -44,7 +44,7 @@ export const Navbar = () => {
               <Link 
                 to="/carros" 
                 className={`text-white hover:text-primary transition-colors ${
-                  isActive("/carros") ? "text-primary font-semibold" : ""
+                  isActive("/carros") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
               >
                 Comprar carro
@@ -52,7 +52,7 @@ export const Navbar = () => {
               <Link 
                 to="/vender" 
                 className={`text-white hover:text-primary transition-colors ${
-                  isActive("/vender") ? "text-primary font-semibold" : ""
+                  isActive("/vender") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
               >
                 Vender meu carro
@@ -72,7 +72,7 @@ export const Navbar = () => {
               <Link
                 to="/"
                 className={`block text-white hover:text-primary transition-colors ${
-                  isActive("/") ? "text-primary font-semibold" : ""
+                  isActive("/") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -81,7 +81,7 @@ export const Navbar = () => {
               <Link
                 to="/carros"
                 className={`block text-white hover:text-primary transition-colors ${
-                  isActive("/carros") ? "text-primary font-semibold" : ""
+                  isActive("/carros") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -90,7 +90,7 @@ export const Navbar = () => {
               <Link
                 to="/vender"
                 className={`block text-white hover:text-primary transition-colors ${
-                  isActive("/vender") ? "text-primary font-semibold" : ""
+                  isActive("/vender") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
