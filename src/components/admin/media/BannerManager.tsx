@@ -37,20 +37,17 @@ export const BannerManager = () => {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         {[1, 2, 3].map((i) => (
           <div 
             key={i}
-            className="bg-card animate-pulse rounded-lg border shadow-sm overflow-hidden flex"
+            className="bg-card animate-pulse rounded-lg border shadow-sm overflow-hidden flex h-[180px]"
           >
-            <div className="w-[300px] bg-muted" />
-            <div className="flex-1 p-6 space-y-4">
+            <div className="w-[320px] bg-muted" />
+            <div className="flex-1 p-4 space-y-3">
+              <div className="h-4 bg-muted rounded w-1/2" />
               <div className="h-4 bg-muted rounded w-1/3" />
               <div className="h-4 bg-muted rounded w-2/3" />
-              <div className="flex space-x-2 pt-2">
-                <div className="h-9 bg-muted rounded flex-1" />
-                <div className="h-9 bg-muted rounded flex-1" />
-              </div>
             </div>
           </div>
         ))}
@@ -59,16 +56,16 @@ export const BannerManager = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {banners?.map((banner) => (
         <div 
           key={banner.id} 
           className={cn(
-            "group bg-card hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden flex transition-all duration-200",
+            "group bg-white hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden flex h-[180px] transition-all duration-200",
             !banner.is_active && "opacity-75"
           )}
         >
-          <div className="w-[300px] relative">
+          <div className="w-[320px] relative">
             <AspectRatio ratio={16/9} className="h-full">
               <img 
                 src={banner.desktop_image_url} 
@@ -91,9 +88,9 @@ export const BannerManager = () => {
               </div>
             </AspectRatio>
           </div>
-          <div className="flex-1 p-6 space-y-4">
+          <div className="flex-1 p-4 space-y-3 bg-[#F8F9FA]">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-secondary">Status</span>
+              <span className="text-sm font-medium text-[#1A1F2C]">Status</span>
               <Switch
                 checked={banner.is_active}
                 onCheckedChange={(checked) =>
@@ -103,22 +100,22 @@ export const BannerManager = () => {
             </div>
             {banner.link && (
               <div className="flex items-start gap-2 text-sm group/link">
-                <LinkIcon className="h-4 w-4 mt-1 text-muted-foreground group-hover/link:text-primary transition-colors" />
+                <LinkIcon className="h-4 w-4 mt-1 text-[#64748B] group-hover/link:text-primary transition-colors" />
                 <a 
                   href={banner.link} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-muted-foreground hover:text-primary transition-colors break-all line-clamp-2"
+                  className="text-[#64748B] hover:text-primary transition-colors break-all line-clamp-2"
                 >
                   {banner.link}
                 </a>
               </div>
             )}
-            <div className="flex space-x-2 pt-2">
+            <div className="flex space-x-2">
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="flex-1 text-secondary hover:text-secondary hover:bg-secondary/5 transition-colors"
+                className="flex-1 text-[#1A1F2C] hover:text-[#1A1F2C] hover:bg-[#E2E8F0] transition-colors"
               >
                 <Pencil className="h-4 w-4 mr-2" />
                 Editar
