@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 export function FeaturedVehicles() {
   const [vehicles, setVehicles] = useState([]);
@@ -63,6 +65,11 @@ export function FeaturedVehicles() {
               Confira nossa seleção especial de veículos
             </p>
           </div>
+          <Button asChild variant="outline">
+            <Link to="/destaques" className="hidden sm:inline-flex">
+              Ver todos os destaques
+            </Link>
+          </Button>
         </div>
 
         {isLoading ? (
