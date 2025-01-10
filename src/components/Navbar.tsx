@@ -17,26 +17,6 @@ export const Navbar = () => {
     return location.pathname === path;
   };
 
-  const handleAdminClick = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (!session) {
-      navigate("/auth");
-    } else {
-      const { data: userProfile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", session.user.id)
-        .single();
-
-      if (userProfile?.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/auth");
-      }
-    }
-  };
-
   return (
     <>
       <TopBanner />
@@ -85,12 +65,6 @@ export const Navbar = () => {
               >
                 Simular financiamento
               </button>
-              <button
-                className="text-white hover:text-primary transition-colors"
-                onClick={handleAdminClick}
-              >
-                Área administrativa
-              </button>
             </div>
           </div>
 
@@ -132,15 +106,6 @@ export const Navbar = () => {
                 }}
               >
                 Simular financiamento
-              </button>
-              <button
-                className="w-full text-white hover:text-primary transition-colors text-left"
-                onClick={() => {
-                  handleAdminClick();
-                  setIsMenuOpen(false);
-                }}
-              >
-                Área administrativa
               </button>
             </div>
           )}
