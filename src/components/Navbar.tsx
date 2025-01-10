@@ -35,19 +35,25 @@ export const Navbar = () => {
             <div className="hidden md:flex items-center space-x-6">
               <Link 
                 to="/" 
-                className={`text-white hover:text-primary ${isActive("/") ? "text-primary" : ""}`}
+                className={`text-white hover:text-primary transition-colors ${
+                  isActive("/") ? "text-primary font-semibold" : ""
+                }`}
               >
                 Home
               </Link>
               <Link 
                 to="/carros" 
-                className={`text-white hover:text-primary ${isActive("/carros") ? "text-primary" : ""}`}
+                className={`text-white hover:text-primary transition-colors ${
+                  isActive("/carros") ? "text-primary font-semibold" : ""
+                }`}
               >
                 Comprar carro
               </Link>
               <Link 
                 to="/vender" 
-                className={`text-white hover:text-primary ${isActive("/vender") ? "text-primary" : ""}`}
+                className={`text-white hover:text-primary transition-colors ${
+                  isActive("/vender") ? "text-primary font-semibold" : ""
+                }`}
               >
                 Vender meu carro
               </Link>
@@ -65,21 +71,27 @@ export const Navbar = () => {
             <div className="md:hidden mt-4 space-y-4 pb-4">
               <Link
                 to="/"
-                className={`block text-white hover:text-primary ${isActive("/") ? "text-primary" : ""}`}
+                className={`block text-white hover:text-primary transition-colors ${
+                  isActive("/") ? "text-primary font-semibold" : ""
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </Link>
               <Link
                 to="/carros"
-                className={`block text-white hover:text-primary ${isActive("/carros") ? "text-primary" : ""}`}
+                className={`block text-white hover:text-primary transition-colors ${
+                  isActive("/carros") ? "text-primary font-semibold" : ""
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Comprar carro
               </Link>
               <Link
                 to="/vender"
-                className={`block text-white hover:text-primary ${isActive("/vender") ? "text-primary" : ""}`}
+                className={`block text-white hover:text-primary transition-colors ${
+                  isActive("/vender") ? "text-primary font-semibold" : ""
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Vender meu carro
