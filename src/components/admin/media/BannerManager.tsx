@@ -128,8 +128,8 @@ export const BannerManager = () => {
                 </div>
               </AspectRatio>
             </div>
-            <div className="flex-1 p-4 flex flex-col justify-between bg-[#F8F9FA]">
-              <div className="space-y-3">
+            <div className="flex-1 p-4 flex bg-[#F8F9FA]">
+              <div className="flex-1 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-[#1A1F2C]">Status</span>
                   <Switch
@@ -153,24 +153,22 @@ export const BannerManager = () => {
                   </div>
                 )}
               </div>
-              <div className="flex space-x-2 mt-4">
+              <div className="flex flex-col gap-2 ml-4">
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="flex-1 text-[#1A1F2C] hover:text-[#1A1F2C] hover:bg-[#E2E8F0] transition-colors"
+                  className="text-[#1A1F2C] hover:text-[#1A1F2C] hover:bg-[#E2E8F0] transition-colors"
                   onClick={() => handleEdit(banner)}
                 >
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Editar
+                  <Pencil className="h-4 w-4" />
                 </Button>
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/5 transition-colors"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/5 transition-colors"
                   onClick={() => setBannerToDelete(banner.id)}
                 >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Excluir
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
             </div>

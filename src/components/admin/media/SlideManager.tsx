@@ -101,11 +101,11 @@ export const SlideManager = () => {
           <div 
             key={slide.id} 
             className={cn(
-              "group bg-white hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden flex h-[240px] transition-all duration-200",
+              "group bg-white hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden flex h-[180px] transition-all duration-200",
               !slide.is_active && "opacity-75"
             )}
           >
-            <div className="w-[426px] relative">
+            <div className="w-[320px] relative">
               <AspectRatio ratio={16/9} className="h-full">
                 <img 
                   src={slide.desktop_image_url} 
