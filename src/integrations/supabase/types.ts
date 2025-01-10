@@ -53,28 +53,46 @@ export type Database = {
       }
       portal_settings: {
         Row: {
+          address: string | null
           body_type_icons: Json[] | null
           brand_logos: Json[] | null
           created_at: string | null
+          email: string | null
+          facebook_url: string | null
           id: string
+          instagram_url: string | null
+          phone: string | null
           updated_at: string | null
           whatsapp_number: string
+          youtube_url: string | null
         }
         Insert: {
+          address?: string | null
           body_type_icons?: Json[] | null
           brand_logos?: Json[] | null
           created_at?: string | null
+          email?: string | null
+          facebook_url?: string | null
           id?: string
+          instagram_url?: string | null
+          phone?: string | null
           updated_at?: string | null
           whatsapp_number: string
+          youtube_url?: string | null
         }
         Update: {
+          address?: string | null
           body_type_icons?: Json[] | null
           brand_logos?: Json[] | null
           created_at?: string | null
+          email?: string | null
+          facebook_url?: string | null
           id?: string
+          instagram_url?: string | null
+          phone?: string | null
           updated_at?: string | null
           whatsapp_number?: string
+          youtube_url?: string | null
         }
         Relationships: []
       }
