@@ -1,12 +1,15 @@
 import { ChevronRight, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 interface VehicleDetailsBreadcrumbProps {
   title: string;
 }
 
 export const VehicleDetailsBreadcrumb = ({ title }: VehicleDetailsBreadcrumbProps) => {
+  const { toast } = useToast();
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -20,6 +23,9 @@ export const VehicleDetailsBreadcrumb = ({ title }: VehicleDetailsBreadcrumbProp
     } else {
       // Fallback to copying to clipboard
       navigator.clipboard.writeText(window.location.href);
+      toast({
+        description: "Link copiado para a área de transferência!",
+      });
     }
   };
 
@@ -48,12 +54,12 @@ export const VehicleDetailsBreadcrumb = ({ title }: VehicleDetailsBreadcrumbProp
       </ol>
       <Button
         variant="ghost"
-        size="sm"
-        className="text-muted hover:text-primary"
+        size="icon"
+        className="hover:bg-primary/10 hover:text-primary transition-colors"
         onClick={handleShare}
       >
-        <Share2 className="w-4 h-4 mr-2" />
-        <span className="hidden sm:inline">Compartilhar</span>
+        <Share2 className="h-4 w-4" />
+        <span className="sr-only">Compartilhar</span>
       </Button>
     </div>
   );
