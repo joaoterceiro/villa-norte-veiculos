@@ -4,8 +4,14 @@ import { SlideManager } from "@/components/admin/media/SlideManager";
 import { Button } from "@/components/ui/button";
 import { Plus, Image, Presentation } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import { SlideForm } from "@/components/admin/media/SlideForm";
+import { BannerForm } from "@/components/admin/media/BannerForm";
 
 const MediaManager = () => {
+  const [isSlideFormOpen, setIsSlideFormOpen] = useState(false);
+  const [isBannerFormOpen, setIsBannerFormOpen] = useState(false);
+
   return (
     <AdminLayout>
       <div className="space-y-12">
@@ -23,12 +29,19 @@ const MediaManager = () => {
                 </p>
               </div>
             </div>
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button 
+              className="bg-primary hover:bg-primary/90"
+              onClick={() => setIsSlideFormOpen(true)}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Adicionar Slide
             </Button>
           </div>
           <SlideManager />
+          <SlideForm
+            open={isSlideFormOpen}
+            onOpenChange={setIsSlideFormOpen}
+          />
         </section>
 
         <Separator className="my-8" />
@@ -47,12 +60,19 @@ const MediaManager = () => {
                 </p>
               </div>
             </div>
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button 
+              className="bg-primary hover:bg-primary/90"
+              onClick={() => setIsBannerFormOpen(true)}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Adicionar Banner
             </Button>
           </div>
           <BannerManager />
+          <BannerForm
+            open={isBannerFormOpen}
+            onOpenChange={setIsBannerFormOpen}
+          />
         </section>
       </div>
     </AdminLayout>
