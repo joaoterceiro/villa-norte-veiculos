@@ -88,30 +88,32 @@ export const BannerManager = () => {
               </div>
             </AspectRatio>
           </div>
-          <div className="flex-1 p-4 space-y-3 bg-[#F8F9FA]">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-[#1A1F2C]">Status</span>
-              <Switch
-                checked={banner.is_active}
-                onCheckedChange={(checked) =>
-                  handleStatusChange(banner.id, checked)
-                }
-              />
-            </div>
-            {banner.link && (
-              <div className="flex items-start gap-2 text-sm group/link">
-                <LinkIcon className="h-4 w-4 mt-1 text-[#64748B] group-hover/link:text-primary transition-colors" />
-                <a 
-                  href={banner.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-[#64748B] hover:text-primary transition-colors break-all line-clamp-2"
-                >
-                  {banner.link}
-                </a>
+          <div className="flex-1 p-4 flex flex-col justify-between bg-[#F8F9FA]">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-[#1A1F2C]">Status</span>
+                <Switch
+                  checked={banner.is_active}
+                  onCheckedChange={(checked) =>
+                    handleStatusChange(banner.id, checked)
+                  }
+                />
               </div>
-            )}
-            <div className="flex space-x-2">
+              {banner.link && (
+                <div className="flex items-start gap-2 text-sm group/link">
+                  <LinkIcon className="h-4 w-4 mt-1 text-[#64748B] group-hover/link:text-primary transition-colors" />
+                  <a 
+                    href={banner.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-[#64748B] hover:text-primary transition-colors break-all line-clamp-2"
+                  >
+                    {banner.link}
+                  </a>
+                </div>
+              )}
+            </div>
+            <div className="flex space-x-2 mt-4">
               <Button 
                 variant="outline" 
                 size="sm" 

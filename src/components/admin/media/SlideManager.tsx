@@ -88,43 +88,45 @@ export const SlideManager = () => {
               </div>
             </AspectRatio>
           </div>
-          <div className="flex-1 p-4 space-y-3 bg-[#F8F9FA]">
-            <div>
-              <h3 className="font-medium text-[#1A1F2C] line-clamp-1">{slide.title}</h3>
-              {slide.alt_text && (
-                <p className="text-sm text-[#64748B] mt-1 line-clamp-2">{slide.alt_text}</p>
+          <div className="flex-1 p-4 flex flex-col justify-between bg-[#F8F9FA]">
+            <div className="space-y-3">
+              <div>
+                <h3 className="font-medium text-[#1A1F2C] line-clamp-1">{slide.title}</h3>
+                {slide.alt_text && (
+                  <p className="text-sm text-[#64748B] mt-1 line-clamp-2">{slide.alt_text}</p>
+                )}
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-[#1A1F2C]">Status</span>
+                <Switch
+                  checked={slide.is_active}
+                  onCheckedChange={(checked) =>
+                    handleStatusChange(slide.id, checked)
+                  }
+                />
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[#64748B] flex items-center gap-1">
+                  <ArrowUpDown className="h-4 w-4" />
+                  Ordem
+                </span>
+                <span className="font-medium text-[#1A1F2C]">{slide.display_order}</span>
+              </div>
+              {slide.link && (
+                <div className="flex items-start gap-2 text-sm group/link">
+                  <LinkIcon className="h-4 w-4 mt-1 text-[#64748B] group-hover/link:text-primary transition-colors" />
+                  <a 
+                    href={slide.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-[#64748B] hover:text-primary transition-colors break-all line-clamp-1"
+                  >
+                    {slide.link}
+                  </a>
+                </div>
               )}
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-[#1A1F2C]">Status</span>
-              <Switch
-                checked={slide.is_active}
-                onCheckedChange={(checked) =>
-                  handleStatusChange(slide.id, checked)
-                }
-              />
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-[#64748B] flex items-center gap-1">
-                <ArrowUpDown className="h-4 w-4" />
-                Ordem
-              </span>
-              <span className="font-medium text-[#1A1F2C]">{slide.display_order}</span>
-            </div>
-            {slide.link && (
-              <div className="flex items-start gap-2 text-sm group/link">
-                <LinkIcon className="h-4 w-4 mt-1 text-[#64748B] group-hover/link:text-primary transition-colors" />
-                <a 
-                  href={slide.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-[#64748B] hover:text-primary transition-colors break-all line-clamp-1"
-                >
-                  {slide.link}
-                </a>
-              </div>
-            )}
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 mt-4">
               <Button 
                 variant="outline" 
                 size="sm" 
