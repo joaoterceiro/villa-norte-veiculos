@@ -101,11 +101,11 @@ export const SlideManager = () => {
           <div 
             key={slide.id} 
             className={cn(
-              "group bg-white hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden flex h-[180px] transition-all duration-200",
+              "group bg-white hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden flex h-[240px] transition-all duration-200",
               !slide.is_active && "opacity-75"
             )}
           >
-            <div className="w-[320px] relative">
+            <div className="w-[426px] relative">
               <AspectRatio ratio={16/9} className="h-full">
                 <img 
                   src={slide.desktop_image_url} 
@@ -128,8 +128,8 @@ export const SlideManager = () => {
                 </div>
               </AspectRatio>
             </div>
-            <div className="flex-1 p-4 flex flex-col justify-between bg-[#F8F9FA]">
-              <div className="space-y-3">
+            <div className="flex-1 p-4 flex bg-[#F8F9FA]">
+              <div className="flex-1 space-y-3">
                 <div>
                   <h3 className="font-medium text-[#1A1F2C] line-clamp-1">{slide.title}</h3>
                   {slide.alt_text && (
@@ -166,24 +166,22 @@ export const SlideManager = () => {
                   </div>
                 )}
               </div>
-              <div className="flex space-x-2 mt-4">
+              <div className="flex flex-col gap-2 ml-4">
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="flex-1 text-[#1A1F2C] hover:text-[#1A1F2C] hover:bg-[#E2E8F0] transition-colors"
+                  className="text-[#1A1F2C] hover:text-[#1A1F2C] hover:bg-[#E2E8F0] transition-colors"
                   onClick={() => handleEdit(slide)}
                 >
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Editar
+                  <Pencil className="h-4 w-4" />
                 </Button>
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/5 transition-colors"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/5 transition-colors"
                   onClick={() => setSlideToDelete(slide.id)}
                 >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Excluir
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
             </div>
