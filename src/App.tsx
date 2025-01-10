@@ -8,7 +8,7 @@ import FeaturedVehicles from "@/pages/FeaturedVehicles";
 import VehicleDetails from "@/pages/VehicleDetails";
 import Auth from "@/pages/Auth";
 import Admin from "@/pages/Admin";
-import Settings from "@/pages/Settings";
+import Settings from "@/pages/admin/Settings";
 import MediaManager from "@/pages/admin/MediaManager";
 import NotFound from "@/pages/NotFound";
 
