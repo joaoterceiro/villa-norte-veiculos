@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -8,21 +8,6 @@ import { FinancingForm } from "./FinancingForm";
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showFinancingModal, setShowFinancingModal] = useState(false);
-  const location = useLocation();
-
-  const isActive = (path: string) => {
-    if (path === '/') {
-      return location.pathname === '/';
-    }
-    return location.pathname.startsWith(path);
-  };
-
-  const navLinkClasses = (path: string) =>
-    `transition-colors ${
-      isActive(path)
-        ? "text-primary font-medium"
-        : "text-white hover:text-primary"
-    }`;
 
   return (
     <nav className="bg-secondary py-4">
@@ -40,13 +25,13 @@ export const Navbar = () => {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/" className={navLinkClasses('/')}>
+            <Link to="/" className="text-white hover:text-primary">
               Home
             </Link>
-            <Link to="/carros" className={navLinkClasses('/carros')}>
+            <Link to="/carros" className="text-white hover:text-primary">
               Comprar carro
             </Link>
-            <Link to="/vender" className={navLinkClasses('/vender')}>
+            <Link to="/vender" className="text-white hover:text-primary">
               Vender meu carro
             </Link>
             <button 
@@ -63,21 +48,21 @@ export const Navbar = () => {
           <div className="md:hidden mt-4 space-y-4 pb-4">
             <Link
               to="/"
-              className={`block ${navLinkClasses('/')}`}
+              className="block text-white hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/carros"
-              className={`block ${navLinkClasses('/carros')}`}
+              className="block text-white hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
               Comprar carro
             </Link>
             <Link
               to="/vender"
-              className={`block ${navLinkClasses('/vender')}`}
+              className="block text-white hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
               Vender meu carro
