@@ -42,7 +42,7 @@ export const TopBanner = () => {
             <img
               src={banner.mobile_image_url}
               alt="Banner promocional"
-              className="w-full min-h-[60px] md:min-h-[80px] h-auto object-cover"
+              className="w-full h-auto max-h-[84px] object-cover"
             />
           </picture>
         </Link>
