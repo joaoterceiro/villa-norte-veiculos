@@ -11,21 +11,51 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Package, Plus, Pencil, Trash2, Star, StarOff } from "lucide-react";
+import { Package, Plus, Pencil, Trash2, Star, StarOff, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ProductManager() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [makeFilter, setMakeFilter] = useState("");
+  const [conditionFilter, setConditionFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const { data: products, isLoading: isLoadingProducts } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", searchTerm, makeFilter, conditionFilter, statusFilter],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("product")
         .select("*")
         .order("date_added", { ascending: false });
+
+      if (searchTerm) {
+        query = query.or(`title.ilike.%${searchTerm}%,make.ilike.%${searchTerm}%,model.ilike.%${searchTerm}%`);
+      }
+      
+      if (makeFilter) {
+        query = query.eq("make", makeFilter);
+      }
+      
+      if (conditionFilter) {
+        query = query.eq("condition", conditionFilter);
+      }
+      
+      if (statusFilter) {
+        query = query.eq("status", statusFilter);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         toast({
@@ -37,6 +67,19 @@ export default function ProductManager() {
       }
 
       return data;
+    },
+  });
+
+  const { data: makes } = useQuery({
+    queryKey: ["makes"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("product")
+        .select("make")
+        .not("make", "is", null)
+        .order("make");
+      
+      return [...new Set(data?.map(item => item.make))];
     },
   });
 
@@ -106,6 +149,54 @@ export default function ProductManager() {
             <Plus className="mr-2 h-4 w-4" />
             Novo Produto
           </Button>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+            <Input
+              placeholder="Buscar produtos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          
+          <Select value={makeFilter} onValueChange={setMakeFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por marca" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todas as marcas</SelectItem>
+              {makes?.map((make) => (
+                <SelectItem key={make} value={make}>
+                  {make}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={conditionFilter} onValueChange={setConditionFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por condição" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todas as condições</SelectItem>
+              <SelectItem value="new">Novo</SelectItem>
+              <SelectItem value="used">Usado</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todos os status</SelectItem>
+              <SelectItem value="active">Ativo</SelectItem>
+              <SelectItem value="inactive">Inativo</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="rounded-md border">
