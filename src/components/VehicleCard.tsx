@@ -26,7 +26,7 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
 
   return (
     <Link to={`/carros/${vehicle.vehicle_id}`}>
-      <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100">
+      <Card className="group h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100">
         <div className="aspect-[4/3] relative overflow-hidden">
           <img
             src={vehicle.image_feature || "/placeholder.svg"}
@@ -41,8 +41,8 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
             </div>
           )}
         </div>
-        <div className="p-3 md:p-4">
-          <h3 className="text-sm md:text-base font-semibold text-secondary line-clamp-2 mb-2 md:mb-3">
+        <div className="p-3 md:p-4 flex flex-col flex-grow">
+          <h3 className="text-sm md:text-base font-semibold text-secondary line-clamp-2 mb-2 md:mb-3 flex-grow">
             {vehicle.title}
           </h3>
           <span className="text-lg md:text-xl font-bold text-primary block mb-2 md:mb-3">
