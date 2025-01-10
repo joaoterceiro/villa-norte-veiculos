@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { Upload, Loader2 } from "lucide-react";
 
 interface SlideFormProps {
   open: boolean;
@@ -26,6 +27,8 @@ interface SlideFormProps {
 export const SlideForm = ({ open, onOpenChange, initialData }: SlideFormProps) => {
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
+  const [uploadingDesktop, setUploadingDesktop] = useState(false);
+  const [uploadingMobile, setUploadingMobile] = useState(false);
   const [formData, setFormData] = useState(initialData || {
     title: "",
     desktop_image_url: "",
@@ -35,6 +38,46 @@ export const SlideForm = ({ open, onOpenChange, initialData }: SlideFormProps) =
     display_order: 0,
     is_active: true,
   });
+
+  const handleImageUpload = async (file: File, type: 'desktop' | 'mobile') => {
+    const setUploading = type === 'desktop' ? setUploadingDesktop : setUploadingMobile;
+    setUploading(true);
+
+    try {
+      if (!file) {
+        toast.error("Por favor, selecione um arquivo");
+        return;
+      }
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError, data } = await supabase.storage
+        .from('slides')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('slides')
+        .getPublicUrl(filePath);
+
+      setFormData(prev => ({
+        ...prev,
+        [`${type}_image_url`]: publicUrl
+      }));
+
+      toast.success(`Imagem ${type === 'desktop' ? 'desktop' : 'mobile'} enviada com sucesso`);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error(`Erro ao enviar imagem ${type === 'desktop' ? 'desktop' : 'mobile'}`);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,23 +133,57 @@ export const SlideForm = ({ open, onOpenChange, initialData }: SlideFormProps) =
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="desktop_image_url">URL da Imagem Desktop</Label>
-            <Input
-              id="desktop_image_url"
-              value={formData.desktop_image_url}
-              onChange={(e) => setFormData(prev => ({ ...prev, desktop_image_url: e.target.value }))}
-              required
-            />
+            <Label>Imagem Desktop</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file, 'desktop');
+                }}
+                disabled={uploadingDesktop}
+              />
+              {uploadingDesktop && (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              )}
+            </div>
+            {formData.desktop_image_url && (
+              <div className="mt-2">
+                <img 
+                  src={formData.desktop_image_url} 
+                  alt="Preview desktop" 
+                  className="max-h-32 rounded-md"
+                />
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="mobile_image_url">URL da Imagem Mobile</Label>
-            <Input
-              id="mobile_image_url"
-              value={formData.mobile_image_url}
-              onChange={(e) => setFormData(prev => ({ ...prev, mobile_image_url: e.target.value }))}
-              required
-            />
+            <Label>Imagem Mobile</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file, 'mobile');
+                }}
+                disabled={uploadingMobile}
+              />
+              {uploadingMobile && (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              )}
+            </div>
+            {formData.mobile_image_url && (
+              <div className="mt-2">
+                <img 
+                  src={formData.mobile_image_url} 
+                  alt="Preview mobile" 
+                  className="max-h-32 rounded-md"
+                />
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -154,7 +231,7 @@ export const SlideForm = ({ open, onOpenChange, initialData }: SlideFormProps) =
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading || uploadingDesktop || uploadingMobile}>
               {loading ? "Salvando..." : initialData ? "Salvar" : "Criar"}
             </Button>
           </div>
