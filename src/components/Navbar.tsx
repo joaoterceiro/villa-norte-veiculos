@@ -1,18 +1,40 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FinancingForm } from "./FinancingForm";
 import { TopBanner } from "./TopBanner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showFinancingModal, setShowFinancingModal] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => {
     return location.pathname === path;
+  };
+
+  const handleAdminClick = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      navigate("/auth");
+    } else {
+      const { data: userProfile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", session.user.id)
+        .single();
+
+      if (userProfile?.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/auth");
+      }
+    }
   };
 
   return (
@@ -63,6 +85,12 @@ export const Navbar = () => {
               >
                 Simular financiamento
               </button>
+              <button
+                className="text-white hover:text-primary transition-colors"
+                onClick={handleAdminClick}
+              >
+                Área administrativa
+              </button>
             </div>
           </div>
 
@@ -104,6 +132,15 @@ export const Navbar = () => {
                 }}
               >
                 Simular financiamento
+              </button>
+              <button
+                className="w-full text-white hover:text-primary transition-colors text-left"
+                onClick={() => {
+                  handleAdminClick();
+                  setIsMenuOpen(false);
+                }}
+              >
+                Área administrativa
               </button>
             </div>
           )}
