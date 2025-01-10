@@ -24,7 +24,7 @@ const MediaManager = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-secondary">Slides</h2>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-[#8A898C] mt-1">
                   Gerencie os slides do carrossel principal
                 </p>
               </div>
@@ -55,7 +55,7 @@ const MediaManager = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-secondary">Banners</h2>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-[#8A898C] mt-1">
                   Gerencie os banners promocionais
                 </p>
               </div>
