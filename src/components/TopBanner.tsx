@@ -1,22 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+
+type TopBanner = {
+  id: string;
+  desktop_image_url: string;
+  mobile_image_url: string;
+  link: string | null;
+  is_active: boolean;
+}
+
+const fetchActiveBanner = async () => {
+  const { data, error } = await supabase
+    .from('top_banners')
+    .select('*')
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data;
+};
 
 export const TopBanner = () => {
   const [isVisible, setIsVisible] = useState(true);
+  const { data: banner } = useQuery<TopBanner | null>({
+    queryKey: ['topBanner'],
+    queryFn: fetchActiveBanner,
+  });
 
-  if (!isVisible) return null;
+  if (!isVisible || !banner) return null;
 
   return (
     <div className="relative bg-secondary">
       <div className="max-w-[2000px] mx-auto">
-        <Link to="/carros">
-          <img
-            src="/lovable-uploads/4f79c376-f92c-46c3-bf53-706f6926ea5f.png"
-            alt="Mais de 100 veículos esperando por você"
-            className="w-full min-h-[60px] md:min-h-[80px] h-auto object-cover"
-          />
+        <Link to={banner.link || "/carros"}>
+          <picture>
+            <source media="(min-width: 768px)" srcSet={banner.desktop_image_url} />
+            <img
+              src={banner.mobile_image_url}
+              alt="Banner promocional"
+              className="w-full min-h-[60px] md:min-h-[80px] h-auto object-cover"
+            />
+          </picture>
         </Link>
         <Button
           variant="ghost"
