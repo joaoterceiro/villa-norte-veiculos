@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 export const TopBanner = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -10,11 +11,13 @@ export const TopBanner = () => {
   return (
     <div className="relative bg-secondary">
       <div className="max-w-[2000px] mx-auto">
-        <img
-          src="/lovable-uploads/4f79c376-f92c-46c3-bf53-706f6926ea5f.png"
-          alt="Mais de 100 veículos esperando por você"
-          className="w-full h-auto object-cover"
-        />
+        <Link to="/carros">
+          <img
+            src="/lovable-uploads/4f79c376-f92c-46c3-bf53-706f6926ea5f.png"
+            alt="Mais de 100 veículos esperando por você"
+            className="w-full min-h-[60px] md:min-h-[80px] h-auto object-cover"
+          />
+        </Link>
         <Button
           variant="ghost"
           size="icon"
