@@ -1,10 +1,10 @@
-import { MapPin, Phone, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { MapPin, Mail, Phone } from "lucide-react";
 
 export const FooterContact = () => {
   const { data: settings } = useQuery({
-    queryKey: ['portal-settings'],
+    queryKey: ['portal-settings-contact'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('portal_settings')
@@ -27,36 +27,26 @@ export const FooterContact = () => {
   return (
     <div className="text-center md:text-left">
       <h3 className="mb-6 text-lg font-semibold">Contato</h3>
-      <ul className="space-y-3">
+      <div className="space-y-4">
         {settings.address && (
-          <li className="flex items-center justify-center gap-2 text-muted-foreground md:justify-start">
-            <MapPin className="h-4 w-4 shrink-0" />
+          <div className="flex items-center justify-center md:justify-start gap-2">
+            <MapPin className="h-5 w-5 shrink-0" />
             <span>{settings.address}</span>
-          </li>
+          </div>
         )}
         {settings.phone && (
-          <li className="flex items-center justify-center gap-2 text-muted-foreground md:justify-start">
-            <Phone className="h-4 w-4 shrink-0" />
-            <a 
-              href={`tel:${settings.phone}`}
-              className="hover:text-primary focus:text-primary focus:outline-none"
-            >
-              {settings.phone}
-            </a>
-          </li>
+          <div className="flex items-center justify-center md:justify-start gap-2">
+            <Phone className="h-5 w-5 shrink-0" />
+            <span>{settings.phone}</span>
+          </div>
         )}
         {settings.email && (
-          <li className="flex items-center justify-center gap-2 text-muted-foreground md:justify-start">
-            <Mail className="h-4 w-4 shrink-0" />
-            <a 
-              href={`mailto:${settings.email}`}
-              className="hover:text-primary focus:text-primary focus:outline-none"
-            >
-              {settings.email}
-            </a>
-          </li>
+          <div className="flex items-center justify-center md:justify-start gap-2">
+            <Mail className="h-5 w-5 shrink-0" />
+            <span>{settings.email}</span>
+          </div>
         )}
-      </ul>
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const FooterSocial = () => {
   const { data: settings } = useQuery({
-    queryKey: ['portal-settings'],
+    queryKey: ['portal-settings-social'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('portal_settings')
