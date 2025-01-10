@@ -37,14 +37,14 @@ export const BannerManager = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="space-y-6">
         {[1, 2, 3].map((i) => (
           <div 
             key={i}
-            className="bg-card animate-pulse rounded-lg border shadow-sm overflow-hidden"
+            className="bg-card animate-pulse rounded-lg border shadow-sm overflow-hidden flex"
           >
-            <div className="aspect-video bg-muted" />
-            <div className="p-6 space-y-4">
+            <div className="w-[300px] bg-muted" />
+            <div className="flex-1 p-6 space-y-4">
               <div className="h-4 bg-muted rounded w-1/3" />
               <div className="h-4 bg-muted rounded w-2/3" />
               <div className="flex space-x-2 pt-2">
@@ -59,17 +59,17 @@ export const BannerManager = () => {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {banners?.map((banner) => (
-          <div 
-            key={banner.id} 
-            className={cn(
-              "group bg-card hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden transition-all duration-200",
-              !banner.is_active && "opacity-75"
-            )}
-          >
-            <AspectRatio ratio={16/9} className="bg-muted relative">
+    <div className="space-y-6">
+      {banners?.map((banner) => (
+        <div 
+          key={banner.id} 
+          className={cn(
+            "group bg-card hover:bg-accent/5 rounded-lg border shadow-sm overflow-hidden flex transition-all duration-200",
+            !banner.is_active && "opacity-75"
+          )}
+        >
+          <div className="w-[300px] relative">
+            <AspectRatio ratio={16/9} className="h-full">
               <img 
                 src={banner.desktop_image_url} 
                 alt="Banner preview"
@@ -90,51 +90,51 @@ export const BannerManager = () => {
                 )}
               </div>
             </AspectRatio>
-            <div className="p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-secondary">Status</span>
-                <Switch
-                  checked={banner.is_active}
-                  onCheckedChange={(checked) =>
-                    handleStatusChange(banner.id, checked)
-                  }
-                />
-              </div>
-              {banner.link && (
-                <div className="flex items-start gap-2 text-sm group/link">
-                  <LinkIcon className="h-4 w-4 mt-1 text-muted-foreground group-hover/link:text-primary transition-colors" />
-                  <a 
-                    href={banner.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-muted-foreground hover:text-primary transition-colors break-all line-clamp-2"
-                  >
-                    {banner.link}
-                  </a>
-                </div>
-              )}
-              <div className="flex space-x-2 pt-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1 text-secondary hover:text-secondary hover:bg-secondary/5 transition-colors"
+          </div>
+          <div className="flex-1 p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-secondary">Status</span>
+              <Switch
+                checked={banner.is_active}
+                onCheckedChange={(checked) =>
+                  handleStatusChange(banner.id, checked)
+                }
+              />
+            </div>
+            {banner.link && (
+              <div className="flex items-start gap-2 text-sm group/link">
+                <LinkIcon className="h-4 w-4 mt-1 text-muted-foreground group-hover/link:text-primary transition-colors" />
+                <a 
+                  href={banner.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-muted-foreground hover:text-primary transition-colors break-all line-clamp-2"
                 >
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Editar
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/5 transition-colors"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Excluir
-                </Button>
+                  {banner.link}
+                </a>
               </div>
+            )}
+            <div className="flex space-x-2 pt-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex-1 text-secondary hover:text-secondary hover:bg-secondary/5 transition-colors"
+              >
+                <Pencil className="h-4 w-4 mr-2" />
+                Editar
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/5 transition-colors"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Excluir
+              </Button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };
