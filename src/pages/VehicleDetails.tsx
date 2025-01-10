@@ -11,11 +11,16 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { VehicleImageGallery } from "@/components/VehicleImageGallery";
 import { VehicleSimilar } from "@/components/VehicleSimilar";
+import { Calculator, MessageSquare } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { FinancingForm } from "@/components/FinancingForm";
 
 const VehicleDetails = () => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [financingOpen, setFinancingOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const { data: vehicle, isLoading } = useQuery({
     queryKey: ["vehicle", id],
@@ -35,7 +40,7 @@ const VehicleDetails = () => {
     },
   });
 
-  const { data: similarVehicles } = useQuery({
+  const { data: similarVehiclesData } = useQuery({
     queryKey: ["similar-vehicles", vehicle?.make, vehicle?.model],
     enabled: !!vehicle,
     queryFn: async () => {
@@ -65,6 +70,13 @@ const VehicleDetails = () => {
     setCurrentImageIndex((prev) => 
       prev === (vehicle?.product_images?.length || 1) - 1 ? 0 : prev + 1
     );
+  };
+
+  const handleWhatsAppClick = () => {
+    if (!vehicle) return;
+    const message = `Olá! Tenho interesse no veículo: ${vehicle.title}`;
+    const whatsappUrl = `https://wa.me/5512996301903?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   if (isLoading) {
@@ -107,7 +119,7 @@ const VehicleDetails = () => {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background pb-20 md:pb-0">
         <div className="container mx-auto py-3 px-3 md:py-6 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-6">
             <VehicleImageGallery
@@ -161,10 +173,10 @@ const VehicleDetails = () => {
             </div>
           </div>
 
-          {similarVehicles && similarVehicles.length > 0 && (
+          {similarVehiclesData && similarVehiclesData.length > 0 && (
             <>
               <Separator className="my-4 md:my-6" />
-              <VehicleSimilar vehicles={similarVehicles} />
+              <VehicleSimilar vehicles={similarVehiclesData} />
             </>
           )}
 
@@ -181,7 +193,35 @@ const VehicleDetails = () => {
               />
             </DialogContent>
           </Dialog>
+
+          <Dialog open={financingOpen} onOpenChange={setFinancingOpen}>
+            <DialogContent>
+              <FinancingForm 
+                onSuccess={() => setFinancingOpen(false)}
+                vehicleTitle={vehicle.title}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
+
+        {isMobile && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 grid grid-cols-2 gap-4 z-50">
+            <button
+              onClick={() => setFinancingOpen(true)}
+              className="flex items-center justify-center gap-2 bg-[#FFF5EE] text-primary rounded-lg py-3 px-4"
+            >
+              <Calculator className="w-5 h-5" />
+              <span>Simular</span>
+            </button>
+            <button
+              onClick={handleWhatsAppClick}
+              className="flex items-center justify-center gap-2 bg-primary text-white rounded-lg py-3 px-4"
+            >
+              <MessageSquare className="w-5 h-5" />
+              <span>Tenho interesse</span>
+            </button>
+          </div>
+        )}
       </main>
       <Footer />
     </>
