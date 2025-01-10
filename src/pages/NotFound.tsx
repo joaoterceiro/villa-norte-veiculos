@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -18,17 +19,17 @@ export default function NotFound() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* 404 Image */}
+          {/* 404 Animation */}
           <motion.div
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-8"
+            className="mb-8 w-full max-w-md mx-auto"
           >
-            <img
-              src="/lovable-uploads/ed4f18ca-4c43-4a0e-987a-d9371eba911c.png"
-              alt="404 Illustration"
-              className="w-full max-w-md mx-auto"
+            <DotLottieReact
+              src="https://lottie.host/fc233abe-7f8d-4e9d-90e6-0d3f2af8a021/4LqCT4sHXw.lottie"
+              loop
+              autoplay
             />
           </motion.div>
 
