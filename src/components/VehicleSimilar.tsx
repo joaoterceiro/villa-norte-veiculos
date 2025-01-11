@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { VehicleCard } from "./VehicleCard";
 
 interface VehicleSimilarProps {
@@ -14,7 +15,7 @@ interface VehicleSimilarProps {
   }>;
 }
 
-export const VehicleSimilar = ({ vehicles }: VehicleSimilarProps) => {
+export const VehicleSimilar = memo(({ vehicles }: VehicleSimilarProps) => {
   if (!vehicles || vehicles.length === 0) return null;
 
   return (
@@ -22,9 +23,14 @@ export const VehicleSimilar = ({ vehicles }: VehicleSimilarProps) => {
       <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Veículos Similares</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
         {vehicles.map((vehicle) => (
-          <VehicleCard key={vehicle.vehicle_id} vehicle={vehicle} />
+          <VehicleCard 
+            key={vehicle.vehicle_id} 
+            vehicle={vehicle} 
+          />
         ))}
       </div>
     </>
   );
-};
+});
+
+VehicleSimilar.displayName = "VehicleSimilar";

@@ -28,7 +28,7 @@ export const VehicleDetailsContent = ({
   onNextImage,
   onLightboxChange,
   onFinancingChange,
-  similarVehicles,
+  similarVehicles = [],
 }: VehicleDetailsContentProps) => {
   const specifications = [
     { label: "Marca", value: vehicle.make },
