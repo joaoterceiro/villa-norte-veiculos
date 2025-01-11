@@ -1,10 +1,8 @@
-import { AdminLayout } from "@/layouts/AdminLayout";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, TrendingUp, TrendingDown, Car, Users } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { DashboardHeader } from "@/components/admin/dashboard/DashboardHeader";
+import { StatsGrid } from "@/components/admin/dashboard/StatsGrid";
+import { RecentItemsList } from "@/components/admin/dashboard/RecentItemsList";
 
 const Admin = () => {
   const { data: vehicleCount, isLoading: isLoadingVehicles } = useQuery({
@@ -75,7 +73,12 @@ const Admin = () => {
         .limit(5);
       
       if (error) throw error;
-      return data;
+      return data?.map(lead => ({
+        id: lead.lead_id,
+        title: lead.nome,
+        subtitle: lead.telefone,
+        date: lead.data_cadastro,
+      }));
     }
   });
 
@@ -89,157 +92,42 @@ const Admin = () => {
         .limit(5);
       
       if (error) throw error;
-      return data;
+      return data?.map(vehicle => ({
+        id: vehicle.vehicle_id,
+        title: vehicle.title,
+        subtitle: vehicle.price ? `R$ ${vehicle.price.toLocaleString('pt-BR')}` : 'Preço não informado',
+        date: vehicle.date_added,
+      }));
     }
   });
 
   const isLoading = isLoadingVehicles || isLoadingFeatured || isLoadingSold || isLoadingLeads;
 
   return (
-    <AdminLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Bem-vindo ao painel administrativo
-          </p>
-        </div>
+    <div className="space-y-6">
+      <DashboardHeader />
+      
+      <StatsGrid
+        vehicleCount={vehicleCount || 0}
+        monthlyLeads={monthlyLeads || 0}
+        featuredVehicles={featuredVehicles || 0}
+        soldVehicles={soldVehicles || 0}
+        isLoading={isLoading}
+      />
 
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total de Veículos</CardTitle>
-              {isLoadingVehicles ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Car className="h-4 w-4 text-muted-foreground" />
-              )}
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{vehicleCount || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                Veículos cadastrados
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Leads do Mês</CardTitle>
-              {isLoadingLeads ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Users className="h-4 w-4 text-muted-foreground" />
-              )}
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{monthlyLeads || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                Novos contatos este mês
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Em Destaque</CardTitle>
-              {isLoadingFeatured ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              )}
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{featuredVehicles || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                Veículos em destaque
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Vendidos</CardTitle>
-              {isLoadingSold ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-muted-foreground" />
-              )}
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{soldVehicles || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                Veículos vendidos
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle className="text-lg">Leads Recentes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isLoadingRecentLeads ? (
-                <div className="flex justify-center p-4">
-                  <Loader2 className="h-6 w-6 animate-spin" />
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {recentLeads?.map((lead) => (
-                    <div key={lead.lead_id} className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-2 gap-2">
-                      <div>
-                        <p className="font-medium">{lead.nome}</p>
-                        <p className="text-sm text-muted-foreground">{lead.telefone}</p>
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {lead.data_cadastro && formatDistanceToNow(new Date(lead.data_cadastro), { 
-                          addSuffix: true,
-                          locale: ptBR 
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle className="text-lg">Veículos Recentes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isLoadingRecentVehicles ? (
-                <div className="flex justify-center p-4">
-                  <Loader2 className="h-6 w-6 animate-spin" />
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {recentVehicles?.map((vehicle) => (
-                    <div key={vehicle.vehicle_id} className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-2 gap-2">
-                      <div>
-                        <p className="font-medium">{vehicle.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {vehicle.price ? `R$ ${vehicle.price.toLocaleString('pt-BR')}` : 'Preço não informado'}
-                        </p>
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {vehicle.date_added && formatDistanceToNow(new Date(vehicle.date_added), { 
-                          addSuffix: true,
-                          locale: ptBR 
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+        <RecentItemsList
+          title="Leads Recentes"
+          items={recentLeads}
+          isLoading={isLoadingRecentLeads}
+        />
+        <RecentItemsList
+          title="Veículos Recentes"
+          items={recentVehicles}
+          isLoading={isLoadingRecentVehicles}
+        />
       </div>
-    </AdminLayout>
+    </div>
   );
 };
 
