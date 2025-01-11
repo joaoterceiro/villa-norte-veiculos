@@ -17,6 +17,12 @@ export const Navbar = () => {
     return location.pathname === path;
   };
 
+  const handleSellCarClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const message = encodeURIComponent("Olá! Tenho interesse em vender meu veículo. Como posso prosseguir?");
+    window.open(`https://wa.me/5511999999999?text=${message}`, '_blank');
+  };
+
   return (
     <>
       <TopBanner />
@@ -51,14 +57,15 @@ export const Navbar = () => {
               >
                 Comprar carro
               </Link>
-              <Link 
-                to="/vender" 
+              <a 
+                href="#"
+                onClick={handleSellCarClick}
                 className={`text-white hover:text-primary transition-colors ${
                   isActive("/vender") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
               >
                 Vender meu carro
-              </Link>
+              </a>
               <button 
                 className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors"
                 onClick={() => setShowFinancingModal(true)}
@@ -89,15 +96,18 @@ export const Navbar = () => {
               >
                 Comprar carro
               </Link>
-              <Link
-                to="/vender"
+              <a
+                href="#"
                 className={`block text-white hover:text-primary transition-colors ${
                   isActive("/vender") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={(e) => {
+                  setIsMenuOpen(false);
+                  handleSellCarClick(e);
+                }}
               >
                 Vender meu carro
-              </Link>
+              </a>
               <button 
                 className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors"
                 onClick={() => {
