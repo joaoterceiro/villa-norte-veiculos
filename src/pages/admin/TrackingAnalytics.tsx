@@ -1,15 +1,11 @@
-import { AdminLayout } from "@/layouts/AdminLayout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Code2, History, Settings2 } from "lucide-react";
-import { ScriptEditor } from "@/components/admin/tracking/ScriptEditor";
-import { ScriptVersionHistory } from "@/components/admin/tracking/ScriptVersionHistory";
-import { SettingsTab } from "@/components/admin/tracking/SettingsTab";
+import { Loader2 } from "lucide-react";
 import { Script } from "@/components/admin/tracking/types";
+import { ScriptTabs } from "@/components/admin/tracking/ScriptTabs";
 
 export default function TrackingAnalytics() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -187,54 +183,13 @@ export default function TrackingAnalytics() {
         </div>
       ) : (
         <div className="space-y-6">
-          <Tabs defaultValue="head" className="w-full">
-            <TabsList className="w-full justify-start">
-              <TabsTrigger value="head" className="flex items-center gap-2">
-                <Code2 className="h-4 w-4" />
-                Head Scripts
-              </TabsTrigger>
-              <TabsTrigger value="body" className="flex items-center gap-2">
-                <Code2 className="h-4 w-4" />
-                Body Scripts
-              </TabsTrigger>
-              <TabsTrigger value="history" className="flex items-center gap-2">
-                <History className="h-4 w-4" />
-                Histórico
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="flex items-center gap-2">
-                <Settings2 className="h-4 w-4" />
-                Configurações
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="head" className="space-y-4">
-              <ScriptEditor
-                title="Scripts no Head"
-                script={headScript}
-                onContentChange={(value) => handleContentChange("head", value)}
-                onActiveChange={(checked) => handleActiveChange("head", checked)}
-                isLoading={mutation.isPending}
-              />
-            </TabsContent>
-
-            <TabsContent value="body" className="space-y-4">
-              <ScriptEditor
-                title="Scripts no Body"
-                script={bodyScript}
-                onContentChange={(value) => handleContentChange("body", value)}
-                onActiveChange={(checked) => handleActiveChange("body", checked)}
-                isLoading={mutation.isPending}
-              />
-            </TabsContent>
-
-            <TabsContent value="history">
-              <ScriptVersionHistory />
-            </TabsContent>
-
-            <TabsContent value="settings">
-              <SettingsTab />
-            </TabsContent>
-          </Tabs>
+          <ScriptTabs
+            headScript={headScript}
+            bodyScript={bodyScript}
+            onContentChange={handleContentChange}
+            onActiveChange={handleActiveChange}
+            isLoading={mutation.isPending}
+          />
         </div>
       )}
     </div>
