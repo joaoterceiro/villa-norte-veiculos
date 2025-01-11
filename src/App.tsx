@@ -28,12 +28,12 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         
         {/* Admin Routes */}
-        <Route element={<AdminLayout><Outlet /></AdminLayout>}>
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/settings" element={<Settings />} />
-          <Route path="/admin/products" element={<ProductManager />} />
-          <Route path="/admin/media" element={<MediaManager />} />
-          <Route path="/admin/tracking" element={<TrackingAnalytics />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Admin />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="products" element={<ProductManager />} />
+          <Route path="media" element={<MediaManager />} />
+          <Route path="tracking" element={<TrackingAnalytics />} />
         </Route>
 
         {/* 404 Route */}

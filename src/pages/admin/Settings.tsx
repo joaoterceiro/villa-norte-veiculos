@@ -1,127 +1,202 @@
-import { AdminLayout } from "@/layouts/AdminLayout";
-import { useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Settings2 } from "lucide-react";
-import { ContactInfoForm } from "@/components/admin/settings/ContactInfoForm";
-import { SocialMediaForm } from "@/components/admin/settings/SocialMediaForm";
+import { Loader2, Save } from "lucide-react";
+import { useState, useEffect } from "react";
 
-export default function Settings() {
+interface SettingsData {
+  site_name: string;
+  contact_email: string;
+  contact_phone: string;
+  whatsapp_number: string;
+  maintenance_mode: boolean;
+}
+
+const Settings = () => {
+  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [settings, setSettings] = useState<SettingsData>({
+    site_name: "",
+    contact_email: "",
+    contact_phone: "",
+    whatsapp_number: "",
+    maintenance_mode: false,
+  });
 
-  const { data: settings, isLoading } = useQuery({
-    queryKey: ["portal-settings"],
+  const { data: fetchedSettings, isLoading } = useQuery({
+    queryKey: ["site-settings"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("portal_settings")
+        .from("settings")
         .select("*")
-        .limit(1)
+        .single();
+
+      if (error) throw error;
+      return data as SettingsData;
+    },
+  });
+
+  useEffect(() => {
+    if (fetchedSettings) {
+      setSettings(fetchedSettings);
+    }
+  }, [fetchedSettings]);
+
+  const mutation = useMutation({
+    mutationFn: async (newSettings: SettingsData) => {
+      const { data, error } = await supabase
+        .from("settings")
+        .upsert(newSettings)
+        .select()
         .single();
 
       if (error) throw error;
       return data;
     },
-  });
-
-  const mutation = useMutation({
-    mutationFn: async (values: any) => {
-      const { error } = await supabase
-        .from("portal_settings")
-        .update(values)
-        .eq("id", settings?.id);
-
-      if (error) throw error;
-    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["portal-settings"] });
-      toast.success("Configurações atualizadas com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["site-settings"] });
+      toast({
+        title: "Configurações salvas",
+        description: "As alterações foram aplicadas com sucesso.",
+      });
     },
     onError: () => {
-      toast.error("Erro ao atualizar configurações");
+      toast({
+        variant: "destructive",
+        title: "Erro ao salvar",
+        description: "Ocorreu um erro ao salvar as configurações.",
+      });
     },
   });
+
+  const handleSave = () => {
+    mutation.mutate(settings);
+  };
 
   if (isLoading) {
     return (
-      <AdminLayout>
-        <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </AdminLayout>
+      <div className="flex justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
     );
   }
 
-  const handleSubmit = (values: any) => {
-    mutation.mutate(values);
-  };
-
   return (
-    <AdminLayout>
-      <div className="max-w-3xl mx-auto p-6">
-        <div className="flex items-center gap-2 mb-8">
-          <Settings2 className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Configurações do Portal</h1>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg font-medium">Informações de Contato</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ContactInfoForm
-              defaultValues={{
-                whatsapp_number: settings?.whatsapp_number || "",
-                phone: settings?.phone || "",
-                email: settings?.email || "",
-                address: settings?.address || "",
-              }}
-              onSubmit={handleSubmit}
-            />
-          </CardContent>
-        </Card>
-
-        <Separator className="my-6" />
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg font-medium">Redes Sociais</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <SocialMediaForm
-              defaultValues={{
-                facebook_url: settings?.facebook_url || "",
-                instagram_url: settings?.instagram_url || "",
-                youtube_url: settings?.youtube_url || "",
-              }}
-              onSubmit={handleSubmit}
-            />
-            <Button 
-              type="submit" 
-              className="w-full mt-6"
-              disabled={mutation.isPending}
-              onClick={() => {
-                const contactForm = document.querySelector('form');
-                if (contactForm) {
-                  contactForm.requestSubmit();
-                }
-              }}
-            >
-              {mutation.isPending ? (
-                <div className="flex items-center gap-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  Salvando...
-                </div>
-              ) : (
-                "Salvar alterações"
-              )}
-            </Button>
-          </CardContent>
-        </Card>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">Configurações</h1>
+        <p className="text-muted-foreground">
+          Gerencie as configurações gerais do site
+        </p>
       </div>
-    </AdminLayout>
+
+      <div className="grid gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações Gerais</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="site_name">Nome do Site</Label>
+                <Input
+                  id="site_name"
+                  value={settings.site_name}
+                  onChange={(e) =>
+                    setSettings({ ...settings, site_name: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="contact_email">E-mail de Contato</Label>
+                <Input
+                  id="contact_email"
+                  type="email"
+                  value={settings.contact_email}
+                  onChange={(e) =>
+                    setSettings({ ...settings, contact_email: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="contact_phone">Telefone de Contato</Label>
+                <Input
+                  id="contact_phone"
+                  value={settings.contact_phone}
+                  onChange={(e) =>
+                    setSettings({ ...settings, contact_phone: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="whatsapp_number">Número do WhatsApp</Label>
+                <Input
+                  id="whatsapp_number"
+                  value={settings.whatsapp_number}
+                  onChange={(e) =>
+                    setSettings({ ...settings, whatsapp_number: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Separator />
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Configurações do Sistema</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Modo Manutenção</Label>
+                <p className="text-sm text-muted-foreground">
+                  Ative para exibir uma página de manutenção para os visitantes
+                </p>
+              </div>
+              <Switch
+                checked={settings.maintenance_mode}
+                onCheckedChange={(checked) =>
+                  setSettings({ ...settings, maintenance_mode: checked })
+                }
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-end">
+          <Button
+            onClick={handleSave}
+            disabled={mutation.isPending}
+            className="w-[200px]"
+          >
+            {mutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Salvando...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Salvar Alterações
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Settings;
