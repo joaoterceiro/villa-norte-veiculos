@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: <Vehicles />,
   },
   {
-    path: "/vehicles/:vehicleId",
+    path: "/carros/:vehicleId",
     element: <VehicleDetails />,
   },
   {
