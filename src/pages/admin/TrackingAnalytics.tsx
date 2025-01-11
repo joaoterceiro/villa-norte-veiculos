@@ -13,9 +13,10 @@ import { Script } from "@/components/admin/tracking/types";
 
 export default function TrackingAnalytics() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [scripts, setScripts] = useState<Script[]>([]);
   const queryClient = useQueryClient();
 
-  const { data: scripts, isLoading } = useQuery({
+  const { data: fetchedScripts, isLoading } = useQuery({
     queryKey: ["tracking-scripts"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,6 +28,12 @@ export default function TrackingAnalytics() {
       return data as Script[];
     },
   });
+
+  useEffect(() => {
+    if (fetchedScripts) {
+      setScripts(fetchedScripts);
+    }
+  }, [fetchedScripts]);
 
   const mutation = useMutation({
     mutationFn: async (values: { type: string; content: string; is_active: boolean }) => {
@@ -48,7 +55,8 @@ export default function TrackingAnalytics() {
       toast.success("Scripts salvos com sucesso!");
       setHasUnsavedChanges(false);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Error saving scripts:", error);
       toast.error("Erro ao salvar scripts");
     },
   });
@@ -81,6 +89,26 @@ export default function TrackingAnalytics() {
         type: "body",
         content: bodyScript.content || "",
         is_active: bodyScript.is_active,
+      });
+    }
+  };
+
+  const handleContentChange = (type: string, content: string) => {
+    setHasUnsavedChanges(true);
+    setScripts(prev => 
+      prev.map(script => 
+        script.type === type ? { ...script, content } : script
+      )
+    );
+  };
+
+  const handleActiveChange = (type: string, checked: boolean) => {
+    const script = scripts.find(s => s.type === type);
+    if (script) {
+      mutation.mutate({
+        type,
+        content: script.content || "",
+        is_active: checked,
       });
     }
   };
@@ -140,21 +168,8 @@ export default function TrackingAnalytics() {
                 <ScriptEditor
                   title="Scripts no Head"
                   script={headScript}
-                  onContentChange={(value) => {
-                    setHasUnsavedChanges(true);
-                    if (headScript) {
-                      headScript.content = value;
-                    }
-                  }}
-                  onActiveChange={(checked) => {
-                    if (headScript) {
-                      mutation.mutate({
-                        type: "head",
-                        content: headScript.content || "",
-                        is_active: checked,
-                      });
-                    }
-                  }}
+                  onContentChange={(value) => handleContentChange("head", value)}
+                  onActiveChange={(checked) => handleActiveChange("head", checked)}
                   isLoading={mutation.isPending}
                 />
               </TabsContent>
@@ -163,21 +178,8 @@ export default function TrackingAnalytics() {
                 <ScriptEditor
                   title="Scripts no Body"
                   script={bodyScript}
-                  onContentChange={(value) => {
-                    setHasUnsavedChanges(true);
-                    if (bodyScript) {
-                      bodyScript.content = value;
-                    }
-                  }}
-                  onActiveChange={(checked) => {
-                    if (bodyScript) {
-                      mutation.mutate({
-                        type: "body",
-                        content: bodyScript.content || "",
-                        is_active: checked,
-                      });
-                    }
-                  }}
+                  onContentChange={(value) => handleContentChange("body", value)}
+                  onActiveChange={(checked) => handleActiveChange("body", checked)}
                   isLoading={mutation.isPending}
                 />
               </TabsContent>
