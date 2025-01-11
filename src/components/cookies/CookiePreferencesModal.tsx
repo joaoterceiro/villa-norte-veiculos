@@ -48,8 +48,8 @@ export const CookiePreferencesModal = ({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-lg">
         <SheetHeader className="mb-6">
-          <SheetTitle>Preferências de Cookies</SheetTitle>
-          <SheetDescription>
+          <SheetTitle className="text-gray-800">Preferências de Cookies</SheetTitle>
+          <SheetDescription className="text-gray-600">
             Personalize suas preferências de cookies. Cookies necessários não podem ser desativados pois são essenciais para o funcionamento do site.
           </SheetDescription>
         </SheetHeader>
@@ -58,7 +58,7 @@ export const CookiePreferencesModal = ({
           {Object.entries(categories).map(([key, category]) => (
             <div key={key} className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor={`cookie-${key}`} className="text-base font-medium">
+                <Label htmlFor={`cookie-${key}`} className="text-base font-medium text-gray-700">
                   {category.title}
                 </Label>
                 <Switch
@@ -70,7 +70,7 @@ export const CookiePreferencesModal = ({
                   disabled={category.required}
                 />
               </div>
-              <p className="text-sm text-muted-foreground">{category.description}</p>
+              <p className="text-sm text-gray-500">{category.description}</p>
             </div>
           ))}
         </div>

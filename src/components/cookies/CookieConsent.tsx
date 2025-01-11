@@ -114,10 +114,10 @@ export const CookieConsent = () => {
         <div className="container mx-auto max-w-7xl">
           <div className="flex flex-col gap-4">
             <div>
-              <h2 className="text-lg font-semibold mb-2">
+              <h2 className="text-lg font-semibold mb-2 text-gray-800">
                 {cookiePolicy.content.title}
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-gray-600">
                 {cookiePolicy.content.introduction}
               </p>
             </div>
@@ -125,7 +125,7 @@ export const CookieConsent = () => {
             <div className="flex flex-col sm:flex-row gap-3 items-center justify-end">
               <Link 
                 to="/politica-de-cookies"
-                className="text-sm text-muted hover:text-primary transition-colors"
+                className="text-sm text-gray-500 hover:text-primary transition-colors"
               >
                 Política de Cookies
               </Link>

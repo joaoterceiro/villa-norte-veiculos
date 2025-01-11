@@ -55,14 +55,14 @@ export default function CookiePolicy() {
 
   return (
     <div className="container py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">{cookiePolicy.content.title}</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">{cookiePolicy.content.title}</h1>
       
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Introdução</CardTitle>
+          <CardTitle className="text-gray-800">Introdução</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
+          <p className="text-gray-600">
             {cookiePolicy.content.introduction}
           </p>
         </CardContent>
@@ -71,32 +71,32 @@ export default function CookiePolicy() {
       <Accordion type="single" collapsible className="mb-8">
         {Object.entries(cookiePolicy.content.sections).map(([key, section]) => (
           <AccordionItem key={key} value={key}>
-            <AccordionTrigger className="text-lg font-semibold">
+            <AccordionTrigger className="text-lg font-semibold text-gray-800">
               {section.title}
             </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground">
+            <AccordionContent className="text-gray-600">
               {section.content}
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
 
-      <h2 className="text-2xl font-semibold mb-4">Categorias de Cookies</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Categorias de Cookies</h2>
       <div className="grid gap-4">
         {Object.entries(cookiePolicy.categories).map(([key, category]) => (
           <Card key={key}>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+              <CardTitle className="flex items-center justify-between text-gray-800">
                 {category.title}
                 {category.required && (
-                  <span className="text-sm font-normal text-muted-foreground">
+                  <span className="text-sm font-normal text-gray-500">
                     (Necessário)
                   </span>
                 )}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">{category.description}</p>
+              <p className="text-gray-600">{category.description}</p>
             </CardContent>
           </Card>
         ))}
