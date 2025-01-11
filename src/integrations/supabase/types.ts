@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cookie_policy: {
+        Row: {
+          categories: Json
+          content: Json
+          id: string
+          is_active: boolean | null
+          last_updated: string | null
+          published_at: string | null
+          version: string
+        }
+        Insert: {
+          categories?: Json
+          content: Json
+          id?: string
+          is_active?: boolean | null
+          last_updated?: string | null
+          published_at?: string | null
+          version: string
+        }
+        Update: {
+          categories?: Json
+          content?: Json
+          id?: string
+          is_active?: boolean | null
+          last_updated?: string | null
+          published_at?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           carro_troca: boolean | null

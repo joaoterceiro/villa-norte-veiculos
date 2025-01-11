@@ -13,6 +13,7 @@ import { Footer } from "@/components/Footer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Link } from "react-router-dom";
 import { BrandLogos } from "@/components/BrandLogos";
+import { CookieConsent } from "@/components/cookies/CookieConsent";
 
 const Index = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -117,6 +118,7 @@ const Index = () => {
         <Showrooms />
       </main>
       <Footer />
+      <CookieConsent />
     </div>
   );
 };
