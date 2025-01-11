@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Package, Plus, Pencil, Trash2, Star, StarOff, Search } from "lucide-react";
+import { Package, Plus, Pencil, Trash2, Star, StarOff, Image } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,6 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export default function ProductManager() {
   const { toast } = useToast();
@@ -29,6 +36,9 @@ export default function ProductManager() {
   const [makeFilter, setMakeFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   const { data: products, isLoading: isLoadingProducts } = useQuery({
     queryKey: ["products", searchTerm, makeFilter, conditionFilter, statusFilter],
@@ -126,6 +136,33 @@ export default function ProductManager() {
     setIsLoading(false);
   };
 
+  const handleSetImageFeature = async () => {
+    if (!selectedVehicleId || !imageUrl) return;
+
+    setIsLoading(true);
+    const { error } = await supabase
+      .from("product")
+      .update({ image_feature: imageUrl })
+      .eq("vehicle_id", selectedVehicleId);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao definir imagem destaque",
+        description: error.message,
+      });
+    } else {
+      toast({
+        title: "Imagem destaque definida com sucesso",
+      });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      setIsImageDialogOpen(false);
+      setImageUrl("");
+      setSelectedVehicleId(null);
+    }
+    setIsLoading(false);
+  };
+
   if (isLoadingProducts) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -149,7 +186,6 @@ export default function ProductManager() {
 
       <div className="grid gap-4 md:grid-cols-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <Input
             placeholder="Buscar produtos..."
             value={searchTerm}
@@ -238,6 +274,19 @@ export default function ProductManager() {
                       variant="outline"
                       size="icon"
                       disabled={isLoading}
+                      onClick={() => {
+                        setSelectedVehicleId(product.vehicle_id);
+                        setImageUrl(product.image_feature || "");
+                        setIsImageDialogOpen(true);
+                      }}
+                      title="Definir imagem destaque"
+                    >
+                      <Image className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      disabled={isLoading}
                       onClick={() => handleToggleFeatured(product.vehicle_id, product.is_featured || false)}
                       title={product.is_featured ? "Remover destaque" : "Destacar produto"}
                     >
@@ -265,6 +314,36 @@ export default function ProductManager() {
           </TableBody>
         </Table>
       </div>
+
+      <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Definir Imagem Destaque</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Input
+              placeholder="URL da imagem"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsImageDialogOpen(false);
+                setImageUrl("");
+                setSelectedVehicleId(null);
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button onClick={handleSetImageFeature} disabled={isLoading}>
+              Salvar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
