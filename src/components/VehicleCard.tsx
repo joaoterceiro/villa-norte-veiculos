@@ -1,6 +1,7 @@
 import { Calendar, Fuel, Car } from "lucide-react";
 import { Card } from "./ui/card";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
 interface VehicleCardProps {
   vehicle: {
@@ -16,14 +17,14 @@ interface VehicleCardProps {
   };
 }
 
-export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(price);
-  };
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(price);
+};
 
+export const VehicleCard = memo(({ vehicle }: VehicleCardProps) => {
   return (
     <Link to={`/veiculos/${vehicle.vehicle_id}`}>
       <Card className="group h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100">
@@ -32,6 +33,7 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
             src={vehicle.image_feature || "/placeholder.svg"}
             alt={vehicle.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
           />
           {vehicle.is_featured && (
             <div className="absolute top-2 left-2 md:top-4 md:left-4">
@@ -66,4 +68,6 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
       </Card>
     </Link>
   );
-};
+});
+
+VehicleCard.displayName = "VehicleCard";

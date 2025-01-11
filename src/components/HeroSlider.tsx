@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Link } from "react-router-dom";
 import { Skeleton } from "./ui/skeleton";
 
-export const HeroSlider = () => {
+export const HeroSlider = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [slides, setSlides] = useState<{
@@ -46,7 +46,7 @@ export const HeroSlider = () => {
     
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(timer);
   }, [slides.length]);
@@ -76,15 +76,15 @@ export const HeroSlider = () => {
       src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
       alt=""
       className="w-full h-full object-cover"
-      loading="eager"
-      fetchPriority="high"
+      loading={currentSlide === 0 ? "eager" : "lazy"}
+      fetchPriority={currentSlide === 0 ? "high" : "auto"}
     />
   );
 
   return (
     <div className="relative h-[500px] overflow-hidden">
       <div
-        className="absolute inset-0 transition-transform duration-500 ease-in-out"
+        className="absolute inset-0 transition-transform duration-500 ease-in-out will-change-transform"
         style={{
           transform: `translateX(-${currentSlide * 100}%)`,
         }}
@@ -130,4 +130,6 @@ export const HeroSlider = () => {
       )}
     </div>
   );
-};
+});
+
+HeroSlider.displayName = "HeroSlider";
