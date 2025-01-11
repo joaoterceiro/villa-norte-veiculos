@@ -12,7 +12,7 @@ import Settings from "./pages/admin/Settings";
 import ProductManager from "./pages/admin/ProductManager";
 import MediaManager from "./pages/admin/MediaManager";
 import TrackingAnalytics from "./pages/admin/TrackingAnalytics";
-import AdminLayout from "./layouts/AdminLayout";
+import { AdminLayout } from "./layouts/AdminLayout";
 
 function App() {
   return (
