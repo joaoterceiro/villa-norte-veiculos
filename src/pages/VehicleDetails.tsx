@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
@@ -10,15 +10,20 @@ import { VehicleDetailsContent } from "@/components/vehicle-details/VehicleDetai
 import { VehicleMobileActions } from "@/components/vehicle-details/VehicleMobileActions";
 
 const VehicleDetails = () => {
-  const { id } = useParams();
+  const { vehicleId } = useParams<{ vehicleId: string }>();
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [financingOpen, setFinancingOpen] = useState(false);
   const isMobile = useIsMobile();
 
   const { data: vehicle, isLoading } = useQuery({
-    queryKey: ["vehicle", id],
+    queryKey: ["vehicle", vehicleId],
     queryFn: async () => {
+      if (!vehicleId) {
+        throw new Error("Vehicle ID is required");
+      }
+
       const { data, error } = await supabase
         .from("product")
         .select(`
@@ -26,12 +31,20 @@ const VehicleDetails = () => {
           product_accessories (accessory),
           product_images (image_url, image_url_large)
         `)
-        .eq("vehicle_id", id)
+        .eq("vehicle_id", vehicleId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === "PGRST116") {
+          // Record not found
+          navigate("/404");
+          return null;
+        }
+        throw error;
+      }
       return data;
     },
+    enabled: !!vehicleId,
   });
 
   const { data: similarVehiclesData } = useQuery({
@@ -42,7 +55,7 @@ const VehicleDetails = () => {
         .from("product")
         .select("*, product_accessories(accessory)")
         .eq("make", vehicle?.make)
-        .neq("vehicle_id", id)
+        .neq("vehicle_id", vehicleId)
         .limit(5);
 
       if (error) throw error;
