@@ -3,6 +3,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+type ScriptVersion = {
+  id: string;
+  type: string;
+  content: string | null;
+  version: number | null;
+  updated_at: string;
+  updated_by: string | null;
+  users_sis: {
+    name: string;
+  } | null;
+}
+
 export function ScriptVersionHistory() {
   const { data: versions } = useQuery({
     queryKey: ["tracking-scripts-versions"],
@@ -16,14 +28,14 @@ export function ScriptVersionHistory() {
           version,
           updated_at,
           updated_by,
-          users_sis (
+          users_sis:updated_by (
             name
           )
         `)
         .order("updated_at", { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as ScriptVersion[];
     },
   });
 
