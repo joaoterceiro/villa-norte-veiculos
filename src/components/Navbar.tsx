@@ -1,27 +1,30 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FinancingForm } from "./FinancingForm";
 import { TopBanner } from "./TopBanner";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { DesktopMenu } from "./navbar/DesktopMenu";
+import { MobileMenu } from "./navbar/MobileMenu";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showFinancingModal, setShowFinancingModal] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
+  const { data: settings } = useQuery({
+    queryKey: ["portal-settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("portal_settings")
+        .select("whatsapp_number")
+        .single();
 
-  const handleSellCarClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const message = encodeURIComponent("Olá! Tenho interesse em vender meu veículo. Como posso prosseguir?");
-    window.open(`https://wa.me/5511999999999?text=${message}`, '_blank');
-  };
+      if (error) throw error;
+      return data;
+    },
+  });
 
   return (
     <>
@@ -40,85 +43,19 @@ export const Navbar = () => {
             </button>
 
             {/* Desktop menu */}
-            <div className="hidden md:flex items-center space-x-6">
-              <Link 
-                to="/" 
-                className={`text-white hover:text-primary transition-colors ${
-                  isActive("/") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
-                }`}
-              >
-                Home
-              </Link>
-              <Link 
-                to="/veiculos" 
-                className={`text-white hover:text-primary transition-colors ${
-                  isActive("/veiculos") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
-                }`}
-              >
-                Comprar carro
-              </Link>
-              <a 
-                href="#"
-                onClick={handleSellCarClick}
-                className={`text-white hover:text-primary transition-colors ${
-                  isActive("/vender") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
-                }`}
-              >
-                Vender meu carro
-              </a>
-              <button 
-                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors"
-                onClick={() => setShowFinancingModal(true)}
-              >
-                Simular financiamento
-              </button>
-            </div>
-          </div>
+            <DesktopMenu
+              whatsappNumber={settings?.whatsapp_number}
+              onFinancingClick={() => setShowFinancingModal(true)}
+            />
 
-          {/* Mobile menu */}
-          {isMenuOpen && (
-            <div className="md:hidden mt-4 space-y-4 pb-4">
-              <Link
-                to="/"
-                className={`block text-white hover:text-primary transition-colors ${
-                  isActive("/") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                to="/veiculos"
-                className={`block text-white hover:text-primary transition-colors ${
-                  isActive("/veiculos") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Comprar carro
-              </Link>
-              <a
-                href="#"
-                className={`block text-white hover:text-primary transition-colors ${
-                  isActive("/vender") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
-                }`}
-                onClick={(e) => {
-                  setIsMenuOpen(false);
-                  handleSellCarClick(e);
-                }}
-              >
-                Vender meu carro
-              </a>
-              <button 
-                className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-accent transition-colors"
-                onClick={() => {
-                  setShowFinancingModal(true);
-                  setIsMenuOpen(false);
-                }}
-              >
-                Simular financiamento
-              </button>
-            </div>
-          )}
+            {/* Mobile menu */}
+            <MobileMenu
+              isOpen={isMenuOpen}
+              whatsappNumber={settings?.whatsapp_number}
+              onFinancingClick={() => setShowFinancingModal(true)}
+              onClose={() => setIsMenuOpen(false)}
+            />
+          </div>
         </div>
 
         <Dialog open={showFinancingModal} onOpenChange={setShowFinancingModal}>
