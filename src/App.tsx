@@ -12,11 +12,13 @@ import Settings from "./pages/admin/Settings";
 import ProductManager from "./pages/admin/ProductManager";
 import MediaManager from "./pages/admin/MediaManager";
 import TrackingAnalytics from "./pages/admin/TrackingAnalytics";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Index />} />
         <Route path="/veiculos" element={<Vehicles />} />
         <Route path="/veiculos/:id" element={<VehicleDetails />} />
@@ -24,13 +26,17 @@ function App() {
         <Route path="/destaques" element={<FeaturedVehicles />} />
         <Route path="/politica-de-cookies" element={<CookiePolicy />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/admin" element={<Admin />}>
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Admin />} />
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<ProductManager />} />
           <Route path="media" element={<MediaManager />} />
           <Route path="tracking" element={<TrackingAnalytics />} />
         </Route>
+
+        {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
