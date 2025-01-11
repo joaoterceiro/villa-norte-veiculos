@@ -12,7 +12,7 @@ type ScriptVersion = {
   updated_by: string | null;
   users_sis: {
     name: string | null;
-  }[] | null;
+  } | null;
 }
 
 export function ScriptVersionHistory() {
@@ -28,9 +28,7 @@ export function ScriptVersionHistory() {
           version,
           updated_at,
           updated_by,
-          users_sis!tracking_scripts_updated_by_users_sis_fkey(
-            name
-          )
+          users_sis:users_sis(name)
         `)
         .order("updated_at", { ascending: false });
 
@@ -66,7 +64,7 @@ export function ScriptVersionHistory() {
                   {version.type === "head" ? "Head Script" : "Body Script"} v{version.version}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Atualizado por {version.users_sis?.[0]?.name ?? "Usuário desconhecido"} em{" "}
+                  Atualizado por {version.users_sis?.name ?? "Usuário desconhecido"} em{" "}
                   {new Date(version.updated_at).toLocaleString("pt-BR")}
                 </p>
               </div>
