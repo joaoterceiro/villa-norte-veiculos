@@ -10,7 +10,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Phone, Mail, MapPin, Save } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const contactFormSchema = z.object({
   whatsapp_number: z.string().min(1, "WhatsApp é obrigatório"),
@@ -31,6 +33,8 @@ export function ContactInfoForm({ defaultValues, onSubmit }: ContactInfoFormProp
     resolver: zodResolver(contactFormSchema),
     defaultValues,
   });
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -104,6 +108,20 @@ export function ContactInfoForm({ defaultValues, onSubmit }: ContactInfoFormProp
             </FormItem>
           )}
         />
+
+        <Button type="submit" disabled={isSubmitting} className="w-[200px]">
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Salvando...
+            </>
+          ) : (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              Salvar Alterações
+            </>
+          )}
+        </Button>
       </form>
     </Form>
   );

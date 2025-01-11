@@ -10,7 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Facebook, Instagram, Youtube, Save, Loader2 } from "lucide-react";
 
 const socialMediaSchema = z.object({
   facebook_url: z.string().url("URL inválida").optional().nullable().or(z.literal("")),
@@ -30,6 +31,8 @@ export function SocialMediaForm({ defaultValues, onSubmit }: SocialMediaFormProp
     resolver: zodResolver(socialMediaSchema),
     defaultValues,
   });
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -84,6 +87,20 @@ export function SocialMediaForm({ defaultValues, onSubmit }: SocialMediaFormProp
             </FormItem>
           )}
         />
+
+        <Button type="submit" disabled={isSubmitting} className="w-[200px]">
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Salvando...
+            </>
+          ) : (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              Salvar Alterações
+            </>
+          )}
+        </Button>
       </form>
     </Form>
   );

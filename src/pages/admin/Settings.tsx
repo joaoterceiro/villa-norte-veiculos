@@ -1,33 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Save } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
+import { ContactInfoForm } from "@/components/admin/settings/ContactInfoForm";
+import { SocialMediaForm } from "@/components/admin/settings/SocialMediaForm";
 
 interface SettingsData {
   whatsapp_number: string;
   email: string | null;
   phone: string | null;
   address: string | null;
+  facebook_url: string | null;
+  instagram_url: string | null;
+  youtube_url: string | null;
 }
 
 const Settings = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [settings, setSettings] = useState<SettingsData>({
-    whatsapp_number: "",
-    email: null,
-    phone: null,
-    address: null,
-  });
 
-  const { data: fetchedSettings, isLoading } = useQuery({
+  const { data: settings, isLoading } = useQuery({
     queryKey: ["portal-settings"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -40,14 +35,8 @@ const Settings = () => {
     },
   });
 
-  useEffect(() => {
-    if (fetchedSettings) {
-      setSettings(fetchedSettings);
-    }
-  }, [fetchedSettings]);
-
   const mutation = useMutation({
-    mutationFn: async (newSettings: SettingsData) => {
+    mutationFn: async (newSettings: Partial<SettingsData>) => {
       const { data, error } = await supabase
         .from("portal_settings")
         .upsert(newSettings)
@@ -73,10 +62,6 @@ const Settings = () => {
     },
   });
 
-  const handleSave = () => {
-    mutation.mutate(settings);
-  };
-
   if (isLoading) {
     return (
       <div className="flex justify-center p-8">
@@ -84,6 +69,27 @@ const Settings = () => {
       </div>
     );
   }
+
+  const handleContactInfoSubmit = (values: Partial<SettingsData>) => {
+    mutation.mutate(values);
+  };
+
+  const handleSocialMediaSubmit = (values: Partial<SettingsData>) => {
+    mutation.mutate(values);
+  };
+
+  const defaultContactInfo = {
+    whatsapp_number: settings?.whatsapp_number || "",
+    phone: settings?.phone || "",
+    email: settings?.email || "",
+    address: settings?.address || "",
+  };
+
+  const defaultSocialMedia = {
+    facebook_url: settings?.facebook_url || "",
+    instagram_url: settings?.instagram_url || "",
+    youtube_url: settings?.youtube_url || "",
+  };
 
   return (
     <div className="space-y-6">
@@ -99,75 +105,25 @@ const Settings = () => {
           <CardHeader>
             <CardTitle>Informações de Contato</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="whatsapp_number">WhatsApp</Label>
-                <Input
-                  id="whatsapp_number"
-                  value={settings.whatsapp_number}
-                  onChange={(e) =>
-                    setSettings({ ...settings, whatsapp_number: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="email">E-mail</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={settings.email || ""}
-                  onChange={(e) =>
-                    setSettings({ ...settings, email: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="phone">Telefone</Label>
-                <Input
-                  id="phone"
-                  value={settings.phone || ""}
-                  onChange={(e) =>
-                    setSettings({ ...settings, phone: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="address">Endereço</Label>
-                <Input
-                  id="address"
-                  value={settings.address || ""}
-                  onChange={(e) =>
-                    setSettings({ ...settings, address: e.target.value })
-                  }
-                />
-              </div>
-            </div>
+          <CardContent>
+            <ContactInfoForm
+              defaultValues={defaultContactInfo}
+              onSubmit={handleContactInfoSubmit}
+            />
           </CardContent>
         </Card>
 
-        <div className="flex justify-end">
-          <Button
-            onClick={handleSave}
-            disabled={mutation.isPending}
-            className="w-[200px]"
-          >
-            {mutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Salvando...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Salvar Alterações
-              </>
-            )}
-          </Button>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Redes Sociais</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <SocialMediaForm
+              defaultValues={defaultSocialMedia}
+              onSubmit={handleSocialMediaSubmit}
+            />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
