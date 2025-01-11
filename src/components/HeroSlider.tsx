@@ -72,13 +72,15 @@ export const HeroSlider = memo(() => {
   }
 
   const renderSlideContent = (slide: typeof slides[0]) => (
-    <img
-      src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
-      alt=""
-      className="w-full h-full object-cover"
-      loading={currentSlide === 0 ? "eager" : "lazy"}
-      fetchPriority={currentSlide === 0 ? "high" : "auto"}
-    />
+    <div className="w-full h-full flex items-center justify-center overflow-hidden">
+      <img
+        src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
+        alt=""
+        className="w-full h-full object-cover object-center"
+        loading={currentSlide === 0 ? "eager" : "lazy"}
+        fetchPriority={currentSlide === 0 ? "high" : "auto"}
+      />
+    </div>
   );
 
   return (
