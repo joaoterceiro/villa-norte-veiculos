@@ -21,14 +21,14 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<Index />} />
         <Route path="/veiculos" element={<Vehicles />} />
-        <Route path="/veiculos/:id" element={<VehicleDetails />} />
+        <Route path="/veiculos/:vehicleId" element={<VehicleDetails />} />
         <Route path="/marca/:brand" element={<BrandVehicles />} />
         <Route path="/destaques" element={<FeaturedVehicles />} />
         <Route path="/politica-de-cookies" element={<CookiePolicy />} />
         <Route path="/auth" element={<Auth />} />
         
         {/* Admin Routes */}
-        <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout>}>
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/settings" element={<Settings />} />
           <Route path="/admin/products" element={<ProductManager />} />
