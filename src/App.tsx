@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Index from "./pages/Index";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetails from "./pages/VehicleDetails";
@@ -28,7 +28,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         
         {/* Admin Routes */}
-        <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout><Outlet /></AdminLayout>}>
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/settings" element={<Settings />} />
           <Route path="/admin/products" element={<ProductManager />} />
