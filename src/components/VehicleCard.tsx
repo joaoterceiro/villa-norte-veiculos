@@ -48,17 +48,17 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           <span className="text-lg md:text-xl font-bold text-primary block mb-2 md:mb-3">
             {formatPrice(vehicle.price || 0)}
           </span>
-          <div className="grid grid-cols-3 gap-2 md:gap-3">
-            <div className="flex items-center gap-1.5 text-muted text-[11px] md:text-sm">
-              <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+          <div className="flex items-center justify-between gap-1">
+            <div className="flex items-center gap-1 text-muted text-[10px] md:text-xs">
+              <Calendar className="w-3 h-3 md:w-3.5 md:h-3.5 shrink-0" />
               <span className="truncate">{vehicle.year}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-muted text-[11px] md:text-sm">
-              <Car className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+            <div className="flex items-center gap-1 text-muted text-[10px] md:text-xs">
+              <Car className="w-3 h-3 md:w-3.5 md:h-3.5 shrink-0" />
               <span className="truncate">{vehicle.mileage?.toLocaleString("pt-BR")} km</span>
             </div>
-            <div className="flex items-center gap-1.5 text-muted text-[11px] md:text-sm">
-              <Fuel className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+            <div className="flex items-center gap-1 text-muted text-[10px] md:text-xs">
+              <Fuel className="w-3 h-3 md:w-3.5 md:h-3.5 shrink-0" />
               <span className="truncate">{vehicle.fuel_type?.toLowerCase()}</span>
             </div>
           </div>
