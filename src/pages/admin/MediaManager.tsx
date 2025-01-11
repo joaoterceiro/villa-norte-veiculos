@@ -1,4 +1,3 @@
-import { AdminLayout } from "@/layouts/AdminLayout";
 import { BannerManager } from "@/components/admin/media/BannerManager";
 import { SlideManager } from "@/components/admin/media/SlideManager";
 import { Button } from "@/components/ui/button";
@@ -13,8 +12,7 @@ const MediaManager = () => {
   const [isBannerFormOpen, setIsBannerFormOpen] = useState(false);
 
   return (
-    <AdminLayout>
-      <div className="space-y-12">
+    <div className="space-y-12">
         {/* Slides Section */}
         <section>
           <div className="flex items-center justify-between mb-8">
@@ -74,8 +72,7 @@ const MediaManager = () => {
             onOpenChange={setIsBannerFormOpen}
           />
         </section>
-      </div>
-    </AdminLayout>
+    </div>
   );
 };
 
