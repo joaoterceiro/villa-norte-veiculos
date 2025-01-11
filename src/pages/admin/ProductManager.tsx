@@ -10,23 +10,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Package, Plus, Pencil, Trash2, Star, StarOff, Image } from "lucide-react";
+import { Package, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { ProductFilters } from "@/components/admin/products/ProductFilters";
+import { ProductActions } from "@/components/admin/products/ProductActions";
+import { ImageFeatureDialog } from "@/components/admin/products/ImageFeatureDialog";
 
 export default function ProductManager() {
   const { toast } = useToast();
@@ -184,52 +172,17 @@ export default function ProductManager() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="relative">
-          <Input
-            placeholder="Buscar produtos..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        
-        <Select value={makeFilter} onValueChange={setMakeFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filtrar por marca" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todas as marcas</SelectItem>
-            {makes?.map((make) => (
-              <SelectItem key={make} value={make}>
-                {make}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={conditionFilter} onValueChange={setConditionFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filtrar por condição" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todas as condições</SelectItem>
-            <SelectItem value="new">Novo</SelectItem>
-            <SelectItem value="used">Usado</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filtrar por status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os status</SelectItem>
-            <SelectItem value="active">Ativo</SelectItem>
-            <SelectItem value="inactive">Inativo</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <ProductFilters
+        searchTerm={searchTerm}
+        makeFilter={makeFilter}
+        conditionFilter={conditionFilter}
+        statusFilter={statusFilter}
+        makes={makes}
+        onSearchChange={setSearchTerm}
+        onMakeChange={setMakeFilter}
+        onConditionChange={setConditionFilter}
+        onStatusChange={setStatusFilter}
+      />
 
       <div className="rounded-md border">
         <Table>
@@ -268,46 +221,20 @@ export default function ProductManager() {
                     {product.status === "active" ? "Ativo" : "Inativo"}
                   </span>
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      disabled={isLoading}
-                      onClick={() => {
-                        setSelectedVehicleId(product.vehicle_id);
-                        setImageUrl(product.image_feature || "");
-                        setIsImageDialogOpen(true);
-                      }}
-                      title="Definir imagem destaque"
-                    >
-                      <Image className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      disabled={isLoading}
-                      onClick={() => handleToggleFeatured(product.vehicle_id, product.is_featured || false)}
-                      title={product.is_featured ? "Remover destaque" : "Destacar produto"}
-                    >
-                      {product.is_featured ? (
-                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                      ) : (
-                        <StarOff className="h-4 w-4" />
-                      )}
-                    </Button>
-                    <Button variant="outline" size="icon">
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      disabled={isLoading}
-                      onClick={() => handleDelete(product.vehicle_id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                <TableCell>
+                  <ProductActions
+                    vehicleId={product.vehicle_id}
+                    isFeatured={product.is_featured || false}
+                    imageFeature={product.image_feature}
+                    isLoading={isLoading}
+                    onDelete={handleDelete}
+                    onToggleFeatured={handleToggleFeatured}
+                    onOpenImageDialog={(id, url) => {
+                      setSelectedVehicleId(id);
+                      setImageUrl(url);
+                      setIsImageDialogOpen(true);
+                    }}
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -315,35 +242,18 @@ export default function ProductManager() {
         </Table>
       </div>
 
-      <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Definir Imagem Destaque</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <Input
-              placeholder="URL da imagem"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-            />
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsImageDialogOpen(false);
-                setImageUrl("");
-                setSelectedVehicleId(null);
-              }}
-            >
-              Cancelar
-            </Button>
-            <Button onClick={handleSetImageFeature} disabled={isLoading}>
-              Salvar
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ImageFeatureDialog
+        isOpen={isImageDialogOpen}
+        imageUrl={imageUrl}
+        isLoading={isLoading}
+        onClose={() => {
+          setIsImageDialogOpen(false);
+          setImageUrl("");
+          setSelectedVehicleId(null);
+        }}
+        onImageUrlChange={setImageUrl}
+        onSave={handleSetImageFeature}
+      />
     </div>
   );
 }
