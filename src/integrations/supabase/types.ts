@@ -393,6 +393,53 @@ export type Database = {
         }
         Relationships: []
       }
+      tracking_scripts: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          previous_version: string | null
+          type: string
+          updated_at: string | null
+          updated_by: string | null
+          version: number | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          previous_version?: string | null
+          type: string
+          updated_at?: string | null
+          updated_by?: string | null
+          version?: number | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          previous_version?: string | null
+          type?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracking_scripts_previous_version_fkey"
+            columns: ["previous_version"]
+            isOneToOne: false
+            referencedRelation: "tracking_scripts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users_sis: {
         Row: {
           cnpj: string | null
