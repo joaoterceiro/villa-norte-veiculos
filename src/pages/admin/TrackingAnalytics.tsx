@@ -37,14 +37,16 @@ export default function TrackingAnalytics() {
 
   const mutation = useMutation({
     mutationFn: async (values: { type: string; content: string; is_active: boolean }) => {
+      const script = scripts.find(s => s.type === values.type);
       const { error } = await supabase
         .from("tracking_scripts")
         .upsert({
+          id: script?.id,
           type: values.type,
           content: values.content,
           is_active: values.is_active,
           updated_by: (await supabase.auth.getUser()).data.user?.id,
-          version: ((scripts?.find(s => s.type === values.type)?.version || 0) + 1),
+          version: ((script?.version || 0) + 1),
         });
 
       if (error) throw error;
@@ -76,16 +78,16 @@ export default function TrackingAnalytics() {
   const headScript = scripts?.find((s) => s.type === "head");
   const bodyScript = scripts?.find((s) => s.type === "body");
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     if (headScript) {
-      mutation.mutate({
+      await mutation.mutateAsync({
         type: "head",
         content: headScript.content || "",
         is_active: headScript.is_active,
       });
     }
     if (bodyScript) {
-      mutation.mutate({
+      await mutation.mutateAsync({
         type: "body",
         content: bodyScript.content || "",
         is_active: bodyScript.is_active,
@@ -102,14 +104,19 @@ export default function TrackingAnalytics() {
     );
   };
 
-  const handleActiveChange = (type: string, checked: boolean) => {
+  const handleActiveChange = async (type: string, checked: boolean) => {
     const script = scripts.find(s => s.type === type);
     if (script) {
-      mutation.mutate({
+      await mutation.mutateAsync({
         type,
         content: script.content || "",
         is_active: checked,
       });
+      setScripts(prev =>
+        prev.map(s =>
+          s.type === type ? { ...s, is_active: checked } : s
+        )
+      );
     }
   };
 
