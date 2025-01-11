@@ -41,8 +41,8 @@ export const VehicleDetailsBreadcrumb = ({ title }: VehicleDetailsBreadcrumbProp
           <ChevronRight className="w-4 h-4 text-muted" />
         </li>
         <li>
-          <Link to="/carros" className="text-muted hover:text-primary transition-colors">
-            Carros
+          <Link to="/veiculos" className="text-muted hover:text-primary transition-colors">
+            Veículos
           </Link>
         </li>
         <li>

@@ -28,19 +28,19 @@ const router = createBrowserRouter([
     element: <Index />,
   },
   {
-    path: "/vehicles",
+    path: "/veiculos",
     element: <Vehicles />,
   },
   {
-    path: "/carros/:vehicleId",
+    path: "/veiculos/:vehicleId",
     element: <VehicleDetails />,
   },
   {
-    path: "/brand/:brand",
+    path: "/marca/:brand",
     element: <BrandVehicles />,
   },
   {
-    path: "/featured",
+    path: "/destaques",
     element: <FeaturedVehicles />,
   },
   {

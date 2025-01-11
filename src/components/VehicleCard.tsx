@@ -25,7 +25,7 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
   };
 
   return (
-    <Link to={`/carros/${vehicle.vehicle_id}`}>
+    <Link to={`/veiculos/${vehicle.vehicle_id}`}>
       <Card className="group h-full flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100">
         <div className="aspect-[4/3] relative overflow-hidden">
           <img
