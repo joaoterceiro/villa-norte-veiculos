@@ -1,6 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -36,7 +34,7 @@ const Settings = () => {
   });
 
   const mutation = useMutation({
-    mutationFn: async (newSettings: Partial<SettingsData>) => {
+    mutationFn: async (newSettings: Partial<SettingsData> & { whatsapp_number: string }) => {
       const { data, error } = await supabase
         .from("portal_settings")
         .upsert(newSettings)
@@ -71,11 +69,19 @@ const Settings = () => {
   }
 
   const handleContactInfoSubmit = (values: Partial<SettingsData>) => {
-    mutation.mutate(values);
+    // Ensure whatsapp_number is present
+    if (!values.whatsapp_number && settings?.whatsapp_number) {
+      values.whatsapp_number = settings.whatsapp_number;
+    }
+    mutation.mutate(values as Partial<SettingsData> & { whatsapp_number: string });
   };
 
   const handleSocialMediaSubmit = (values: Partial<SettingsData>) => {
-    mutation.mutate(values);
+    // Include the required whatsapp_number when updating social media
+    mutation.mutate({
+      ...values,
+      whatsapp_number: settings?.whatsapp_number || "",
+    });
   };
 
   const defaultContactInfo = {
