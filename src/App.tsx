@@ -28,7 +28,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         
         {/* Admin Routes */}
-        <Route element={<AdminLayout>}>
+        <Route element={<AdminLayout />}>
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/settings" element={<Settings />} />
           <Route path="/admin/products" element={<ProductManager />} />
