@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 const locations = [
   {
     id: 1,
@@ -25,7 +27,7 @@ const locations = [
   },
 ];
 
-export const Showrooms = () => {
+export const Showrooms = memo(() => {
   return (
     <div className="container mx-auto py-8 px-4 md:py-12 md:px-6">
       <h2 className="text-xl md:text-2xl font-semibold text-center mb-2">
@@ -45,6 +47,7 @@ export const Showrooms = () => {
               src={location.image}
               alt={location.name}
               className="w-full h-full object-cover"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 md:p-6">
               <h3 className="text-white text-sm md:text-base font-semibold group-hover:text-primary transition-colors">
@@ -56,4 +59,8 @@ export const Showrooms = () => {
       </div>
     </div>
   );
-};
+});
+
+Showrooms.displayName = "Showrooms";
+
+export default Showrooms;
