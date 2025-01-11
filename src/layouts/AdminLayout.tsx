@@ -39,13 +39,17 @@ export const AdminLayout = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-background">
       <AdminHeader />
-      <main className="container mx-auto px-4 py-8">
+      <main className="max-w-[1400px] mx-auto px-6 py-8">
         <Outlet />
       </main>
     </div>

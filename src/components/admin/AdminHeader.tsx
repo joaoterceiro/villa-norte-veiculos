@@ -46,9 +46,9 @@ export function AdminHeader() {
   ];
 
   return (
-    <header className="border-b">
-      <div className="px-4">
-        <nav className="flex items-center justify-between">
+    <header className="border-b bg-white">
+      <div className="max-w-[1400px] mx-auto px-6">
+        <nav className="flex items-center justify-between h-16">
           <Button
             variant="ghost"
             size="sm"
@@ -60,7 +60,7 @@ export function AdminHeader() {
 
           <div className={cn(
             "flex-col lg:flex-row lg:flex lg:space-x-6 absolute lg:relative left-0 right-0 bg-white lg:bg-transparent border-b lg:border-0",
-            "top-[100%] lg:top-0 z-50",
+            "top-[64px] lg:top-0 z-50",
             isMenuOpen ? "flex" : "hidden lg:flex"
           )}>
             {menuItems.map((item) => (
@@ -92,4 +92,4 @@ export function AdminHeader() {
       </div>
     </header>
   );
-}
+};
