@@ -24,11 +24,13 @@ function App() {
         <Route path="/destaques" element={<FeaturedVehicles />} />
         <Route path="/politica-de-cookies" element={<CookiePolicy />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/settings" element={<Settings />} />
-        <Route path="/admin/products" element={<ProductManager />} />
-        <Route path="/admin/media" element={<MediaManager />} />
-        <Route path="/admin/tracking" element={<TrackingAnalytics />} />
+        <Route path="/admin" element={<Admin />}>
+          <Route index element={<Admin />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="products" element={<ProductManager />} />
+          <Route path="media" element={<MediaManager />} />
+          <Route path="tracking" element={<TrackingAnalytics />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
