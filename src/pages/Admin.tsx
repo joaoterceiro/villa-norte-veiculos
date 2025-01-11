@@ -1,7 +1,7 @@
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, TrendingUp, TrendingDown, Car, Users, Calendar } from "lucide-react";
+import { Loader2, TrendingUp, TrendingDown, Car, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";

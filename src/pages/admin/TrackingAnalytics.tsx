@@ -158,87 +158,85 @@ export default function TrackingAnalytics() {
   const bodyScript = scripts?.find((s) => s.type === "body");
 
   return (
-    <AdminLayout>
-      <div className="container mx-auto p-6 max-w-7xl">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold">Tracking & Analytics</h1>
-            <p className="text-muted-foreground">
-              Configure seus códigos de rastreamento e análise que serão aplicados em todo o site
-            </p>
-          </div>
-          <Button 
-            onClick={handleSaveChanges}
-            disabled={mutation.isPending || !hasUnsavedChanges}
-          >
-            {mutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Salvando...
-              </>
-            ) : (
-              "Salvar Alterações"
-            )}
-          </Button>
+    <div className="container mx-auto p-6 max-w-7xl">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold">Tracking & Analytics</h1>
+          <p className="text-muted-foreground">
+            Configure seus códigos de rastreamento e análise que serão aplicados em todo o site
+          </p>
         </div>
-
-        {isLoading ? (
-          <div className="flex justify-center p-8">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <Tabs defaultValue="head" className="w-full">
-              <TabsList className="w-full justify-start">
-                <TabsTrigger value="head" className="flex items-center gap-2">
-                  <Code2 className="h-4 w-4" />
-                  Head Scripts
-                </TabsTrigger>
-                <TabsTrigger value="body" className="flex items-center gap-2">
-                  <Code2 className="h-4 w-4" />
-                  Body Scripts
-                </TabsTrigger>
-                <TabsTrigger value="history" className="flex items-center gap-2">
-                  <History className="h-4 w-4" />
-                  Histórico
-                </TabsTrigger>
-                <TabsTrigger value="settings" className="flex items-center gap-2">
-                  <Settings2 className="h-4 w-4" />
-                  Configurações
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="head" className="space-y-4">
-                <ScriptEditor
-                  title="Scripts no Head"
-                  script={headScript}
-                  onContentChange={(value) => handleContentChange("head", value)}
-                  onActiveChange={(checked) => handleActiveChange("head", checked)}
-                  isLoading={mutation.isPending}
-                />
-              </TabsContent>
-
-              <TabsContent value="body" className="space-y-4">
-                <ScriptEditor
-                  title="Scripts no Body"
-                  script={bodyScript}
-                  onContentChange={(value) => handleContentChange("body", value)}
-                  onActiveChange={(checked) => handleActiveChange("body", checked)}
-                  isLoading={mutation.isPending}
-                />
-              </TabsContent>
-
-              <TabsContent value="history">
-                <ScriptVersionHistory />
-              </TabsContent>
-
-              <TabsContent value="settings">
-                <SettingsTab />
-              </TabsContent>
-            </Tabs>
-          </div>
-        )}
+        <Button 
+          onClick={handleSaveChanges}
+          disabled={mutation.isPending || !hasUnsavedChanges}
+        >
+          {mutation.isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Salvando...
+            </>
+          ) : (
+            "Salvar Alterações"
+          )}
+        </Button>
       </div>
-    </AdminLayout>
+
+      {isLoading ? (
+        <div className="flex justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <Tabs defaultValue="head" className="w-full">
+            <TabsList className="w-full justify-start">
+              <TabsTrigger value="head" className="flex items-center gap-2">
+                <Code2 className="h-4 w-4" />
+                Head Scripts
+              </TabsTrigger>
+              <TabsTrigger value="body" className="flex items-center gap-2">
+                <Code2 className="h-4 w-4" />
+                Body Scripts
+              </TabsTrigger>
+              <TabsTrigger value="history" className="flex items-center gap-2">
+                <History className="h-4 w-4" />
+                Histórico
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="flex items-center gap-2">
+                <Settings2 className="h-4 w-4" />
+                Configurações
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="head" className="space-y-4">
+              <ScriptEditor
+                title="Scripts no Head"
+                script={headScript}
+                onContentChange={(value) => handleContentChange("head", value)}
+                onActiveChange={(checked) => handleActiveChange("head", checked)}
+                isLoading={mutation.isPending}
+              />
+            </TabsContent>
+
+            <TabsContent value="body" className="space-y-4">
+              <ScriptEditor
+                title="Scripts no Body"
+                script={bodyScript}
+                onContentChange={(value) => handleContentChange("body", value)}
+                onActiveChange={(checked) => handleActiveChange("body", checked)}
+                isLoading={mutation.isPending}
+              />
+            </TabsContent>
+
+            <TabsContent value="history">
+              <ScriptVersionHistory />
+            </TabsContent>
+
+            <TabsContent value="settings">
+              <SettingsTab />
+            </TabsContent>
+          </Tabs>
+        </div>
+      )}
+    </div>
   );
 }
