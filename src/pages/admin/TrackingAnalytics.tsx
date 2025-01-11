@@ -48,11 +48,11 @@ export default function TrackingAnalytics() {
         type: values.type,
         content: values.content,
         is_active: values.is_active,
-        version: ((script?.version || 0) + 1),
+        version: script ? (script.version || 0) + 1 : 1,
       };
 
       if (script?.id) {
-        // Update existing script
+        console.log("Updating existing script:", scriptData);
         const { data, error } = await supabase
           .from("tracking_scripts")
           .update(scriptData)
@@ -68,7 +68,7 @@ export default function TrackingAnalytics() {
         console.log("Updated script:", data);
         return data;
       } else {
-        // Insert new script
+        console.log("Inserting new script:", scriptData);
         const { data, error } = await supabase
           .from("tracking_scripts")
           .insert(scriptData)
