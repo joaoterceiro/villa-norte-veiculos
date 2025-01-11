@@ -24,7 +24,10 @@ export default function TrackingAnalytics() {
         .select("*")
         .order("type", { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching scripts:", error);
+        throw error;
+      }
       return data as Script[];
     },
   });
@@ -37,8 +40,11 @@ export default function TrackingAnalytics() {
 
   const mutation = useMutation({
     mutationFn: async (values: { type: string; content: string; is_active: boolean }) => {
+      console.log("Mutation values:", values);
       const script = scripts.find(s => s.type === values.type);
-      const { error } = await supabase
+      console.log("Found script:", script);
+      
+      const { data, error } = await supabase
         .from("tracking_scripts")
         .upsert({
           id: script?.id,
@@ -47,9 +53,16 @@ export default function TrackingAnalytics() {
           is_active: values.is_active,
           updated_by: (await supabase.auth.getUser()).data.user?.id,
           version: ((script?.version || 0) + 1),
-        });
+        })
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Mutation error:", error);
+        throw error;
+      }
+      
+      console.log("Mutation response:", data);
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tracking-scripts"] });
@@ -79,23 +92,31 @@ export default function TrackingAnalytics() {
   const bodyScript = scripts?.find((s) => s.type === "body");
 
   const handleSaveChanges = async () => {
-    if (headScript) {
-      await mutation.mutateAsync({
-        type: "head",
-        content: headScript.content || "",
-        is_active: headScript.is_active,
-      });
-    }
-    if (bodyScript) {
-      await mutation.mutateAsync({
-        type: "body",
-        content: bodyScript.content || "",
-        is_active: bodyScript.is_active,
-      });
+    try {
+      console.log("Saving changes...");
+      if (headScript) {
+        console.log("Saving head script:", headScript);
+        await mutation.mutateAsync({
+          type: "head",
+          content: headScript.content || "",
+          is_active: headScript.is_active,
+        });
+      }
+      if (bodyScript) {
+        console.log("Saving body script:", bodyScript);
+        await mutation.mutateAsync({
+          type: "body",
+          content: bodyScript.content || "",
+          is_active: bodyScript.is_active,
+        });
+      }
+    } catch (error) {
+      console.error("Error in handleSaveChanges:", error);
     }
   };
 
   const handleContentChange = (type: string, content: string) => {
+    console.log("Content change:", { type, content });
     setHasUnsavedChanges(true);
     setScripts(prev => 
       prev.map(script => 
@@ -105,18 +126,23 @@ export default function TrackingAnalytics() {
   };
 
   const handleActiveChange = async (type: string, checked: boolean) => {
-    const script = scripts.find(s => s.type === type);
-    if (script) {
-      await mutation.mutateAsync({
-        type,
-        content: script.content || "",
-        is_active: checked,
-      });
-      setScripts(prev =>
-        prev.map(s =>
-          s.type === type ? { ...s, is_active: checked } : s
-        )
-      );
+    try {
+      console.log("Active change:", { type, checked });
+      const script = scripts.find(s => s.type === type);
+      if (script) {
+        await mutation.mutateAsync({
+          type,
+          content: script.content || "",
+          is_active: checked,
+        });
+        setScripts(prev =>
+          prev.map(s =>
+            s.type === type ? { ...s, is_active: checked } : s
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error in handleActiveChange:", error);
     }
   };
 
