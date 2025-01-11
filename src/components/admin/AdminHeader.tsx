@@ -35,7 +35,7 @@ export function AdminHeader() {
 
   return (
     <header className="border-b">
-      <div className="container mx-auto px-4">
+      <div className="px-4">
         <nav className="flex items-center justify-between">
           <Button
             variant="ghost"
