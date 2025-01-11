@@ -48,19 +48,19 @@ export const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           <span className="text-lg md:text-xl font-bold text-primary block mb-2 md:mb-3">
             {formatPrice(vehicle.price || 0)}
           </span>
-          <div className="flex items-center justify-between text-muted text-xs md:text-sm whitespace-nowrap">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3 h-3 md:w-4 md:h-4" />
-              {vehicle.year}
-            </span>
-            <span className="flex items-center gap-1">
-              <Car className="w-3 h-3 md:w-4 md:h-4" />
-              {vehicle.mileage?.toLocaleString("pt-BR")} km
-            </span>
-            <span className="flex items-center gap-1">
-              <Fuel className="w-3 h-3 md:w-4 md:h-4" />
-              {vehicle.fuel_type?.toLowerCase()}
-            </span>
+          <div className="grid grid-cols-3 gap-2 md:gap-3">
+            <div className="flex items-center gap-1.5 text-muted text-[11px] md:text-sm">
+              <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+              <span className="truncate">{vehicle.year}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-muted text-[11px] md:text-sm">
+              <Car className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+              <span className="truncate">{vehicle.mileage?.toLocaleString("pt-BR")} km</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-muted text-[11px] md:text-sm">
+              <Fuel className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+              <span className="truncate">{vehicle.fuel_type?.toLowerCase()}</span>
+            </div>
           </div>
         </div>
       </Card>
