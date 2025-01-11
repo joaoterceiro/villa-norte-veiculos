@@ -6,6 +6,10 @@ import BrandVehicles from "@/pages/BrandVehicles";
 import FeaturedVehicles from "@/pages/FeaturedVehicles";
 import CookiePolicy from "@/pages/CookiePolicy";
 import NotFound from "@/pages/NotFound";
+import Admin from "@/pages/Admin";
+import ProductManager from "@/pages/admin/ProductManager";
+import MediaManager from "@/pages/admin/MediaManager";
+import TrackingAnalytics from "@/pages/admin/TrackingAnalytics";
 
 function App() {
   return (
@@ -17,6 +21,13 @@ function App() {
         <Route path="/marca/:brand" element={<BrandVehicles />} />
         <Route path="/destaques" element={<FeaturedVehicles />} />
         <Route path="/politica-de-cookies" element={<CookiePolicy />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/products" element={<ProductManager />} />
+        <Route path="/admin/media" element={<MediaManager />} />
+        <Route path="/admin/tracking" element={<TrackingAnalytics />} />
+        
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
