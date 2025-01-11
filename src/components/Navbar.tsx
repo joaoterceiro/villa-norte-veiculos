@@ -44,9 +44,9 @@ export const Navbar = () => {
                 Home
               </Link>
               <Link 
-                to="/carros" 
+                to="/veiculos" 
                 className={`text-white hover:text-primary transition-colors ${
-                  isActive("/carros") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
+                  isActive("/veiculos") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
               >
                 Comprar carro
@@ -81,9 +81,9 @@ export const Navbar = () => {
                 Home
               </Link>
               <Link
-                to="/carros"
+                to="/veiculos"
                 className={`block text-white hover:text-primary transition-colors ${
-                  isActive("/carros") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
+                  isActive("/veiculos") ? "text-[#FF6500] font-semibold border-b-2 border-[#FF6500] pb-1" : ""
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
