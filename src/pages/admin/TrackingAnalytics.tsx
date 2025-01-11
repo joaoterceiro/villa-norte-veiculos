@@ -48,7 +48,6 @@ export default function TrackingAnalytics() {
         type: values.type,
         content: values.content,
         is_active: values.is_active,
-        updated_by: (await supabase.auth.getUser()).data.user?.id,
         version: ((script?.version || 0) + 1),
       };
 
