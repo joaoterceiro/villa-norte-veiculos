@@ -19,6 +19,7 @@ export default function TrackingAnalytics() {
   const { data: fetchedScripts, isLoading } = useQuery({
     queryKey: ["tracking-scripts"],
     queryFn: async () => {
+      console.log("Fetching scripts...");
       const { data, error } = await supabase
         .from("tracking_scripts")
         .select("*")
@@ -26,43 +27,67 @@ export default function TrackingAnalytics() {
 
       if (error) {
         console.error("Error fetching scripts:", error);
+        toast.error("Erro ao carregar scripts");
         throw error;
       }
+      
+      console.log("Fetched scripts:", data);
       return data as Script[];
     },
   });
 
   useEffect(() => {
     if (fetchedScripts) {
+      console.log("Setting scripts from fetch:", fetchedScripts);
       setScripts(fetchedScripts);
     }
   }, [fetchedScripts]);
 
   const mutation = useMutation({
     mutationFn: async (values: { type: string; content: string; is_active: boolean }) => {
-      console.log("Mutation values:", values);
+      console.log("Saving script:", values);
       const script = scripts.find(s => s.type === values.type);
-      console.log("Found script:", script);
       
-      const { data, error } = await supabase
-        .from("tracking_scripts")
-        .upsert({
-          id: script?.id,
-          type: values.type,
-          content: values.content,
-          is_active: values.is_active,
-          updated_by: (await supabase.auth.getUser()).data.user?.id,
-          version: ((script?.version || 0) + 1),
-        })
-        .select();
+      const scriptData = {
+        type: values.type,
+        content: values.content,
+        is_active: values.is_active,
+        updated_by: (await supabase.auth.getUser()).data.user?.id,
+        version: ((script?.version || 0) + 1),
+      };
 
-      if (error) {
-        console.error("Mutation error:", error);
-        throw error;
+      if (script?.id) {
+        // Update existing script
+        const { data, error } = await supabase
+          .from("tracking_scripts")
+          .update(scriptData)
+          .eq('id', script.id)
+          .select()
+          .single();
+
+        if (error) {
+          console.error("Error updating script:", error);
+          throw error;
+        }
+        
+        console.log("Updated script:", data);
+        return data;
+      } else {
+        // Insert new script
+        const { data, error } = await supabase
+          .from("tracking_scripts")
+          .insert(scriptData)
+          .select()
+          .single();
+
+        if (error) {
+          console.error("Error inserting script:", error);
+          throw error;
+        }
+        
+        console.log("Inserted script:", data);
+        return data;
       }
-      
-      console.log("Mutation response:", data);
-      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tracking-scripts"] });
@@ -76,26 +101,10 @@ export default function TrackingAnalytics() {
     },
   });
 
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [hasUnsavedChanges]);
-
-  const headScript = scripts?.find((s) => s.type === "head");
-  const bodyScript = scripts?.find((s) => s.type === "body");
-
   const handleSaveChanges = async () => {
     try {
       console.log("Saving changes...");
       if (headScript) {
-        console.log("Saving head script:", headScript);
         await mutation.mutateAsync({
           type: "head",
           content: headScript.content || "",
@@ -103,7 +112,6 @@ export default function TrackingAnalytics() {
         });
       }
       if (bodyScript) {
-        console.log("Saving body script:", bodyScript);
         await mutation.mutateAsync({
           type: "body",
           content: bodyScript.content || "",
@@ -145,6 +153,9 @@ export default function TrackingAnalytics() {
       console.error("Error in handleActiveChange:", error);
     }
   };
+
+  const headScript = scripts?.find((s) => s.type === "head");
+  const bodyScript = scripts?.find((s) => s.type === "body");
 
   return (
     <AdminLayout>
