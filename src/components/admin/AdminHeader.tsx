@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LogOut, Menu } from "lucide-react";
+import { LogOut, Menu, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
@@ -93,6 +93,18 @@ export function AdminHeader() {
               onClick={() => setIsMenuOpen(false)}
             >
               Configurações
+            </Link>
+            <Link
+              to="/admin/tracking"
+              className={cn(
+                "px-4 lg:px-0 py-4 text-sm font-medium transition-colors hover:text-primary flex items-center gap-2",
+                isActive("/admin/tracking") &&
+                  "text-[#FF6500] border-b-2 border-[#FF6500]"
+              )}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Activity className="h-4 w-4" />
+              Tracking Analytics
             </Link>
           </div>
           
