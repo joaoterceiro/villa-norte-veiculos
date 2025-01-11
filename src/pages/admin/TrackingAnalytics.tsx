@@ -12,6 +12,14 @@ import { CodeEditor } from "@/components/admin/tracking/CodeEditor";
 import { ScriptVersionHistory } from "@/components/admin/tracking/ScriptVersionHistory";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+type Script = {
+  id: string;
+  type: string;
+  content: string | null;
+  is_active: boolean;
+  version: number | null;
+};
+
 export default function TrackingAnalytics() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const queryClient = useQueryClient();
@@ -25,7 +33,7 @@ export default function TrackingAnalytics() {
         .order("type", { ascending: true });
 
       if (error) throw error;
-      return data;
+      return data as Script[];
     },
   });
 
@@ -38,12 +46,14 @@ export default function TrackingAnalytics() {
           content: values.content,
           is_active: values.is_active,
           updated_by: (await supabase.auth.getUser()).data.user?.id,
+          version: ((scripts?.find(s => s.type === values.type)?.version || 0) + 1),
         });
 
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tracking-scripts"] });
+      queryClient.invalidateQueries({ queryKey: ["tracking-scripts-versions"] });
       toast.success("Scripts salvos com sucesso!");
       setHasUnsavedChanges(false);
     },
@@ -142,7 +152,8 @@ export default function TrackingAnalytics() {
                       onCheckedChange={(checked) => {
                         if (headScript) {
                           mutation.mutate({
-                            ...headScript,
+                            type: "head",
+                            content: headScript.content || "",
                             is_active: checked,
                           });
                         }
@@ -172,7 +183,8 @@ export default function TrackingAnalytics() {
                       onCheckedChange={(checked) => {
                         if (bodyScript) {
                           mutation.mutate({
-                            ...bodyScript,
+                            type: "body",
+                            content: bodyScript.content || "",
                             is_active: checked,
                           });
                         }

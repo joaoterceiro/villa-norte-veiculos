@@ -5,9 +5,10 @@ import { Card } from "@/components/ui/card";
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
+  readOnly?: boolean;
 }
 
-export function CodeEditor({ value, onChange }: CodeEditorProps) {
+export function CodeEditor({ value, onChange, readOnly = false }: CodeEditorProps) {
   const editorRef = useRef(null);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export function CodeEditor({ value, onChange }: CodeEditorProps) {
           automaticLayout: true,
           tabSize: 2,
           wordWrap: "on",
+          readOnly,
         }}
         onMount={(editor) => {
           editorRef.current = editor;
