@@ -438,6 +438,13 @@ export type Database = {
             referencedRelation: "tracking_scripts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tracking_scripts_updated_by_users_sis_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "users_sis"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       users_sis: {
