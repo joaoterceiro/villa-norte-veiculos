@@ -3,22 +3,13 @@ import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Loader2, Code2, History, Settings2 } from "lucide-react";
-import { CodeEditor } from "@/components/admin/tracking/CodeEditor";
+import { ScriptEditor } from "@/components/admin/tracking/ScriptEditor";
 import { ScriptVersionHistory } from "@/components/admin/tracking/ScriptVersionHistory";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-
-type Script = {
-  id: string;
-  type: string;
-  content: string | null;
-  is_active: boolean;
-  version: number | null;
-};
+import { SettingsTab } from "@/components/admin/tracking/SettingsTab";
+import { Script } from "@/components/admin/tracking/types";
 
 export default function TrackingAnalytics() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -77,6 +68,23 @@ export default function TrackingAnalytics() {
   const headScript = scripts?.find((s) => s.type === "head");
   const bodyScript = scripts?.find((s) => s.type === "body");
 
+  const handleSaveChanges = () => {
+    if (headScript) {
+      mutation.mutate({
+        type: "head",
+        content: headScript.content || "",
+        is_active: headScript.is_active,
+      });
+    }
+    if (bodyScript) {
+      mutation.mutate({
+        type: "body",
+        content: bodyScript.content || "",
+        is_active: bodyScript.is_active,
+      });
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="container mx-auto p-6 max-w-7xl">
@@ -88,22 +96,7 @@ export default function TrackingAnalytics() {
             </p>
           </div>
           <Button 
-            onClick={() => {
-              if (headScript) {
-                mutation.mutate({
-                  type: "head",
-                  content: headScript.content || "",
-                  is_active: headScript.is_active,
-                });
-              }
-              if (bodyScript) {
-                mutation.mutate({
-                  type: "body",
-                  content: bodyScript.content || "",
-                  is_active: bodyScript.is_active,
-                });
-              }
-            }}
+            onClick={handleSaveChanges}
             disabled={mutation.isPending || !hasUnsavedChanges}
           >
             {mutation.isPending ? (
@@ -144,65 +137,49 @@ export default function TrackingAnalytics() {
               </TabsList>
 
               <TabsContent value="head" className="space-y-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-base font-medium">Scripts no Head</CardTitle>
-                    <Switch
-                      checked={headScript?.is_active}
-                      onCheckedChange={(checked) => {
-                        if (headScript) {
-                          mutation.mutate({
-                            type: "head",
-                            content: headScript.content || "",
-                            is_active: checked,
-                          });
-                        }
-                      }}
-                    />
-                  </CardHeader>
-                  <CardContent>
-                    <CodeEditor
-                      value={headScript?.content || ""}
-                      onChange={(value) => {
-                        setHasUnsavedChanges(true);
-                        if (headScript) {
-                          headScript.content = value;
-                        }
-                      }}
-                    />
-                  </CardContent>
-                </Card>
+                <ScriptEditor
+                  title="Scripts no Head"
+                  script={headScript}
+                  onContentChange={(value) => {
+                    setHasUnsavedChanges(true);
+                    if (headScript) {
+                      headScript.content = value;
+                    }
+                  }}
+                  onActiveChange={(checked) => {
+                    if (headScript) {
+                      mutation.mutate({
+                        type: "head",
+                        content: headScript.content || "",
+                        is_active: checked,
+                      });
+                    }
+                  }}
+                  isLoading={mutation.isPending}
+                />
               </TabsContent>
 
               <TabsContent value="body" className="space-y-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-base font-medium">Scripts no Body</CardTitle>
-                    <Switch
-                      checked={bodyScript?.is_active}
-                      onCheckedChange={(checked) => {
-                        if (bodyScript) {
-                          mutation.mutate({
-                            type: "body",
-                            content: bodyScript.content || "",
-                            is_active: checked,
-                          });
-                        }
-                      }}
-                    />
-                  </CardHeader>
-                  <CardContent>
-                    <CodeEditor
-                      value={bodyScript?.content || ""}
-                      onChange={(value) => {
-                        setHasUnsavedChanges(true);
-                        if (bodyScript) {
-                          bodyScript.content = value;
-                        }
-                      }}
-                    />
-                  </CardContent>
-                </Card>
+                <ScriptEditor
+                  title="Scripts no Body"
+                  script={bodyScript}
+                  onContentChange={(value) => {
+                    setHasUnsavedChanges(true);
+                    if (bodyScript) {
+                      bodyScript.content = value;
+                    }
+                  }}
+                  onActiveChange={(checked) => {
+                    if (bodyScript) {
+                      mutation.mutate({
+                        type: "body",
+                        content: bodyScript.content || "",
+                        is_active: checked,
+                      });
+                    }
+                  }}
+                  isLoading={mutation.isPending}
+                />
               </TabsContent>
 
               <TabsContent value="history">
@@ -210,18 +187,7 @@ export default function TrackingAnalytics() {
               </TabsContent>
 
               <TabsContent value="settings">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Configurações Avançadas</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Alert>
-                      <AlertDescription>
-                        Configurações avançadas estarão disponíveis em breve.
-                      </AlertDescription>
-                    </Alert>
-                  </CardContent>
-                </Card>
+                <SettingsTab />
               </TabsContent>
             </Tabs>
           </div>
