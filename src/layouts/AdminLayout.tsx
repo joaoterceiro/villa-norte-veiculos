@@ -2,8 +2,9 @@ import { AdminHeader } from "@/components/admin/AdminHeader";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Outlet } from "react-router-dom";
 
-export const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+export const AdminLayout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -44,8 +45,8 @@ export const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-background">
       <AdminHeader />
-      <main className="container mx-auto px-4 py-8 max-w-[1400px]">
-        {children}
+      <main className="container mx-auto px-4 py-8">
+        <Outlet />
       </main>
     </div>
   );

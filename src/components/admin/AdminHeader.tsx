@@ -33,6 +33,18 @@ export function AdminHeader() {
     }
   };
 
+  const menuItems = [
+    { path: "/admin", label: "Dashboard" },
+    { path: "/admin/products", label: "Produtos" },
+    { path: "/admin/media", label: "Mídia" },
+    { path: "/admin/settings", label: "Configurações" },
+    { 
+      path: "/admin/tracking", 
+      label: "Tracking Analytics",
+      icon: <Activity className="h-4 w-4" />
+    },
+  ];
+
   return (
     <header className="border-b">
       <div className="px-4">
@@ -51,61 +63,20 @@ export function AdminHeader() {
             "top-[100%] lg:top-0 z-50",
             isMenuOpen ? "flex" : "hidden lg:flex"
           )}>
-            <Link
-              to="/admin"
-              className={cn(
-                "px-4 lg:px-0 py-4 text-sm font-medium transition-colors hover:text-primary",
-                isActive("/admin") && "text-[#FF6500] border-b-2 border-[#FF6500]"
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/admin/products"
-              className={cn(
-                "px-4 lg:px-0 py-4 text-sm font-medium transition-colors hover:text-primary",
-                isActive("/admin/products") &&
-                  "text-[#FF6500] border-b-2 border-[#FF6500]"
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Produtos
-            </Link>
-            <Link
-              to="/admin/media"
-              className={cn(
-                "px-4 lg:px-0 py-4 text-sm font-medium transition-colors hover:text-primary",
-                isActive("/admin/media") &&
-                  "text-[#FF6500] border-b-2 border-[#FF6500]"
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Mídia
-            </Link>
-            <Link
-              to="/admin/settings"
-              className={cn(
-                "px-4 lg:px-0 py-4 text-sm font-medium transition-colors hover:text-primary",
-                isActive("/admin/settings") &&
-                  "text-[#FF6500] border-b-2 border-[#FF6500]"
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Configurações
-            </Link>
-            <Link
-              to="/admin/tracking"
-              className={cn(
-                "px-4 lg:px-0 py-4 text-sm font-medium transition-colors hover:text-primary flex items-center gap-2",
-                isActive("/admin/tracking") &&
-                  "text-[#FF6500] border-b-2 border-[#FF6500]"
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Activity className="h-4 w-4" />
-              Tracking Analytics
-            </Link>
+            {menuItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={cn(
+                  "px-4 lg:px-0 py-4 text-sm font-medium transition-colors hover:text-primary flex items-center gap-2",
+                  isActive(item.path) && "text-[#FF6500] border-b-2 border-[#FF6500]"
+                )}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.icon}
+                {item.label}
+              </Link>
+            ))}
           </div>
           
           <Button
