@@ -84,45 +84,44 @@ export const HeroSlider = memo(() => {
   return (
     <div className="relative h-[500px] overflow-hidden">
       <div
-        className="absolute inset-0 transition-transform duration-500 ease-in-out will-change-transform"
+        className="flex transition-transform duration-500 ease-in-out will-change-transform h-full"
         style={{
           transform: `translateX(-${currentSlide * 100}%)`,
+          width: `${slides.length * 100}%`,
         }}
       >
-        {slides.map((slide, index) => {
-          const style = { left: `${index * 100}%` };
-          
-          return slide.link ? (
+        {slides.map((slide, index) => (
+          slide.link ? (
             <Link
               key={index}
               to={slide.link}
-              className="absolute inset-0 w-full h-full"
-              style={style}
+              className="w-full h-full shrink-0"
             >
               {renderSlideContent(slide)}
             </Link>
           ) : (
             <div
               key={index}
-              className="absolute inset-0 w-full h-full"
-              style={style}
+              className="w-full h-full shrink-0"
             >
               {renderSlideContent(slide)}
             </div>
-          );
-        })}
+          )
+        ))}
       </div>
       {slides.length > 1 && (
         <>
           <button
             onClick={prevSlide}
             className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors"
+            aria-label="Previous slide"
           >
             <ChevronLeft className="text-white" size={24} />
           </button>
           <button
             onClick={nextSlide}
             className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors"
+            aria-label="Next slide"
           >
             <ChevronRight className="text-white" size={24} />
           </button>

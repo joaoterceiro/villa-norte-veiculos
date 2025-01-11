@@ -5,9 +5,9 @@ import { Footer } from "@/components/Footer";
 import { CookieConsent } from "@/components/cookies/CookieConsent";
 import { LoadingFallback } from "@/components/loading/LoadingFallback";
 import { PromotionalBanner } from "@/components/banners/PromotionalBanner";
+import { HeroSlider } from "@/components/HeroSlider";
 
 // Lazy loaded components
-const HeroSlider = lazy(() => import("@/components/HeroSlider").then(module => ({ default: module.HeroSlider })));
 const FeaturedVehicles = lazy(() => import("@/components/FeaturedVehicles").then(module => ({ default: module.FeaturedVehicles })));
 const BrandLogos = lazy(() => import("@/components/BrandLogos").then(module => ({ default: module.BrandLogos })));
 const FinancingSteps = lazy(() => import("@/components/FinancingSteps").then(module => ({ default: module.FinancingSteps })));
@@ -18,9 +18,7 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <Navbar />
       <main>
-        <Suspense fallback={<LoadingFallback />}>
-          <HeroSlider />
-        </Suspense>
+        <HeroSlider />
         <SearchBar />
         <Suspense fallback={<LoadingFallback />}>
           <FeaturedVehicles />
