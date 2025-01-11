@@ -28,7 +28,7 @@ export function ScriptVersionHistory() {
           version,
           updated_at,
           updated_by,
-          users_sis!updated_by_users_sis_fkey(
+          users_sis!tracking_scripts_updated_by_users_sis_fkey(
             name
           )
         `)
