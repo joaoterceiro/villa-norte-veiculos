@@ -21,7 +21,7 @@ export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg
     if (onSearch) {
       onSearch(searchTerm);
     }
-    navigate("/carros");
+    navigate("/veiculos");
   };
 
   return (
