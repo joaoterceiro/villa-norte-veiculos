@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { Database } from "@/integrations/supabase/types";
+
+type CookiePolicyRow = Database["public"]["Tables"]["cookie_policy"]["Row"];
 
 interface CookiePolicy {
   version: string;
@@ -19,6 +22,14 @@ interface CookiePolicy {
   };
 }
 
+const transformCookiePolicy = (row: CookiePolicyRow): CookiePolicy => {
+  return {
+    version: row.version,
+    content: row.content as CookiePolicy["content"],
+    categories: row.categories as CookiePolicy["categories"],
+  };
+};
+
 export const CookieConsent = () => {
   const [showBanner, setShowBanner] = useState(false);
 
@@ -32,7 +43,7 @@ export const CookieConsent = () => {
         .single();
 
       if (error) throw error;
-      return data;
+      return transformCookiePolicy(data);
     },
   });
 
