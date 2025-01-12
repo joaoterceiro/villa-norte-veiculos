@@ -39,17 +39,17 @@ const Specification = ({ label, value, icon, className }: SpecificationProps) =>
         className
       )}
     >
-      <div className="relative z-10 p-6">
-        <div className="mb-4">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gray-100/80 text-gray-600 group-hover:bg-primary/5 group-hover:text-primary transition-colors duration-300 dark:bg-gray-800 dark:text-gray-400">
-            <Icon className="w-6 h-6" strokeWidth={1.5} />
+      <div className="relative z-10 p-4 md:p-6">
+        <div className="mb-3 md:mb-4">
+          <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gray-100/80 text-gray-600 group-hover:bg-primary/5 group-hover:text-primary transition-colors duration-300 dark:bg-gray-800 dark:text-gray-400">
+            <Icon className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
           </div>
         </div>
-        <div className="space-y-2">
-          <div className="text-base font-medium text-gray-500 dark:text-gray-400">
+        <div className="space-y-1 md:space-y-2">
+          <div className="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">
             {label}
           </div>
-          <div className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          <div className="text-base md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
             {value || "—"}
           </div>
         </div>

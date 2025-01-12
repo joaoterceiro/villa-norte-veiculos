@@ -45,9 +45,9 @@ export const VehicleDetailsContent = ({
   ];
 
   return (
-    <div className="max-w-[2000px] mx-auto">
-      <div className="flex gap-6">
-        <div className="w-[65%] h-[600px]">
+    <div className="max-w-[2000px] mx-auto px-4 md:px-6">
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="w-full md:w-[65%] h-[400px] md:h-[600px]">
           <VehicleImageGallery
             images={vehicle.product_images || []}
             title={vehicle.title}
@@ -59,8 +59,8 @@ export const VehicleDetailsContent = ({
           />
         </div>
 
-        <div className="w-[35%]">
-          <div className="sticky top-24">
+        <div className="w-full md:w-[35%]">
+          <div className="md:sticky md:top-24">
             <VehicleInfoPanel
               title={vehicle.title}
               condition={vehicle.condition}
@@ -80,7 +80,7 @@ export const VehicleDetailsContent = ({
         transition={{ duration: 0.5 }}
         className="mt-8"
       >
-        <h2 className="text-2xl font-light tracking-tight text-gray-900 mb-4">
+        <h2 className="text-xl md:text-2xl font-light tracking-tight text-gray-900 mb-4">
           Especificações
         </h2>
         <VehicleSpecifications specifications={specifications} />
@@ -91,11 +91,11 @@ export const VehicleDetailsContent = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="mt-8 bg-gray-50/50 p-8 rounded-2xl"
+        className="mt-8 bg-gray-50/50 p-6 md:p-8 rounded-2xl"
       >
-        <h2 className="text-2xl font-light tracking-wide text-gray-900 mb-4">Descrição</h2>
+        <h2 className="text-xl md:text-2xl font-light tracking-wide text-gray-900 mb-4">Descrição</h2>
         <div className="prose prose-gray max-w-none">
-          <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base md:text-lg">
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line text-sm md:text-base">
             {vehicle.description}
           </p>
         </div>
@@ -108,7 +108,7 @@ export const VehicleDetailsContent = ({
         transition={{ duration: 0.5 }}
         className="mt-8"
       >
-        <h2 className="text-2xl font-light tracking-wide text-gray-900 mb-4">Acessórios</h2>
+        <h2 className="text-xl md:text-2xl font-light tracking-wide text-gray-900 mb-4">Acessórios</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           <AnimatePresence>
             {vehicle.product_accessories?.map((item: any, index: number) => (
@@ -121,9 +121,9 @@ export const VehicleDetailsContent = ({
               >
                 <Badge
                   variant="outline"
-                  className="group flex items-center gap-2 py-2.5 px-4 text-sm font-medium text-gray-700 bg-white/50 hover:bg-gray-50/80 border border-gray-200/80 rounded-xl transition-all duration-200 backdrop-blur-sm hover:border-gray-300/80 w-full"
+                  className="group flex items-center gap-2 py-2 px-3 text-xs md:text-sm font-medium text-gray-700 bg-white/50 hover:bg-gray-50/80 border border-gray-200/80 rounded-xl transition-all duration-200 backdrop-blur-sm hover:border-gray-300/80 w-full"
                 >
-                  <Tag className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors duration-200" strokeWidth={1.5} />
+                  <Tag className="w-3 h-3 md:w-4 md:h-4 text-gray-400 group-hover:text-primary transition-colors duration-200" strokeWidth={1.5} />
                   {item.accessory}
                 </Badge>
               </motion.div>
