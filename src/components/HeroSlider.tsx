@@ -1,21 +1,31 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Skeleton } from "./ui/skeleton";
-import { SlideNavigation } from "./slider/SlideNavigation";
-import { SlideContent } from "./slider/SlideContent";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export const HeroSlider = memo(() => {
+interface Slide {
+  desktop_image_url: string;
+  mobile_image_url: string;
+  link?: string | null;
+}
+
+export const HeroSlider = () => {
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [slides, setSlides] = useState<{
-    desktop_image_url: string;
-    mobile_image_url: string;
-    link?: string | null;
-  }[]>([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchSlides = async () => {
-      setIsLoading(true);
       try {
         const { data, error } = await supabase
           .from("slides")
@@ -23,14 +33,10 @@ export const HeroSlider = memo(() => {
           .eq("is_active", true)
           .order("display_order", { ascending: true });
 
-        if (error) {
-          console.error("Error fetching slides:", error);
-          return;
-        }
-
-        if (data) {
-          setSlides(data);
-        }
+        if (error) throw error;
+        if (data) setSlides(data);
+      } catch (error) {
+        console.error("Error fetching slides:", error);
       } finally {
         setIsLoading(false);
       }
@@ -40,8 +46,8 @@ export const HeroSlider = memo(() => {
   }, []);
 
   useEffect(() => {
-    if (slides.length === 0) return;
-    
+    if (slides.length <= 1) return;
+
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
@@ -57,17 +63,35 @@ export const HeroSlider = memo(() => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  if (isLoading) {
-    return (
-      <div className="h-[500px] w-full">
-        <Skeleton className="w-full h-full" />
-      </div>
-    );
-  }
-
-  if (slides.length === 0) {
+  if (isLoading || slides.length === 0) {
     return null;
   }
+
+  const renderSlide = (slide: Slide, index: number) => {
+    const slideContent = (
+      <div 
+        className="w-full h-full flex-shrink-0 relative"
+        style={{ width: "100%" }}
+      >
+        <img
+          src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
+          alt=""
+          className="w-full h-full object-cover"
+          loading={index === 0 ? "eager" : "lazy"}
+        />
+      </div>
+    );
+
+    return slide.link ? (
+      <Link key={index} to={slide.link} className="block h-full">
+        {slideContent}
+      </Link>
+    ) : (
+      <div key={index} className="block h-full">
+        {slideContent}
+      </div>
+    );
+  };
 
   return (
     <div className="relative h-[500px] w-full overflow-hidden">
@@ -78,25 +102,29 @@ export const HeroSlider = memo(() => {
           width: `${slides.length * 100}%`,
         }}
       >
-        {slides.map((slide, index) => (
-          <SlideContent
-            key={index}
-            index={index}
-            mobileUrl={slide.mobile_image_url}
-            desktopUrl={slide.desktop_image_url}
-            link={slide.link}
-            isFirstSlide={index === 0}
-          />
-        ))}
+        {slides.map((slide, index) => renderSlide(slide, index))}
       </div>
+
       {slides.length > 1 && (
-        <SlideNavigation
-          onPrevClick={prevSlide}
-          onNextClick={nextSlide}
-        />
+        <>
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 p-2 rounded-full transition-colors z-10"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="text-white" size={24} />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 p-2 rounded-full transition-colors z-10"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="text-white" size={24} />
+          </button>
+        </>
       )}
     </div>
   );
-});
+};
 
 HeroSlider.displayName = "HeroSlider";
