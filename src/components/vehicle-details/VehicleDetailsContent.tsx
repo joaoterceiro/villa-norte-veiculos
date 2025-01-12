@@ -82,19 +82,21 @@ export const VehicleDetailsContent = ({
         </motion.div>
       </div>
 
-      <Separator className="my-12 md:my-16" />
+      <Separator className="my-16 md:my-24" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="space-y-6"
+        className="space-y-8"
       >
-        <h2 className="text-2xl md:text-3xl font-light tracking-wide text-gray-900">Especificações</h2>
+        <h2 className="text-3xl font-light tracking-tight text-gray-900 dark:text-white">
+          Especificações
+        </h2>
         <VehicleSpecifications specifications={specifications} />
       </motion.div>
 
-      <Separator className="my-12 md:my-16" />
+      <Separator className="my-16 md:my-24" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
