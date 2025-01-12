@@ -2,13 +2,11 @@ import { VehicleImageGallery } from "@/components/VehicleImageGallery";
 import { VehicleInfoPanel } from "@/components/VehicleInfoPanel";
 import { VehicleSpecifications } from "@/components/VehicleSpecifications";
 import { VehicleSimilar } from "@/components/VehicleSimilar";
-import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FinancingForm } from "@/components/FinancingForm";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface VehicleDetailsContentProps {
   vehicle: any;
@@ -49,11 +47,7 @@ export const VehicleDetailsContent = ({
   return (
     <div className="max-w-[2000px] mx-auto">
       <div className="flex gap-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-[65%] h-[600px] relative"
-        >
+        <div className="w-[65%] h-[600px]">
           <VehicleImageGallery
             images={vehicle.product_images || []}
             title={vehicle.title}
@@ -63,14 +57,9 @@ export const VehicleDetailsContent = ({
             onNextImage={onNextImage}
             onImageClick={() => onLightboxChange(true)}
           />
-        </motion.div>
+        </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="w-[35%]"
-        >
+        <div className="w-[35%]">
           <div className="sticky top-24">
             <VehicleInfoPanel
               title={vehicle.title}
@@ -81,7 +70,7 @@ export const VehicleDetailsContent = ({
               downloadUrl={vehicle.download}
             />
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <motion.div
@@ -89,9 +78,9 @@ export const VehicleDetailsContent = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="space-y-6 mt-12"
+        className="mt-8"
       >
-        <h2 className="text-2xl font-light tracking-tight text-gray-900">
+        <h2 className="text-2xl font-light tracking-tight text-gray-900 mb-4">
           Especificações
         </h2>
         <VehicleSpecifications specifications={specifications} />
@@ -102,9 +91,9 @@ export const VehicleDetailsContent = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="space-y-4 mt-12 bg-gray-50/50 p-8 rounded-2xl"
+        className="mt-8 bg-gray-50/50 p-8 rounded-2xl"
       >
-        <h2 className="text-2xl font-light tracking-wide text-gray-900">Descrição</h2>
+        <h2 className="text-2xl font-light tracking-wide text-gray-900 mb-4">Descrição</h2>
         <div className="prose prose-gray max-w-none">
           <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base md:text-lg">
             {vehicle.description}
@@ -117,9 +106,9 @@ export const VehicleDetailsContent = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="space-y-4 mt-12"
+        className="mt-8"
       >
-        <h2 className="text-2xl font-light tracking-wide text-gray-900">Acessórios</h2>
+        <h2 className="text-2xl font-light tracking-wide text-gray-900 mb-4">Acessórios</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           <AnimatePresence>
             {vehicle.product_accessories?.map((item: any, index: number) => (
@@ -149,7 +138,7 @@ export const VehicleDetailsContent = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mt-12"
+          className="mt-8"
         >
           <VehicleSimilar vehicles={similarVehicles} />
         </motion.div>
