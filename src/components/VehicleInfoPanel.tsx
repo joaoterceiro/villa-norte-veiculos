@@ -58,9 +58,9 @@ export const VehicleInfoPanel = ({
 
   return (
     <>
-      <div className="w-full col-span-12 lg:col-span-4 space-y-8 bg-white p-8 rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] border border-black/5">
+      <div className="w-full col-span-12 lg:col-span-4 space-y-6 md:space-y-8 bg-white p-6 md:p-8 rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] border border-black/5">
         <div>
-          <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-[#86868b] mb-6">
+          <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-[#86868b] mb-4 md:mb-6">
             <span>{condition}</span>
             {location && (
               <>
@@ -69,9 +69,9 @@ export const VehicleInfoPanel = ({
               </>
             )}
           </div>
-          <h1 className="text-[32px] font-semibold leading-tight tracking-[-0.003em] text-[#1d1d1f] break-words">{title}</h1>
-          <div className="mt-8">
-            <span className="text-[40px] font-semibold text-primary inline-flex items-baseline">
+          <h1 className="text-2xl md:text-[32px] font-semibold leading-tight tracking-[-0.003em] text-[#1d1d1f] break-words">{title}</h1>
+          <div className="mt-6 md:mt-8">
+            <span className="text-3xl md:text-[40px] font-semibold text-primary inline-flex items-baseline">
               {formatPrice(price || 0)}
             </span>
           </div>
@@ -79,7 +79,7 @@ export const VehicleInfoPanel = ({
 
         <div className="space-y-3">
           <Button 
-            className="w-full text-[17px] font-medium tracking-[-0.022em] h-auto py-[18px] px-[31px] shadow-[0_2px_8px_rgba(255,87,34,0.2)] hover:translate-y-[-1px] transition-all duration-200 ease-out" 
+            className="w-full text-base md:text-[17px] font-medium tracking-[-0.022em] h-auto py-4 md:py-[18px] px-6 md:px-[31px] shadow-[0_2px_8px_rgba(255,87,34,0.2)] hover:translate-y-[-1px] transition-all duration-200 ease-out" 
             onClick={handleWhatsAppClick}
           >
             <MessageSquare className="w-[18px] h-[18px] mr-2" />
@@ -87,7 +87,7 @@ export const VehicleInfoPanel = ({
           </Button>
           <Button 
             variant="outline" 
-            className="w-full text-[17px] font-medium tracking-[-0.022em] h-auto py-[18px] px-[31px] border-primary text-primary hover:bg-primary/5 hover:translate-y-[-1px] transition-all duration-200 ease-out" 
+            className="w-full text-base md:text-[17px] font-medium tracking-[-0.022em] h-auto py-4 md:py-[18px] px-6 md:px-[31px] border-primary text-primary hover:bg-primary/5 hover:translate-y-[-1px] transition-all duration-200 ease-out" 
             onClick={() => setShowFinancingModal(true)}
           >
             <Calculator className="w-[18px] h-[18px] mr-2" />
@@ -96,10 +96,10 @@ export const VehicleInfoPanel = ({
         </div>
 
         {downloadUrl && (
-          <div className="pt-6 border-t border-[#f5f5f5]">
+          <div className="pt-5 md:pt-6 border-t border-[#f5f5f5]">
             <Button
               variant="outline"
-              className="w-full text-[15px] text-[#86868b] hover:text-[#666666] h-auto py-[18px] px-[31px] hover:translate-y-[-1px] transition-all duration-200 ease-out"
+              className="w-full text-sm md:text-[15px] text-[#86868b] hover:text-[#666666] h-auto py-4 md:py-[18px] px-6 md:px-[31px] hover:translate-y-[-1px] transition-all duration-200 ease-out"
               onClick={() => window.open(downloadUrl, "_blank")}
             >
               <Download className="w-[18px] h-[18px] mr-2" />
@@ -108,34 +108,34 @@ export const VehicleInfoPanel = ({
           </div>
         )}
 
-        <div className="space-y-3 pt-6 border-t border-[#f5f5f5]">
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0" />
-            <span className="text-[15px] leading-[1.4] text-[#333333]">
+        <div className="space-y-3 pt-5 md:pt-6 border-t border-[#f5f5f5]">
+          <div className="flex items-start md:items-center gap-3">
+            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0 mt-0.5 md:mt-0" />
+            <span className="text-sm md:text-[15px] leading-[1.4] text-[#333333]">
               Veículos revisados e periciados
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0" />
-            <span className="text-[15px] leading-[1.4] text-[#333333]">
+          <div className="flex items-start md:items-center gap-3">
+            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0 mt-0.5 md:mt-0" />
+            <span className="text-sm md:text-[15px] leading-[1.4] text-[#333333]">
               Bônus na troca
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0" />
-            <span className="text-[15px] leading-[1.4] text-[#333333]">
+          <div className="flex items-start md:items-center gap-3">
+            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0 mt-0.5 md:mt-0" />
+            <span className="text-sm md:text-[15px] leading-[1.4] text-[#333333]">
               90 dias de garantia da loja
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0" />
-            <span className="text-[15px] leading-[1.4] text-[#333333]">
+          <div className="flex items-start md:items-center gap-3">
+            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0 mt-0.5 md:mt-0" />
+            <span className="text-sm md:text-[15px] leading-[1.4] text-[#333333]">
               Entrada Parcelada em até 21x
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0" />
-            <span className="text-[15px] leading-[1.4] text-[#333333]">
+          <div className="flex items-start md:items-center gap-3">
+            <CheckCircle className="w-[18px] h-[18px] text-primary flex-shrink-0 mt-0.5 md:mt-0" />
+            <span className="text-sm md:text-[15px] leading-[1.4] text-[#333333]">
               Pague em até 60 Meses
             </span>
           </div>
