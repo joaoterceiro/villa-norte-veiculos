@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { VehiclesGrid } from "@/components/vehicles/VehiclesGrid";
 import { VehiclesPagination } from "@/components/vehicles/VehiclesPagination";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Select,
   SelectContent,
