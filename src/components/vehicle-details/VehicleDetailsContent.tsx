@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FinancingForm } from "@/components/FinancingForm";
 import { motion } from "framer-motion";
+import { Tag } from "lucide-react";
 
 interface VehicleDetailsContentProps {
   vehicle: any;
@@ -126,8 +127,9 @@ export const VehicleDetailsContent = ({
             <Badge
               key={index}
               variant="outline"
-              className="justify-start py-2 md:py-3 px-3 md:px-4 text-sm md:text-base hover:bg-gray-50 transition-colors duration-200"
+              className="group flex items-center gap-2 py-2.5 px-4 text-sm font-medium text-gray-700 bg-white/50 hover:bg-gray-50/80 border border-gray-200/80 rounded-xl transition-all duration-200 backdrop-blur-sm hover:border-gray-300/80 dark:bg-gray-900/50 dark:border-gray-800/80 dark:text-gray-300 dark:hover:border-gray-700/80"
             >
+              <Tag className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors duration-200" strokeWidth={1.5} />
               {item.accessory}
             </Badge>
           ))}
