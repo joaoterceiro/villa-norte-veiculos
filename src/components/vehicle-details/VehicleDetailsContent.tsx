@@ -47,11 +47,11 @@ export const VehicleDetailsContent = ({
 
   return (
     <div className="max-w-[2000px] mx-auto">
-      <div className="grid grid-cols-1 xl:grid-cols-20 gap-6">
+      <div className="flex gap-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="col-span-12 xl:col-span-13 h-[600px] relative"
+          className="w-[65%] h-[600px] relative"
         >
           <VehicleImageGallery
             images={vehicle.product_images || []}
@@ -68,9 +68,9 @@ export const VehicleDetailsContent = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="col-span-12 xl:col-span-7"
+          className="w-[35%]"
         >
-          <div className="lg:sticky lg:top-24">
+          <div className="sticky top-24">
             <VehicleInfoPanel
               title={vehicle.title}
               condition={vehicle.condition}
