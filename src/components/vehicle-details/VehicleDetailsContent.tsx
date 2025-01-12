@@ -51,7 +51,7 @@ export const VehicleDetailsContent = ({
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="col-span-12 xl:col-span-7 h-[600px] relative"
+          className="col-span-12 xl:col-span-6 h-[600px] relative"
         >
           <VehicleImageGallery
             images={vehicle.product_images || []}
@@ -68,7 +68,7 @@ export const VehicleDetailsContent = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="col-span-12 xl:col-span-3"
+          className="col-span-12 xl:col-span-4"
         >
           <div className="lg:sticky lg:top-24">
             <VehicleInfoPanel
