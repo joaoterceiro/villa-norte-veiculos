@@ -15,7 +15,7 @@ export const SlideImage = memo(({ mobileUrl, desktopUrl, isFirstSlide }: SlideIm
       alt=""
       className="absolute inset-0 w-full h-full object-cover"
       loading={isFirstSlide ? "eager" : "lazy"}
-      fetchpriority={isFirstSlide ? "high" : "auto"}
+      fetchPriority={isFirstSlide ? "high" : "auto"}
     />
   );
 });
