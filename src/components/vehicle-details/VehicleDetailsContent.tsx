@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FinancingForm } from "@/components/FinancingForm";
+import { motion } from "framer-motion";
 
 interface VehicleDetailsContentProps {
   vehicle: any;
@@ -31,81 +32,121 @@ export const VehicleDetailsContent = ({
   similarVehicles = [],
 }: VehicleDetailsContentProps) => {
   const specifications = [
-    { label: "Marca", value: vehicle.make },
-    { label: "Modelo", value: vehicle.model },
-    { label: "Ano", value: vehicle.year },
-    { label: "Versão", value: vehicle.base_model },
-    { label: "Cor", value: vehicle.color },
-    { label: "Combustível", value: vehicle.fuel_type },
-    { label: "Portas", value: vehicle.doors },
-    { label: "Transmissão", value: vehicle.transmission },
-    { label: "Motor", value: vehicle.engine },
-    { label: "Quilometragem", value: vehicle.mileage?.toLocaleString("pt-BR") }
+    { label: "Marca", value: vehicle.make, icon: "car" },
+    { label: "Modelo", value: vehicle.model, icon: "tag" },
+    { label: "Ano", value: vehicle.year, icon: "calendar" },
+    { label: "Versão", value: vehicle.base_model, icon: "layers" },
+    { label: "Cor", value: vehicle.color, icon: "palette" },
+    { label: "Combustível", value: vehicle.fuel_type, icon: "fuel" },
+    { label: "Portas", value: vehicle.doors, icon: "door" },
+    { label: "Transmissão", value: vehicle.transmission, icon: "settings" },
+    { label: "Motor", value: vehicle.engine, icon: "gauge" },
+    { label: "Quilometragem", value: vehicle.mileage?.toLocaleString("pt-BR"), icon: "activity" }
   ];
 
   return (
-    <>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-6">
-        <VehicleImageGallery
-          images={vehicle.product_images || []}
-          title={vehicle.title}
-          imageFeature={vehicle.image_feature}
-          currentImageIndex={currentImageIndex}
-          onPrevImage={onPrevImage}
-          onNextImage={onNextImage}
-          onImageClick={() => onLightboxChange(true)}
-        />
+    <div className="max-w-[2000px] mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="col-span-12 lg:col-span-7 xl:col-span-8"
+        >
+          <VehicleImageGallery
+            images={vehicle.product_images || []}
+            title={vehicle.title}
+            imageFeature={vehicle.image_feature}
+            currentImageIndex={currentImageIndex}
+            onPrevImage={onPrevImage}
+            onNextImage={onNextImage}
+            onImageClick={() => onLightboxChange(true)}
+          />
+        </motion.div>
 
-        <VehicleInfoPanel
-          title={vehicle.title}
-          condition={vehicle.condition}
-          price={vehicle.price}
-          location="São José dos Campos"
-          category={vehicle.category}
-          downloadUrl={vehicle.download}
-        />
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="col-span-12 lg:col-span-5 xl:col-span-4"
+        >
+          <div className="lg:sticky lg:top-24">
+            <VehicleInfoPanel
+              title={vehicle.title}
+              condition={vehicle.condition}
+              price={vehicle.price}
+              location="São José dos Campos"
+              category={vehicle.category}
+              downloadUrl={vehicle.download}
+            />
+          </div>
+        </motion.div>
       </div>
 
-      <div className="mt-4 md:mt-6">
-        <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Especificações</h2>
+      <Separator className="my-12 md:my-16" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="space-y-6"
+      >
+        <h2 className="text-2xl md:text-3xl font-light tracking-wide text-gray-900">Especificações</h2>
         <VehicleSpecifications specifications={specifications} />
-      </div>
+      </motion.div>
 
-      <Separator className="my-4 md:my-6" />
+      <Separator className="my-12 md:my-16" />
 
-      <div>
-        <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Descrição</h2>
-        <p className="text-[#666666] whitespace-pre-line text-sm md:text-base">
-          {vehicle.description}
-        </p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="space-y-6 bg-gray-50/50 p-8 rounded-2xl"
+      >
+        <h2 className="text-2xl md:text-3xl font-light tracking-wide text-gray-900">Descrição</h2>
+        <div className="prose prose-gray max-w-none">
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base md:text-lg">
+            {vehicle.description}
+          </p>
+        </div>
+      </motion.div>
 
-      <Separator className="my-4 md:my-6" />
+      <Separator className="my-12 md:my-16" />
 
-      <div>
-        <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Acessórios</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="space-y-6"
+      >
+        <h2 className="text-2xl md:text-3xl font-light tracking-wide text-gray-900">Acessórios</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
           {vehicle.product_accessories?.map((item: any, index: number) => (
             <Badge
               key={index}
               variant="outline"
-              className="justify-start py-1 md:py-1.5 px-2 md:px-3 text-xs md:text-sm"
+              className="justify-start py-2 md:py-3 px-3 md:px-4 text-sm md:text-base hover:bg-gray-50 transition-colors duration-200"
             >
               {item.accessory}
             </Badge>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {similarVehicles && similarVehicles.length > 0 && (
         <>
-          <Separator className="my-4 md:my-6" />
-          <VehicleSimilar vehicles={similarVehicles} />
+          <Separator className="my-12 md:my-16" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <VehicleSimilar vehicles={similarVehicles} />
+          </motion.div>
         </>
       )}
 
       <Dialog open={lightboxOpen} onOpenChange={onLightboxChange}>
-        <DialogContent className="max-w-screen-lg w-full p-0 bg-black">
+        <DialogContent className="max-w-screen-2xl w-full p-0 bg-black/95">
           <VehicleImageGallery
             images={vehicle.product_images || []}
             title={vehicle.title}
@@ -119,13 +160,13 @@ export const VehicleDetailsContent = ({
       </Dialog>
 
       <Dialog open={financingOpen} onOpenChange={onFinancingChange}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[500px]">
           <FinancingForm 
             onSuccess={() => onFinancingChange(false)}
             vehicleTitle={vehicle.title}
           />
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
