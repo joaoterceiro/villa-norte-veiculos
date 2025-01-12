@@ -11,7 +11,7 @@ interface VehiclesGridProps {
 
 export const VehiclesGrid = memo(({ vehicles, currentPage, itemsPerPage }: VehiclesGridProps) => {
   const isMobile = useIsMobile();
-  const displayLimit = isMobile ? 6 : itemsPerPage;
+  const displayLimit = isMobile ? 6 : 15;
   const displayedVehicles = vehicles.slice(
     (currentPage - 1) * displayLimit,
     currentPage * displayLimit

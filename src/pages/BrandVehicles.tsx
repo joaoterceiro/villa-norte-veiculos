@@ -15,13 +15,13 @@ import {
 } from "@/components/ui/select";
 import { ChevronRight, Loader2 } from "lucide-react";
 
-const ITEMS_PER_PAGE = 12;
-
 const BrandVehicles = () => {
   const { brand } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
   const sort = searchParams.get("sort") || "newest";
+  const isMobile = useIsMobile();
+  const ITEMS_PER_PAGE = isMobile ? 6 : 15;
 
   const decodedBrand = decodeURIComponent(brand || "");
   const formattedBrand = decodedBrand.charAt(0).toUpperCase() + decodedBrand.slice(1);
