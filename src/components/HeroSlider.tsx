@@ -70,8 +70,8 @@ export const HeroSlider = () => {
   const renderSlide = (slide: Slide, index: number) => {
     const slideContent = (
       <div 
-        className="w-full h-full flex-shrink-0 relative"
-        style={{ width: "100%" }}
+        className="w-full h-full relative"
+        style={{ flex: '0 0 100%' }}
       >
         <img
           src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
