@@ -12,7 +12,7 @@ interface SlideContentProps {
 
 export const SlideContent = memo(({ mobileUrl, desktopUrl, link, isFirstSlide, index }: SlideContentProps) => {
   const content = (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full flex-shrink-0">
       <SlideImage
         mobileUrl={mobileUrl}
         desktopUrl={desktopUrl}
