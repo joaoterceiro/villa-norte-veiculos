@@ -25,11 +25,11 @@ export const VehicleImageGallery = ({
   const totalImages = hasImages ? images.length : 0;
 
   return (
-    <div className="relative h-[85vh] rounded-3xl bg-[#f5f5f5] overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.05)]">
-      {/* Circular Base with Reflection */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5" />
+    <div className="relative h-full rounded-2xl bg-gradient-to-b from-[#f5f5f5] to-[#fafafa] overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.05)] transition-all duration-300">
+      {/* Base Circular com Reflexo */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/[0.02]" />
       
-      {/* Main Image Container */}
+      {/* Container Principal da Imagem */}
       <div className="relative h-full w-full">
         <AnimatePresence mode="wait">
           <motion.img
@@ -37,58 +37,48 @@ export const VehicleImageGallery = ({
             initial={{ opacity: 0, scale: 1.02 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             src={hasImages ? images[currentImageIndex].image_url : imageFeature}
             alt={title}
-            className="w-full h-full object-cover cursor-zoom-in"
+            className="w-full h-full object-contain cursor-zoom-in p-4"
             onClick={onImageClick}
           />
         </AnimatePresence>
 
-        {/* Navigation Controls */}
+        {/* Controles de Navegação */}
         {hasImages && (
           <>
             <button
               onClick={onPrevImage}
-              className="absolute left-6 top-1/2 -translate-y-1/2 w-[60px] h-[60px] rounded-full bg-white/90 backdrop-blur-lg hover:bg-white/95 shadow-lg transition-all duration-200 flex items-center justify-center group"
-              aria-label="Previous image"
+              className="absolute left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border border-black/10 backdrop-blur hover:border-primary/30 hover:bg-white transition-all duration-200 flex items-center justify-center group"
+              aria-label="Imagem anterior"
             >
-              <ChevronLeft className="w-6 h-6 text-[#1d1d1f] transition-transform duration-200 group-hover:-translate-x-0.5" />
+              <ChevronLeft className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors duration-200" />
             </button>
             <button
               onClick={onNextImage}
-              className="absolute right-6 top-1/2 -translate-y-1/2 w-[60px] h-[60px] rounded-full bg-white/90 backdrop-blur-lg hover:bg-white/95 shadow-lg transition-all duration-200 flex items-center justify-center group"
-              aria-label="Next image"
+              className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 border border-black/10 backdrop-blur hover:border-primary/30 hover:bg-white transition-all duration-200 flex items-center justify-center group"
+              aria-label="Próxima imagem"
             >
-              <ChevronRight className="w-6 h-6 text-[#1d1d1f] transition-transform duration-200 group-hover:translate-x-0.5" />
+              <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors duration-200" />
             </button>
           </>
         )}
 
-        {/* Progress Bar */}
+        {/* Contador de Imagens */}
         {hasImages && (
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-1/3 h-0.5 bg-black/10 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-[#FF5722] transition-all duration-300 ease-out"
-              style={{ width: `${((currentImageIndex + 1) / totalImages) * 100}%` }}
-            />
-          </div>
-        )}
-
-        {/* Image Counter */}
-        {hasImages && (
-          <div className="absolute bottom-6 right-6 text-[13px] font-medium tracking-[-0.01em] text-[#86868b]">
+          <div className="absolute bottom-6 right-6 px-3 py-1.5 bg-white/90 backdrop-blur rounded text-[13px] font-medium tracking-[-0.01em] text-[#666] border border-black/5">
             {currentImageIndex + 1} / {totalImages}
           </div>
         )}
 
-        {/* Fullscreen Button */}
+        {/* Botão Fullscreen */}
         <button
           onClick={onImageClick}
-          className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/90 backdrop-blur-lg hover:bg-white/95 shadow-lg transition-all duration-200 flex items-center justify-center"
-          aria-label="View fullscreen"
+          className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/90 border border-black/10 backdrop-blur hover:border-primary/30 hover:bg-white transition-all duration-200 flex items-center justify-center group"
+          aria-label="Ver em tela cheia"
         >
-          <Expand className="w-5 h-5 text-[#1d1d1f]" />
+          <Expand className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors duration-200" />
         </button>
       </div>
     </div>
