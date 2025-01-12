@@ -519,6 +519,13 @@ export type Database = {
         }
         Relationships: []
       }
+      year_options: {
+        Row: {
+          label: string | null
+          year: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       filter_products:
@@ -634,6 +641,13 @@ export type Database = {
           transmission: string | null
           vehicle_id: string
           year: number | null
+        }[]
+      }
+      get_year_options: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          year: number
+          label: string
         }[]
       }
       gtrgm_compress: {

@@ -77,7 +77,7 @@ export default function Vehicles() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
       
       <div className="container mx-auto px-0 sm:px-4 lg:px-8 py-4 lg:py-8">
@@ -110,7 +110,7 @@ export default function Vehicles() {
             <VehiclesHeader totalVehicles={vehicles.length} />
 
             {isLoading ? (
-              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 px-2 sm:px-0">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4 px-2 sm:px-0">
                 {[...Array(8)].map((_, i) => (
                   <div
                     key={i}
