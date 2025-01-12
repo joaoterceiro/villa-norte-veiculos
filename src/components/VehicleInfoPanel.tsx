@@ -69,7 +69,7 @@ export const VehicleInfoPanel = ({
               </>
             )}
           </div>
-          <h1 className="text-2xl md:text-[32px] font-semibold leading-tight tracking-[-0.003em] text-[#1d1d1f] break-words">{title}</h1>
+          <h1 className="text-xl md:text-2xl font-semibold leading-tight tracking-[-0.003em] text-[#1d1d1f] break-words">{title}</h1>
           <div className="mt-6 md:mt-8">
             <span className="text-3xl md:text-[40px] font-semibold text-primary inline-flex items-baseline">
               {formatPrice(price || 0)}
