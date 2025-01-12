@@ -32,16 +32,16 @@ export const VehicleDetailsContent = ({
   similarVehicles = [],
 }: VehicleDetailsContentProps) => {
   const specifications = [
-    { label: "Marca", value: vehicle.make, icon: "car" },
-    { label: "Modelo", value: vehicle.model, icon: "tag" },
-    { label: "Ano", value: vehicle.year, icon: "calendar" },
-    { label: "Versão", value: vehicle.base_model, icon: "layers" },
-    { label: "Cor", value: vehicle.color, icon: "palette" },
-    { label: "Combustível", value: vehicle.fuel_type, icon: "fuel" },
-    { label: "Portas", value: vehicle.doors, icon: "door" },
-    { label: "Transmissão", value: vehicle.transmission, icon: "settings" },
-    { label: "Motor", value: vehicle.engine, icon: "gauge" },
-    { label: "Quilometragem", value: vehicle.mileage?.toLocaleString("pt-BR"), icon: "activity" }
+    { label: "Marca", value: vehicle.make, icon: "car" as const },
+    { label: "Modelo", value: vehicle.model, icon: "tag" as const },
+    { label: "Ano", value: vehicle.year, icon: "calendar" as const },
+    { label: "Versão", value: vehicle.base_model, icon: "layers" as const },
+    { label: "Cor", value: vehicle.color, icon: "palette" as const },
+    { label: "Combustível", value: vehicle.fuel_type, icon: "fuel" as const },
+    { label: "Portas", value: vehicle.doors, icon: "door" as const },
+    { label: "Transmissão", value: vehicle.transmission, icon: "settings" as const },
+    { label: "Motor", value: vehicle.engine, icon: "gauge" as const },
+    { label: "Quilometragem", value: vehicle.mileage?.toLocaleString("pt-BR"), icon: "activity" as const }
   ];
 
   return (
