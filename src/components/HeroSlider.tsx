@@ -72,7 +72,7 @@ export const HeroSlider = memo(() => {
   return (
     <div className="relative h-[500px] w-full overflow-hidden">
       <div
-        className="flex h-full transition-transform duration-500 ease-in-out will-change-transform"
+        className="flex h-full transition-transform duration-500 ease-in-out"
         style={{
           transform: `translateX(-${currentSlide * 100}%)`,
           width: `${slides.length * 100}%`,

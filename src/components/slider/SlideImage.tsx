@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 
 interface SlideImageProps {
   mobileUrl: string;
@@ -7,7 +7,16 @@ interface SlideImageProps {
 }
 
 export const SlideImage = memo(({ mobileUrl, desktopUrl, isFirstSlide }: SlideImageProps) => {
-  const isMobile = window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <img
@@ -15,7 +24,6 @@ export const SlideImage = memo(({ mobileUrl, desktopUrl, isFirstSlide }: SlideIm
       alt=""
       className="absolute inset-0 w-full h-full object-cover"
       loading={isFirstSlide ? "eager" : "lazy"}
-      fetchPriority={isFirstSlide ? "high" : "auto"}
     />
   );
 });
