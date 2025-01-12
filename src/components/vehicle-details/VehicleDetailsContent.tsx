@@ -3,11 +3,12 @@ import { VehicleInfoPanel } from "@/components/VehicleInfoPanel";
 import { VehicleSpecifications } from "@/components/VehicleSpecifications";
 import { VehicleSimilar } from "@/components/VehicleSimilar";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FinancingForm } from "@/components/FinancingForm";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Tag } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface VehicleDetailsContentProps {
   vehicle: any;
@@ -83,29 +84,27 @@ export const VehicleDetailsContent = ({
         </motion.div>
       </div>
 
-      <Separator className="my-16 md:my-24" />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="space-y-8"
+        transition={{ duration: 0.5 }}
+        className="space-y-6 mt-12"
       >
-        <h2 className="text-3xl font-light tracking-tight text-gray-900 dark:text-white">
+        <h2 className="text-2xl font-light tracking-tight text-gray-900">
           Especificações
         </h2>
         <VehicleSpecifications specifications={specifications} />
       </motion.div>
 
-      <Separator className="my-16 md:my-24" />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="space-y-6 bg-gray-50/50 p-8 rounded-2xl"
+        transition={{ duration: 0.5 }}
+        className="space-y-4 mt-12 bg-gray-50/50 p-8 rounded-2xl"
       >
-        <h2 className="text-2xl md:text-3xl font-light tracking-wide text-gray-900">Descrição</h2>
+        <h2 className="text-2xl font-light tracking-wide text-gray-900">Descrição</h2>
         <div className="prose prose-gray max-w-none">
           <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base md:text-lg">
             {vehicle.description}
@@ -113,40 +112,47 @@ export const VehicleDetailsContent = ({
         </div>
       </motion.div>
 
-      <Separator className="my-12 md:my-16" />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="space-y-6"
+        transition={{ duration: 0.5 }}
+        className="space-y-4 mt-12"
       >
-        <h2 className="text-2xl md:text-3xl font-light tracking-wide text-gray-900">Acessórios</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-          {vehicle.product_accessories?.map((item: any, index: number) => (
-            <Badge
-              key={index}
-              variant="outline"
-              className="group flex items-center gap-2 py-2.5 px-4 text-sm font-medium text-gray-700 bg-white/50 hover:bg-gray-50/80 border border-gray-200/80 rounded-xl transition-all duration-200 backdrop-blur-sm hover:border-gray-300/80 dark:bg-gray-900/50 dark:border-gray-800/80 dark:text-gray-300 dark:hover:border-gray-700/80"
-            >
-              <Tag className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors duration-200" strokeWidth={1.5} />
-              {item.accessory}
-            </Badge>
-          ))}
+        <h2 className="text-2xl font-light tracking-wide text-gray-900">Acessórios</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <AnimatePresence>
+            {vehicle.product_accessories?.map((item: any, index: number) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2, delay: index * 0.05 }}
+              >
+                <Badge
+                  variant="outline"
+                  className="group flex items-center gap-2 py-2.5 px-4 text-sm font-medium text-gray-700 bg-white/50 hover:bg-gray-50/80 border border-gray-200/80 rounded-xl transition-all duration-200 backdrop-blur-sm hover:border-gray-300/80 w-full"
+                >
+                  <Tag className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors duration-200" strokeWidth={1.5} />
+                  {item.accessory}
+                </Badge>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </motion.div>
 
       {similarVehicles && similarVehicles.length > 0 && (
-        <>
-          <Separator className="my-12 md:my-16" />
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <VehicleSimilar vehicles={similarVehicles} />
-          </motion.div>
-        </>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-12"
+        >
+          <VehicleSimilar vehicles={similarVehicles} />
+        </motion.div>
       )}
 
       <Dialog open={lightboxOpen} onOpenChange={onLightboxChange}>
