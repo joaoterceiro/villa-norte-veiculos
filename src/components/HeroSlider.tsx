@@ -72,11 +72,11 @@ export const HeroSlider = memo(() => {
   }
 
   const renderSlideContent = (slide: typeof slides[0]) => (
-    <div className="w-full h-full flex items-center justify-center overflow-hidden">
+    <div className="relative w-full h-full">
       <img
         src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
         alt=""
-        className="w-full h-full object-cover object-center"
+        className="absolute inset-0 w-full h-full object-cover"
         loading={currentSlide === 0 ? "eager" : "lazy"}
         fetchPriority={currentSlide === 0 ? "high" : "auto"}
       />
@@ -84,9 +84,9 @@ export const HeroSlider = memo(() => {
   );
 
   return (
-    <div className="relative h-[500px] overflow-hidden">
+    <div className="relative h-[500px] w-full overflow-hidden">
       <div
-        className="flex transition-transform duration-500 ease-in-out will-change-transform h-full"
+        className="flex h-full transition-transform duration-500 ease-in-out will-change-transform"
         style={{
           transform: `translateX(-${currentSlide * 100}%)`,
           width: `${slides.length * 100}%`,
@@ -97,14 +97,14 @@ export const HeroSlider = memo(() => {
             <Link
               key={index}
               to={slide.link}
-              className="w-full h-full shrink-0"
+              className="w-full h-full flex-shrink-0"
             >
               {renderSlideContent(slide)}
             </Link>
           ) : (
             <div
               key={index}
-              className="w-full h-full shrink-0"
+              className="w-full h-full flex-shrink-0"
             >
               {renderSlideContent(slide)}
             </div>
@@ -115,14 +115,14 @@ export const HeroSlider = memo(() => {
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors z-10"
             aria-label="Previous slide"
           >
             <ChevronLeft className="text-white" size={24} />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors z-10"
             aria-label="Next slide"
           >
             <ChevronRight className="text-white" size={24} />
