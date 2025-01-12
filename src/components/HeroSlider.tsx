@@ -1,9 +1,8 @@
 import { useState, useEffect, memo } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { Link } from "react-router-dom";
 import { Skeleton } from "./ui/skeleton";
+import { SlideNavigation } from "./slider/SlideNavigation";
+import { SlideContent } from "./slider/SlideContent";
 
 export const HeroSlider = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -13,7 +12,6 @@ export const HeroSlider = memo(() => {
     mobile_image_url: string;
     link?: string | null;
   }[]>([]);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchSlides = async () => {
@@ -71,18 +69,6 @@ export const HeroSlider = memo(() => {
     return null;
   }
 
-  const renderSlideContent = (slide: typeof slides[0]) => (
-    <div className="relative w-full h-full">
-      <img
-        src={isMobile ? slide.mobile_image_url : slide.desktop_image_url}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-        loading={currentSlide === 0 ? "eager" : "lazy"}
-        fetchPriority={currentSlide === 0 ? "high" : "auto"}
-      />
-    </div>
-  );
-
   return (
     <div className="relative h-[500px] w-full overflow-hidden">
       <div
@@ -93,41 +79,21 @@ export const HeroSlider = memo(() => {
         }}
       >
         {slides.map((slide, index) => (
-          slide.link ? (
-            <Link
-              key={index}
-              to={slide.link}
-              className="w-full h-full flex-shrink-0"
-            >
-              {renderSlideContent(slide)}
-            </Link>
-          ) : (
-            <div
-              key={index}
-              className="w-full h-full flex-shrink-0"
-            >
-              {renderSlideContent(slide)}
-            </div>
-          )
+          <SlideContent
+            key={index}
+            index={index}
+            mobileUrl={slide.mobile_image_url}
+            desktopUrl={slide.desktop_image_url}
+            link={slide.link}
+            isFirstSlide={index === 0}
+          />
         ))}
       </div>
       {slides.length > 1 && (
-        <>
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors z-10"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="text-white" size={24} />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors z-10"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="text-white" size={24} />
-          </button>
-        </>
+        <SlideNavigation
+          onPrevClick={prevSlide}
+          onNextClick={nextSlide}
+        />
       )}
     </div>
   );
