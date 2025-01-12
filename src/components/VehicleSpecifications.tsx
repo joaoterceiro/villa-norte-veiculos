@@ -34,7 +34,7 @@ const Specification = ({ label, value, icon, className }: SpecificationProps) =>
       transition={{ duration: 0.2 }}
       className={cn(
         "group relative overflow-hidden rounded-2xl bg-gradient-to-b from-white to-gray-50/80 backdrop-blur-sm border border-gray-100/50 transition-all duration-300", 
-        "hover:border-gray-200/50",
+        "hover:shadow-lg hover:shadow-gray-100/50 hover:border-gray-200/50",
         "dark:from-gray-900 dark:to-gray-900/90 dark:border-gray-800/50 dark:hover:border-gray-700/50",
         className
       )}
@@ -69,7 +69,7 @@ interface VehicleSpecificationsProps {
 
 export const VehicleSpecifications = ({ specifications }: VehicleSpecificationsProps) => {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
       {specifications.map((spec, index) => (
         <Specification
           key={index}

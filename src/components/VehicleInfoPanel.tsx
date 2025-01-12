@@ -58,7 +58,7 @@ export const VehicleInfoPanel = ({
 
   return (
     <>
-      <div className="w-full col-span-12 lg:col-span-4 space-y-6 md:space-y-8 bg-white p-6 md:p-8 rounded-2xl border border-black/5">
+      <div className="w-full col-span-12 lg:col-span-4 space-y-6 md:space-y-8 bg-white p-6 md:p-8 rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] border border-black/5">
         <div>
           <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-[#86868b] mb-4 md:mb-6">
             <span>{condition}</span>
