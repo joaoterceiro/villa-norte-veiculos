@@ -47,7 +47,7 @@ export const VehicleDetailsContent = ({
 
   return (
     <div className="max-w-[2000px] mx-auto">
-      <div className="grid grid-cols-1 xl:grid-cols-20 gap-6 xl:gap-6 mb-8">
+      <div className="grid grid-cols-1 xl:grid-cols-20 gap-6 mb-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
