@@ -56,23 +56,6 @@ const VehicleDetails = () => {
     enabled: !!(vehicleId || slug),
   });
 
-  const { data: similarVehiclesData } = useQuery({
-    queryKey: ["similar-vehicles", vehicle?.make, vehicle?.vehicle_id],
-    enabled: !!(vehicle?.make && vehicle?.vehicle_id),
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("vehicle_details")
-        .select("*")
-        .eq("make", vehicle.make)
-        .neq("vehicle_id", vehicle.vehicle_id)
-        .limit(5);
-
-      if (error) throw error;
-      
-      return data;
-    },
-  });
-
   const { data: settings } = useQuery({
     queryKey: ["portal-settings"],
     queryFn: async () => {
@@ -80,6 +63,22 @@ const VehicleDetails = () => {
         .from("portal_settings")
         .select("*")
         .single();
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: similarVehiclesData } = useQuery({
+    queryKey: ["similar-vehicles", vehicle?.make, vehicle?.vehicle_id],
+    enabled: !!(vehicle?.make && vehicle?.vehicle_id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("vehicle_details")
+        .select()
+        .eq("make", vehicle.make)
+        .neq("vehicle_id", vehicle.vehicle_id)
+        .limit(5);
 
       if (error) throw error;
       return data;
