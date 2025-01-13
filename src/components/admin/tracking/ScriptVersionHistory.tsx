@@ -56,22 +56,22 @@ export function ScriptVersionHistory() {
 
   return (
     <>
-      <Card>
+      <Card className="bg-gray-50">
         <CardHeader>
-          <CardTitle>Histórico de Versões</CardTitle>
+          <CardTitle className="text-gray-900">Histórico de Versões</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {versions.map((version) => (
               <div
                 key={version.id}
-                className="flex items-center justify-between border-b pb-4 last:border-0"
+                className="flex items-center justify-between border-b border-gray-200 pb-4 last:border-0"
               >
                 <div>
-                  <p className="font-medium">
+                  <p className="font-medium text-gray-800">
                     {version.type === "head" ? "Head Script" : "Body Script"} v{version.version}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-gray-600">
                     Atualizado por {version.users_sis?.name ?? "Usuário desconhecido"} em{" "}
                     {new Date(version.updated_at).toLocaleString("pt-BR")}
                   </p>
@@ -80,6 +80,7 @@ export function ScriptVersionHistory() {
                   variant="outline"
                   size="sm"
                   onClick={() => setSelectedVersion(version)}
+                  className="text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                 >
                   <Eye className="h-4 w-4 mr-2" />
                   Visualizar
@@ -91,9 +92,9 @@ export function ScriptVersionHistory() {
       </Card>
 
       <Dialog open={!!selectedVersion} onOpenChange={() => setSelectedVersion(null)}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl bg-gray-50">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-gray-900">
               {selectedVersion?.type === "head" ? "Head Script" : "Body Script"} v
               {selectedVersion?.version}
             </DialogTitle>
