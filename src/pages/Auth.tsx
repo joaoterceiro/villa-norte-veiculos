@@ -18,11 +18,22 @@ const Auth = () => {
   }, []);
 
   const checkSession = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      navigate("/admin");
+    try {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Session check error:", error);
+        // Clear any invalid session data
+        await supabase.auth.signOut();
+        setErrorMessage("Sessão inválida. Por favor, faça login novamente.");
+      } else if (session) {
+        navigate("/admin");
+      }
+    } catch (error) {
+      console.error("Session check error:", error);
+      setErrorMessage("Erro ao verificar sessão. Por favor, tente novamente.");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -36,7 +47,11 @@ const Auth = () => {
             .eq("id", session.user.id)
             .single();
 
-          if (error || userProfile?.role !== "admin") {
+          if (error) {
+            console.error("Error checking user role:", error);
+            setErrorMessage("Erro ao verificar permissões do usuário.");
+            await supabase.auth.signOut();
+          } else if (userProfile?.role !== "admin") {
             setErrorMessage("Acesso negado. Apenas administradores podem fazer login.");
             await supabase.auth.signOut();
           } else {
@@ -48,6 +63,11 @@ const Auth = () => {
           await supabase.auth.signOut();
         }
         setIsLoading(false);
+      } else if (event === "SIGNED_OUT") {
+        setErrorMessage("");
+      } else if (event === "TOKEN_REFRESHED") {
+        // Handle successful token refresh
+        console.log("Token refreshed successfully");
       }
     });
 
