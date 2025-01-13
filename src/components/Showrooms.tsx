@@ -29,28 +29,29 @@ const locations = [
 
 export const Showrooms = memo(() => {
   return (
-    <div className="container mx-auto py-8 px-4 md:py-12 md:px-6">
-      <h2 className="text-xl md:text-2xl font-semibold text-center mb-2">
+    <div className="container mx-auto py-16 px-4">
+      <h2 className="text-3xl font-light text-center mb-2">
         VISITE NOSSO SHOWROOM
       </h2>
-      <p className="text-center text-muted mb-8 md:mb-12">Nossas Unidades</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+      <p className="text-center text-gray-500 mb-16 font-light">Nossas Unidades</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {locations.map((location) => (
           <a
             key={location.id}
             href={location.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="relative rounded-lg overflow-hidden group aspect-[4/3] hover:opacity-95 transition-opacity"
+            className="relative rounded-xl overflow-hidden group aspect-[16/9] hover:shadow-xl transition-all duration-300"
           >
             <img
               src={location.image}
               alt={location.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4 md:p-6">
-              <h3 className="text-white text-sm md:text-base font-semibold group-hover:text-primary transition-colors">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-90" />
+            <div className="absolute inset-x-0 bottom-0 p-6">
+              <h3 className="text-white text-lg font-light transform transition-transform duration-300 group-hover:translate-y-[-4px]">
                 {location.name}
               </h3>
             </div>
