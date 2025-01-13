@@ -76,19 +76,6 @@ const VehicleDetails = () => {
     },
   });
 
-  const { data: settings } = useQuery({
-    queryKey: ["portal-settings"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("portal_settings")
-        .select("*")
-        .single();
-
-      if (error) throw error;
-      return data;
-    },
-  });
-
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => 
       prev === 0 ? (vehicle?.product_images?.length || 1) - 1 : prev - 1

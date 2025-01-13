@@ -30,4 +30,5 @@ export interface FilteredVehicle {
   status: string;
   image_feature: string;
   accessories: string[];
+  slug: string;
 }

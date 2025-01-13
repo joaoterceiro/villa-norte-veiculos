@@ -12,6 +12,7 @@ interface VehicleSimilarProps {
     image_feature: string;
     is_featured: boolean;
     accessories: string[];
+    slug: string;
   }>;
 }
 
