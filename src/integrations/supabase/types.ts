@@ -156,6 +156,7 @@ export type Database = {
           plate: string | null
           price: number | null
           promotion_price: number | null
+          slug: string | null
           status: string | null
           title: string
           transmission: string | null
@@ -191,6 +192,7 @@ export type Database = {
           plate?: string | null
           price?: number | null
           promotion_price?: number | null
+          slug?: string | null
           status?: string | null
           title: string
           transmission?: string | null
@@ -226,6 +228,7 @@ export type Database = {
           plate?: string | null
           price?: number | null
           promotion_price?: number | null
+          slug?: string | null
           status?: string | null
           title?: string
           transmission?: string | null
@@ -636,12 +639,20 @@ export type Database = {
           plate: string | null
           price: number | null
           promotion_price: number | null
+          slug: string | null
           status: string | null
           title: string
           transmission: string | null
           vehicle_id: string
           year: number | null
         }[]
+      }
+      generate_product_slug: {
+        Args: {
+          title: string
+          vid: string
+        }
+        Returns: string
       }
       get_year_options: {
         Args: Record<PropertyKey, never>

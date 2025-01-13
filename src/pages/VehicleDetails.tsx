@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +10,7 @@ import { VehicleDetailsContent } from "@/components/vehicle-details/VehicleDetai
 import { VehicleMobileActions } from "@/components/vehicle-details/VehicleMobileActions";
 
 const VehicleDetails = () => {
-  const { vehicleId } = useParams<{ vehicleId: string }>();
+  const { vehicleId, slug } = useParams<{ vehicleId?: string; slug?: string }>();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -18,33 +18,42 @@ const VehicleDetails = () => {
   const isMobile = useIsMobile();
 
   const { data: vehicle, isLoading } = useQuery({
-    queryKey: ["vehicle", vehicleId],
+    queryKey: ["vehicle", vehicleId, slug],
     queryFn: async () => {
-      if (!vehicleId) {
-        throw new Error("Vehicle ID is required");
-      }
-
-      const { data, error } = await supabase
+      let query = supabase
         .from("product")
         .select(`
           *,
           product_accessories (accessory),
           product_images (image_url, image_url_large)
-        `)
-        .eq("vehicle_id", vehicleId)
-        .single();
+        `);
+
+      if (vehicleId) {
+        query = query.eq("vehicle_id", vehicleId);
+      } else if (slug) {
+        query = query.eq("slug", slug);
+      } else {
+        throw new Error("Vehicle ID or slug is required");
+      }
+
+      const { data, error } = await query.single();
 
       if (error) {
         if (error.code === "PGRST116") {
-          // Record not found
           navigate("/404");
           return null;
         }
         throw error;
       }
+
+      // Redirecionar para URL com slug se acessado por UUID
+      if (vehicleId && data.slug && !window.location.pathname.includes("/s/")) {
+        navigate(`/veiculos/s/${data.slug}`, { replace: true });
+      }
+
       return data;
     },
-    enabled: !!vehicleId,
+    enabled: !!(vehicleId || slug),
   });
 
   const { data: similarVehiclesData } = useQuery({

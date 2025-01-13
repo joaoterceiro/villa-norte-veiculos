@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetails from "./pages/VehicleDetails";
@@ -22,6 +22,7 @@ function App() {
         <Route path="/" element={<Index />} />
         <Route path="/veiculos" element={<Vehicles />} />
         <Route path="/veiculos/:vehicleId" element={<VehicleDetails />} />
+        <Route path="/veiculos/s/:slug" element={<VehicleDetails />} />
         <Route path="/marca/:brand" element={<BrandVehicles />} />
         <Route path="/destaques" element={<FeaturedVehicles />} />
         <Route path="/politica-de-cookies" element={<CookiePolicy />} />
