@@ -68,10 +68,10 @@ export const FinancingSteps = () => {
   return (
     <div className="bg-gray-50 py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-light text-center mb-2">
+        <h2 className="text-3xl font-light tracking-tight text-center mb-2">
           FÁCIL E RÁPIDO
         </h2>
-        <p className="text-center text-gray-500 mb-16 font-light">
+        <p className="text-center text-gray-500 mb-16 font-light leading-relaxed">
           Simule seu financiamento em 3 passos simples
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -89,8 +89,8 @@ export const FinancingSteps = () => {
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-2xl font-light text-gray-600 mb-6">
                     {step.number}
                   </div>
-                  <h3 className="text-xl font-light mb-4">{step.title}</h3>
-                  <p className="text-gray-500 mb-8 font-light">{step.description}</p>
+                  <h3 className="text-xl font-light tracking-tight mb-4">{step.title}</h3>
+                  <p className="text-gray-500 mb-8 font-light leading-relaxed">{step.description}</p>
                   <button
                     onClick={() => handleAction(index)}
                     className="text-primary hover:text-primary/90 font-medium inline-flex items-center gap-2 group transition-colors"

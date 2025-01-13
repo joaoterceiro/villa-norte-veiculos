@@ -60,8 +60,8 @@ export function FeaturedVehicles() {
       <div className="container">
         <div className="flex items-center justify-between mb-6 md:mb-8 px-1 sm:px-4">
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900">Veículos em destaque</h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <h2 className="text-xl md:text-2xl font-light tracking-tight text-gray-900">Veículos em destaque</h2>
+            <p className="text-sm text-gray-500 mt-1 font-light leading-relaxed">
               Confira nossa seleção especial de veículos
             </p>
           </div>
