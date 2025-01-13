@@ -1,32 +1,52 @@
-import { Search } from "lucide-react";
+import { useState, useEffect } from "react";
 import { SearchInput } from "./search/SearchInput";
 import { SearchResults } from "./search/SearchResults";
 import { useVehicleSearch } from "./search/useVehicleSearch";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
-export const SearchBar = () => {
-  const { searchTerm, setSearchTerm, searchResults, isLoading } = useVehicleSearch();
+interface SearchBarProps {
+  onSearch?: (term: string) => void;
+  className?: string;
+}
+
+export const SearchBar = ({ onSearch, className = "bg-white rounded-lg shadow-lg p-6" }: SearchBarProps) => {
+  const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const make = searchParams.get("make");
+  const { searchResults, isLoading, totalVehicles } = useVehicleSearch(searchTerm, make);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onSearch) {
+      onSearch(searchTerm);
+    }
+    navigate("/veiculos");
+  };
 
   return (
-    <section className="w-full py-8 md:py-12 bg-white">
-      <div className="container max-w-[1400px] mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-secondary mb-4">
-            Encontre o carro dos seus sonhos
-          </h2>
-          <p className="text-base md:text-lg text-muted font-light leading-relaxed">
-            Mais de 100 veículos esperando por você em nosso showroom
-          </p>
-        </div>
-        
-        <div className="relative max-w-2xl mx-auto">
-          <SearchInput value={searchTerm} onChange={setSearchTerm} />
-          <SearchResults 
-            results={searchResults} 
-            isLoading={isLoading} 
-            searchTerm={searchTerm} 
-          />
-        </div>
+    <div className="container mx-auto -mt-8 relative z-10 px-4">
+      <div className={className}>
+        <h2 className="text-2xl font-semibold mb-4">
+          Encontre o veículo perfeito entre mais de {totalVehicles} disponíveis!
+        </h2>
+        <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <SearchInput value={searchTerm} onChange={setSearchTerm} />
+            <SearchResults 
+              results={searchResults}
+              isLoading={isLoading}
+              searchTerm={searchTerm}
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-[#FF5B00] hover:bg-[#FF5B00]/90 transition-colors text-white px-8 py-3 rounded-lg font-semibold whitespace-nowrap"
+          >
+            VER OFERTAS ({totalVehicles})
+          </button>
+        </form>
       </div>
-    </section>
+    </div>
   );
 };
