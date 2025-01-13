@@ -57,22 +57,19 @@ const VehicleDetails = () => {
   });
 
   const { data: similarVehiclesData } = useQuery({
-    queryKey: ["similar-vehicles", vehicle?.make, vehicle?.model],
-    enabled: !!vehicle,
+    queryKey: ["similar-vehicles", vehicle?.make, vehicle?.vehicle_id],
+    enabled: !!(vehicle?.make && vehicle?.vehicle_id),
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("product")
-        .select("*, product_accessories(accessory)")
-        .eq("make", vehicle?.make)
-        .neq("vehicle_id", vehicleId)
+        .from("vehicle_details")
+        .select("*")
+        .eq("make", vehicle.make)
+        .neq("vehicle_id", vehicle.vehicle_id)
         .limit(5);
 
       if (error) throw error;
       
-      return data.map(v => ({
-        ...v,
-        accessories: v.product_accessories?.map(a => a.accessory) || []
-      }));
+      return data;
     },
   });
 
