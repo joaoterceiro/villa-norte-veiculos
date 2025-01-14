@@ -13,11 +13,26 @@ interface FinancialDataStepProps {
 
 export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: FinancialDataStepProps) => {
   const formatDate = (value: string) => {
-    const numericValue = value.replace(/\D/g, "");
-    if (numericValue.length <= 2) return numericValue;
-    if (numericValue.length <= 4) return `${numericValue.slice(0, 2)}/${numericValue.slice(2)}`;
-    if (numericValue.length <= 8) return `${numericValue.slice(0, 2)}/${numericValue.slice(2, 4)}/${numericValue.slice(4)}`;
-    return `${numericValue.slice(0, 2)}/${numericValue.slice(2, 4)}/${numericValue.slice(4, 8)}`;
+    let numericValue = value.replace(/\D/g, "");
+    
+    // Limit to 8 digits
+    if (numericValue.length > 8) {
+      numericValue = numericValue.slice(0, 8);
+    }
+    
+    // Format as DD/MM/YYYY
+    if (numericValue.length <= 2) {
+      return numericValue;
+    }
+    if (numericValue.length <= 4) {
+      return `${numericValue.slice(0, 2)}/${numericValue.slice(2)}`;
+    }
+    return `${numericValue.slice(0, 2)}/${numericValue.slice(2, 4)}/${numericValue.slice(4)}`;
+  };
+
+  const parseDate = (dateString: string) => {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return new Date(year, month - 1, day);
   };
 
   return (
@@ -57,6 +72,7 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
             <FormControl>
               <Input
                 {...field}
+                type="text"
                 value={value ? formatDate(value.toString()) : ""}
                 placeholder="06/07/1994"
                 maxLength={10}
@@ -64,9 +80,14 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
                 onChange={(e) => {
                   const formatted = formatDate(e.target.value);
                   if (formatted.length === 10) {
-                    const [day, month, year] = formatted.split('/');
-                    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-                    onChange(date);
+                    try {
+                      const date = parseDate(formatted);
+                      if (!isNaN(date.getTime())) {
+                        onChange(date);
+                      }
+                    } catch (error) {
+                      console.error("Invalid date format");
+                    }
                   } else {
                     onChange(e.target.value);
                   }

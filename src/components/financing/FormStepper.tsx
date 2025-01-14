@@ -19,20 +19,23 @@ export const FormStepper = ({ currentStep, totalSteps }: FormStepperProps) => {
                 opacity: 1 
               }}
               className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300",
+                "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300",
                 currentStep > index
                   ? "bg-primary shadow-lg shadow-primary/20"
-                  : currentStep === index
+                  : currentStep === index + 1
                   ? "bg-primary ring-4 ring-primary/20"
                   : "bg-gray-100",
                 "relative"
               )}
             >
               <span className={cn(
-                "text-sm font-medium transition-colors",
+                "text-base font-medium transition-colors",
                 currentStep >= index + 1 ? "text-white" : "text-gray-400"
               )}>
                 {index + 1}
+              </span>
+              <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-500">
+                {index === 0 ? "Dados Pessoais" : index === 1 ? "Dados Financeiros" : "Documentação"}
               </span>
             </motion.div>
             {index < totalSteps - 1 && (
