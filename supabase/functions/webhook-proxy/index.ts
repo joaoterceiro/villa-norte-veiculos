@@ -17,6 +17,7 @@ serve(async (req) => {
 
   try {
     const data = await req.json()
+    console.log('Received data:', data);
     
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
@@ -26,18 +27,28 @@ serve(async (req) => {
       body: JSON.stringify(data)
     })
 
+    console.log('Webhook response status:', response.status);
+    
     if (!response.ok) {
-      throw new Error('Webhook request failed')
+      const errorText = await response.text();
+      console.error('Webhook error response:', errorText);
+      throw new Error(`Webhook request failed with status ${response.status}: ${errorText}`);
     }
 
-    return new Response(JSON.stringify({ success: true }), {
+    const responseData = await response.json();
+    console.log('Webhook response data:', responseData);
+
+    return new Response(JSON.stringify({ success: true, data: responseData }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
   } catch (error) {
     console.error('Error in webhook-proxy:', error);
     
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      details: error instanceof Error ? error.stack : undefined 
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
     })
