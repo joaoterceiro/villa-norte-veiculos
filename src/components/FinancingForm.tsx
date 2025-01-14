@@ -185,3 +185,4 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
       </form>
     </Form>
   );
+};
