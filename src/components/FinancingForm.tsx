@@ -12,6 +12,7 @@ import { FinancialDataStep } from "./financing/FinancialDataStep";
 import { DocumentationStep } from "./financing/DocumentationStep";
 import { formSchema } from "./financing/schema";
 import { z } from "zod";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface FinancingFormProps {
   onSuccess: () => void;
@@ -103,41 +104,60 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormStepper currentStep={step} totalSteps={3} />
         
-        {step === 1 && (
-          <PersonalDataStep form={form} formatPhone={formatPhone} />
-        )}
+        <AnimatePresence mode="wait">
+          {step === 1 && (
+            <PersonalDataStep form={form} formatPhone={formatPhone} />
+          )}
 
-        {step === 2 && (
-          <FinancialDataStep
-            form={form}
-            formatCurrency={formatCurrency}
-            formatCPF={formatCPF}
-          />
-        )}
+          {step === 2 && (
+            <FinancialDataStep
+              form={form}
+              formatCurrency={formatCurrency}
+              formatCPF={formatCPF}
+            />
+          )}
 
-        {step === 3 && (
-          <DocumentationStep form={form} />
-        )}
+          {step === 3 && (
+            <DocumentationStep form={form} />
+          )}
+        </AnimatePresence>
 
-        <div className="flex justify-between">
+        <motion.div 
+          className="flex justify-between pt-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
           {step > 1 && (
-            <Button type="button" variant="outline" onClick={prevStep}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={prevStep}
+              className="h-12 px-6 rounded-xl border-gray-200 hover:bg-gray-50/80 hover:border-primary/30 transition-all duration-200"
+            >
               Voltar
             </Button>
           )}
           {step < 3 ? (
-            <Button type="button" onClick={nextStep} className="ml-auto">
+            <Button
+              type="button"
+              onClick={nextStep}
+              className="h-12 px-6 rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all duration-200 ml-auto"
+            >
               Próximo
             </Button>
           ) : (
-            <Button type="submit" className="ml-auto">
+            <Button
+              type="submit"
+              className="h-12 px-6 rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all duration-200 ml-auto"
+            >
               Enviar
             </Button>
           )}
-        </div>
+        </motion.div>
       </form>
     </Form>
   );

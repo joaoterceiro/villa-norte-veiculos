@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./schema";
+import { motion } from "framer-motion";
 
 interface FinancialDataStepProps {
   form: UseFormReturn<z.infer<typeof formSchema>>;
@@ -18,18 +19,23 @@ interface FinancialDataStepProps {
 
 export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: FinancialDataStepProps) => {
   return (
-    <div className="space-y-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="space-y-6"
+    >
       <FormField
         control={form.control}
         name="valor_entrada"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Qual é o valor de entrada?</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700">Valor de entrada</FormLabel>
             <FormControl>
               <Input
                 {...field}
                 placeholder="R$ 0,00"
-                className="placeholder:text-gray-400"
+                className="h-12 px-4 rounded-xl border-gray-200 bg-gray-50/50 placeholder:text-gray-400 focus:border-primary focus:ring-primary/20 transition-all duration-200"
                 onChange={(e) => {
                   field.onChange(formatCurrency(e.target.value));
                 }}
@@ -45,19 +51,22 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
         name="data_nascimento"
         render={({ field }) => (
           <FormItem className="flex flex-col">
-            <FormLabel>Qual é a sua data de nascimento?</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700">Data de nascimento</FormLabel>
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
-                  <Input
-                    className={cn(
-                      "pl-3 text-left font-normal bg-white",
-                      !field.value && "text-gray-400"
-                    )}
-                    placeholder="Selecione uma data"
-                    value={field.value ? format(field.value, "dd/MM/yyyy", { locale: ptBR }) : ""}
-                    readOnly
-                  />
+                  <div className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 flex items-center hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 cursor-pointer">
+                    <Calendar className="mr-2 h-4 w-4 text-gray-400" />
+                    <Input
+                      className={cn(
+                        "border-0 bg-transparent p-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+                        !field.value && "text-gray-400"
+                      )}
+                      placeholder="Selecione uma data"
+                      value={field.value ? format(field.value, "dd/MM/yyyy", { locale: ptBR }) : ""}
+                      readOnly
+                    />
+                  </div>
                 </FormControl>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 bg-white" align="start">
@@ -83,12 +92,12 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
         name="cpf"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Qual é o seu CPF?</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700">CPF</FormLabel>
             <FormControl>
               <Input
                 {...field}
                 placeholder="000.000.000-00"
-                className="placeholder:text-gray-400"
+                className="h-12 px-4 rounded-xl border-gray-200 bg-gray-50/50 placeholder:text-gray-400 focus:border-primary focus:ring-primary/20 transition-all duration-200"
                 maxLength={14}
                 onChange={(e) => {
                   field.onChange(formatCPF(e.target.value));
@@ -99,6 +108,6 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
           </FormItem>
         )}
       />
-    </div>
+    </motion.div>
   );
 };

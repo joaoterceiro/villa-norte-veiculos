@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./schema";
+import { motion } from "framer-motion";
 
 interface PersonalDataStepProps {
   form: UseFormReturn<z.infer<typeof formSchema>>;
@@ -11,18 +12,23 @@ interface PersonalDataStepProps {
 
 export const PersonalDataStep = ({ form, formatPhone }: PersonalDataStepProps) => {
   return (
-    <div className="space-y-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="space-y-6"
+    >
       <FormField
         control={form.control}
         name="nome"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Qual é o seu nome?</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700">Nome completo</FormLabel>
             <FormControl>
               <Input 
                 {...field} 
-                placeholder="Digite seu nome completo"
-                className="placeholder:text-gray-400"
+                placeholder="Digite seu nome"
+                className="h-12 px-4 rounded-xl border-gray-200 bg-gray-50/50 placeholder:text-gray-400 focus:border-primary focus:ring-primary/20 transition-all duration-200"
               />
             </FormControl>
             <FormMessage />
@@ -35,12 +41,12 @@ export const PersonalDataStep = ({ form, formatPhone }: PersonalDataStepProps) =
         name="telefone"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Qual é o seu contato?</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700">Telefone</FormLabel>
             <FormControl>
               <Input
                 {...field}
                 placeholder="(00) 00000-0000"
-                className="placeholder:text-gray-400"
+                className="h-12 px-4 rounded-xl border-gray-200 bg-gray-50/50 placeholder:text-gray-400 focus:border-primary focus:ring-primary/20 transition-all duration-200"
                 maxLength={15}
                 onChange={(e) => {
                   field.onChange(formatPhone(e.target.value));
@@ -51,6 +57,6 @@ export const PersonalDataStep = ({ form, formatPhone }: PersonalDataStepProps) =
           </FormItem>
         )}
       />
-    </div>
+    </motion.div>
   );
 };

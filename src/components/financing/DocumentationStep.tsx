@@ -3,6 +3,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./schema";
+import { motion } from "framer-motion";
 
 interface DocumentationStepProps {
   form: UseFormReturn<z.infer<typeof formSchema>>;
@@ -10,30 +11,41 @@ interface DocumentationStepProps {
 
 export const DocumentationStep = ({ form }: DocumentationStepProps) => {
   return (
-    <div className="space-y-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="space-y-8"
+    >
       <FormField
         control={form.control}
         name="carro_troca"
         render={({ field }) => (
-          <FormItem className="space-y-3">
-            <FormLabel>Possui carro na troca?</FormLabel>
+          <FormItem className="space-y-4">
+            <FormLabel className="text-sm font-medium text-gray-700">Possui carro na troca?</FormLabel>
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="flex flex-col space-y-1"
+                className="flex flex-col space-y-3"
               >
                 <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="true" />
+                    <RadioGroupItem 
+                      value="true"
+                      className="border-2 border-gray-200 text-primary focus:border-primary focus:ring-primary/20"
+                    />
                   </FormControl>
-                  <FormLabel className="font-normal">Sim</FormLabel>
+                  <FormLabel className="text-sm font-normal text-gray-600 cursor-pointer">Sim</FormLabel>
                 </FormItem>
                 <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="false" />
+                    <RadioGroupItem 
+                      value="false"
+                      className="border-2 border-gray-200 text-primary focus:border-primary focus:ring-primary/20"
+                    />
                   </FormControl>
-                  <FormLabel className="font-normal">Não</FormLabel>
+                  <FormLabel className="text-sm font-normal text-gray-600 cursor-pointer">Não</FormLabel>
                 </FormItem>
               </RadioGroup>
             </FormControl>
@@ -46,25 +58,31 @@ export const DocumentationStep = ({ form }: DocumentationStepProps) => {
         control={form.control}
         name="cnh"
         render={({ field }) => (
-          <FormItem className="space-y-3">
-            <FormLabel>Possui CNH?</FormLabel>
+          <FormItem className="space-y-4">
+            <FormLabel className="text-sm font-medium text-gray-700">Possui CNH?</FormLabel>
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="flex flex-col space-y-1"
+                className="flex flex-col space-y-3"
               >
                 <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="true" />
+                    <RadioGroupItem 
+                      value="true"
+                      className="border-2 border-gray-200 text-primary focus:border-primary focus:ring-primary/20"
+                    />
                   </FormControl>
-                  <FormLabel className="font-normal">Sim</FormLabel>
+                  <FormLabel className="text-sm font-normal text-gray-600 cursor-pointer">Sim</FormLabel>
                 </FormItem>
                 <FormItem className="flex items-center space-x-3 space-y-0">
                   <FormControl>
-                    <RadioGroupItem value="false" />
+                    <RadioGroupItem 
+                      value="false"
+                      className="border-2 border-gray-200 text-primary focus:border-primary focus:ring-primary/20"
+                    />
                   </FormControl>
-                  <FormLabel className="font-normal">Não</FormLabel>
+                  <FormLabel className="text-sm font-normal text-gray-600 cursor-pointer">Não</FormLabel>
                 </FormItem>
               </RadioGroup>
             </FormControl>
@@ -72,6 +90,6 @@ export const DocumentationStep = ({ form }: DocumentationStepProps) => {
           </FormItem>
         )}
       />
-    </div>
+    </motion.div>
   );
 };
