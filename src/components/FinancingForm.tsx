@@ -59,24 +59,9 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
     }).format(floatValue);
   };
 
-  const sendToWebhook = async (data: any) => {
-    try {
-      const response = await supabase.functions.invoke('webhook-proxy', {
-        body: data
-      });
-
-      if (response.error) {
-        throw new Error('Falha ao enviar dados para integração');
-      }
-    } catch (error) {
-      console.error('Erro ao enviar para webhook:', error);
-      throw error;
-    }
-  };
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const formattedData = {
+      const { error } = await supabase.from("leads").insert({
         nome: values.nome,
         telefone: values.telefone,
         valor_entrada: parseFloat(values.valor_entrada.replace(/\D/g, "")) / 100,
@@ -85,17 +70,9 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
         carro_troca: values.carro_troca === "true",
         cnh: values.cnh === "true",
         observacao: `Interesse no veículo: ${vehicleTitle}`,
-      };
+      });
 
-      // Salvar no Supabase
-      const { error: supabaseError } = await supabase
-        .from("leads")
-        .insert(formattedData);
-
-      if (supabaseError) throw supabaseError;
-
-      // Enviar para webhook
-      await sendToWebhook(formattedData);
+      if (error) throw error;
 
       toast({
         title: "Simulação enviada com sucesso!",
