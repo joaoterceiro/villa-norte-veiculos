@@ -136,7 +136,7 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
               type="button"
               variant="outline"
               onClick={prevStep}
-              className="h-12 px-6 rounded-xl border-gray-200 hover:bg-gray-50/80 hover:border-primary/30 transition-all duration-200"
+              className="h-12 px-6 rounded-xl border-gray-200 hover:bg-gray-50/80 hover:border-primary/30 hover:text-primary transition-all duration-200"
             >
               Voltar
             </Button>

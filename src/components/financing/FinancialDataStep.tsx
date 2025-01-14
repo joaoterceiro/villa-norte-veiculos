@@ -1,11 +1,5 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Calendar } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./schema";
@@ -18,6 +12,14 @@ interface FinancialDataStepProps {
 }
 
 export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: FinancialDataStepProps) => {
+  const formatDate = (value: string) => {
+    return value
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "$1/$2")
+      .replace(/(\d{2})(\d)/, "$1/$2")
+      .replace(/(\d{4})\d+?$/, "$1");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -49,39 +51,28 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
       <FormField
         control={form.control}
         name="data_nascimento"
-        render={({ field }) => (
-          <FormItem className="flex flex-col">
+        render={({ field: { value, onChange, ...field } }) => (
+          <FormItem>
             <FormLabel className="text-sm font-medium text-gray-700">Data de nascimento</FormLabel>
-            <Popover>
-              <PopoverTrigger asChild>
-                <FormControl>
-                  <div className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 flex items-center hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 cursor-pointer">
-                    <Calendar className="mr-2 h-4 w-4 text-gray-400" />
-                    <Input
-                      className={cn(
-                        "border-0 bg-transparent p-0 focus-visible:ring-0 focus-visible:ring-offset-0",
-                        !field.value && "text-gray-400"
-                      )}
-                      placeholder="Selecione uma data"
-                      value={field.value ? format(field.value, "dd/MM/yyyy", { locale: ptBR }) : ""}
-                      readOnly
-                    />
-                  </div>
-                </FormControl>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white" align="start">
-                <CalendarComponent
-                  mode="single"
-                  selected={field.value}
-                  onSelect={field.onChange}
-                  disabled={(date) =>
-                    date > new Date() || date < new Date("1900-01-01")
+            <FormControl>
+              <Input
+                {...field}
+                value={value ? formatDate(value.toString()) : ""}
+                placeholder="DD/MM/AAAA"
+                maxLength={10}
+                className="h-12 px-4 rounded-xl border-gray-200 bg-gray-50/50 placeholder:text-gray-400 focus:border-primary focus:ring-primary/20 transition-all duration-200"
+                onChange={(e) => {
+                  const formatted = formatDate(e.target.value);
+                  if (formatted.length === 10) {
+                    const [day, month, year] = formatted.split('/');
+                    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                    onChange(date);
+                  } else {
+                    onChange(e.target.value);
                   }
-                  initialFocus
-                  locale={ptBR}
-                />
-              </PopoverContent>
-            </Popover>
+                }}
+              />
+            </FormControl>
             <FormMessage />
           </FormItem>
         )}
