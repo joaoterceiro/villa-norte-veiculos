@@ -59,9 +59,28 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
     }).format(floatValue);
   };
 
+  const sendToWebhook = async (data: any) => {
+    try {
+      const response = await fetch('https://n8n.villanortevelculos.com/webhook/6e61ea1a0-2b4f-4d8d-998c-62696d8057b8', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao enviar dados para integração');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar para webhook:', error);
+      throw error;
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { error } = await supabase.from("leads").insert({
+      const formattedData = {
         nome: values.nome,
         telefone: values.telefone,
         valor_entrada: parseFloat(values.valor_entrada.replace(/\D/g, "")) / 100,
@@ -70,9 +89,17 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
         carro_troca: values.carro_troca === "true",
         cnh: values.cnh === "true",
         observacao: `Interesse no veículo: ${vehicleTitle}`,
-      });
+      };
 
-      if (error) throw error;
+      // Salvar no Supabase
+      const { error: supabaseError } = await supabase
+        .from("leads")
+        .insert(formattedData);
+
+      if (supabaseError) throw supabaseError;
+
+      // Enviar para webhook
+      await sendToWebhook(formattedData);
 
       toast({
         title: "Simulação enviada com sucesso!",
