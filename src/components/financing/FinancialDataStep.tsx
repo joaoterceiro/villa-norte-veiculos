@@ -13,11 +13,10 @@ interface FinancialDataStepProps {
 
 export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: FinancialDataStepProps) => {
   const formatDate = (value: string) => {
-    return value
-      .replace(/\D/g, "")
-      .replace(/(\d{2})(\d)/, "$1/$2")
-      .replace(/(\d{2})(\d)/, "$1/$2")
-      .replace(/(\d{4})\d+?$/, "$1");
+    const numericValue = value.replace(/\D/g, "");
+    if (numericValue.length <= 2) return numericValue;
+    if (numericValue.length <= 4) return `${numericValue.slice(0, 2)}/${numericValue.slice(2)}`;
+    return `${numericValue.slice(0, 2)}/${numericValue.slice(2, 4)}/${numericValue.slice(4, 8)}`;
   };
 
   return (
@@ -58,7 +57,7 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
               <Input
                 {...field}
                 value={value ? formatDate(value.toString()) : ""}
-                placeholder="DD/MM/AAAA"
+                placeholder="06/07/1994"
                 maxLength={10}
                 className="h-12 px-4 rounded-xl border-gray-200 bg-gray-50/50 placeholder:text-gray-400 focus:border-primary focus:ring-primary/20 transition-all duration-200"
                 onChange={(e) => {
