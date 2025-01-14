@@ -61,15 +61,11 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
 
   const sendToWebhook = async (data: any) => {
     try {
-      const response = await fetch('https://n8n.villanortevelculos.com/webhook/6e61ea1a0-2b4f-4d8d-998c-62696d8057b8', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
+      const response = await supabase.functions.invoke('webhook-proxy', {
+        body: data
       });
 
-      if (!response.ok) {
+      if (response.error) {
         throw new Error('Falha ao enviar dados para integração');
       }
     } catch (error) {
@@ -189,4 +185,3 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
       </form>
     </Form>
   );
-};
