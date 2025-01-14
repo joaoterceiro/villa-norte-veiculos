@@ -104,7 +104,7 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form className="space-y-8">
         <FormStepper currentStep={step} totalSteps={3} />
         
         <AnimatePresence mode="wait">
@@ -151,7 +151,8 @@ export const FinancingForm = ({ onSuccess, vehicleTitle }: FinancingFormProps) =
             </Button>
           ) : (
             <Button
-              type="submit"
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
               className="h-12 px-6 rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all duration-200 ml-auto"
             >
               Enviar
