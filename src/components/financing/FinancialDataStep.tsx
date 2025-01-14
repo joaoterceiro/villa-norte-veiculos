@@ -16,6 +16,7 @@ export const FinancialDataStep = ({ form, formatCurrency, formatCPF }: Financial
     const numericValue = value.replace(/\D/g, "");
     if (numericValue.length <= 2) return numericValue;
     if (numericValue.length <= 4) return `${numericValue.slice(0, 2)}/${numericValue.slice(2)}`;
+    if (numericValue.length <= 8) return `${numericValue.slice(0, 2)}/${numericValue.slice(2, 4)}/${numericValue.slice(4)}`;
     return `${numericValue.slice(0, 2)}/${numericValue.slice(2, 4)}/${numericValue.slice(4, 8)}`;
   };
 
